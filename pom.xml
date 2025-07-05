@@ -16,13 +16,21 @@
         <module>dict-i18n-loader-db</module>
         <module>dict-i18n-loader-redis</module>
         <module>dict-i18n-demo</module>
+        <module>dict-i18n-generator-maven-plugin</module>
     </modules>
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j-api.version>1.7.36</slf4j-api.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <reflections.version>0.10.2</reflections.version>
+        <spring.boot.version>2.7.12</spring.boot.version>
+        <maven.plugin.annotations.version>3.6.0</maven.plugin.annotations.version>
+        <maven.plugin.api.version>3.9.9</maven.plugin.api.version>
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        <maven.plugin.plugin.version>3.5.2</maven.plugin.plugin.version>
+        <flatten.maven.plugin.version>1.5.0</flatten.maven.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -66,6 +74,29 @@
                 <artifactId>dict-i18n-demo</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>${maven.plugin.annotations.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>${maven.plugin.api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>${maven.plugin.api.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -76,11 +107,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>${maven.plugin.plugin.version}</version>
                 </plugin>
 
                 <!-- Spring Boot Plugin for starter module if needed -->
@@ -91,30 +128,33 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten.maven.plugin.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>jdk8</id>
-            <activation>
-                <jdk>[1.8,1.9)</jdk>
-            </activation>
-            <properties>
-                <java.version>1.8</java.version>
-                <spring.boot.version>2.7.12</spring.boot.version>
-            </properties>
-        </profile>
-
-        <!--        <profile>-->
-        <!--            <id>jdk17</id>-->
-        <!--            <activation>-->
-        <!--                <jdk>[17,18)</jdk>-->
-        <!--            </activation>-->
-        <!--            <properties>-->
-        <!--                <java.version>17</java.version>-->
-        <!--                <spring.boot.version>3.2.4</spring.boot.version>-->
-        <!--            </properties>-->
-        <!--        </profile>-->
-    </profiles>
 
 </project>

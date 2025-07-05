@@ -19,9 +19,7 @@
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>
             <artifactId>dict-i18n-loader-yml</artifactId>
-            <version>${revision}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -32,5 +30,31 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-generator-maven-plugin</artifactId>
+                <version>${revision}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-yml</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <basePackages>
+                        <package>cn.silwings.dicti18n.demo.dict</package>
+                    </basePackages>
+                    <languages>
+                        <language>zh</language>
+                        <language>en</language>
+                    </languages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
