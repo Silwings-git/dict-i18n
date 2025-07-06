@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.silwings.dicti18n.starter.autoconfigure.DictI18nAutoConfiguration

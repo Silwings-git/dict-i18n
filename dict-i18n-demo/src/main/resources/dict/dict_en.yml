@@ -1,0 +1,11 @@
+order_status:
+  created: Created
+  paid: Paid
+  shipped: Shipped
+  completed: Completed
+  canceled: Canceled
+order:
+  order_country:
+    CN: China
+    MY: Malaysia
+    US: America

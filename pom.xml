@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-parent</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>dict-i18n-core</module>
+        <module>dict-i18n-spring-boot-starter</module>
+        <module>dict-i18n-loader-yml</module>
+        <module>dict-i18n-loader-db</module>
+        <module>dict-i18n-loader-redis</module>
+        <module>dict-i18n-demo</module>
+    </modules>
+
+    <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <slf4j-api.version>1.7.36</slf4j-api.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot BOM -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-loader-yml</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-loader-db</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-loader-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-demo</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Compiler Plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+
+                <!-- Spring Boot Plugin for starter module if needed -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>jdk8</id>
+            <activation>
+                <jdk>[1.8,1.9)</jdk>
+            </activation>
+            <properties>
+                <java.version>1.8</java.version>
+                <spring.boot.version>2.7.12</spring.boot.version>
+            </properties>
+        </profile>
+
+        <!--        <profile>-->
+        <!--            <id>jdk17</id>-->
+        <!--            <activation>-->
+        <!--                <jdk>[17,18)</jdk>-->
+        <!--            </activation>-->
+        <!--            <properties>-->
+        <!--                <java.version>17</java.version>-->
+        <!--                <spring.boot.version>3.2.4</spring.boot.version>-->
+        <!--            </properties>-->
+        <!--        </profile>-->
+    </profiles>
+
+</project>

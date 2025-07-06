@@ -1,0 +1,14 @@
+dict-i18n:
+  loader-order:
+    - yml
+  max-recursion-depth: 10
+  default-lang: zh-cn
+  check:
+    enable-dict-name-unique-check: true
+    scan-packages:
+      - cn.silwings.dicti18n.demo
+  response-enhancer:
+    enabled: true
+  loader:
+    yml:
+      location-pattern: classpath:dict/dict_*.yml
