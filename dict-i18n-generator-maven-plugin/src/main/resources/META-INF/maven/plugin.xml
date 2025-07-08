@@ -4,7 +4,7 @@
     <mojos>
         <mojo>
             <goal>generate-yml</goal>
-            <implementation>cn.silwings.dicti18n.plugin.GenerateYmlMojo</implementation>
+            <implementation>cn.silwings.dicti18n.plugin.generate.GenerateYmlMojo</implementation>
             <phase>generate-resources</phase>
             <configuration>
                 <basePackages implementation="java.util.List"/>

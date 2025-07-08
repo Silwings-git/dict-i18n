@@ -52,6 +52,7 @@
                         <language>zh</language>
                         <language>en</language>
                     </languages>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
         </plugins>
