@@ -11,4 +11,4 @@ dict-i18n:
     enabled: true
   loader:
     yml:
-      location-pattern: classpath:dict/dict_*.yml
+      location-pattern: classpath:dict-i18n/dict_*.yml

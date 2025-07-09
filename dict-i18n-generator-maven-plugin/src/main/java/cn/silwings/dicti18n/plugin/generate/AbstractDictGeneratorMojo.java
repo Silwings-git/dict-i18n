@@ -9,6 +9,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -67,5 +68,20 @@ public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
         }
     }
 
-    abstract void generate(final Set<Class<? extends Dict>> dictClassSet, final List<String> languages, final File outputDir);
+    void generate(final Set<Class<? extends Dict>> dictClassSet, final List<String> languages, final File outputDir) throws MojoExecutionException {
+        final List<Dict[]> dictsList = new ArrayList<>();
+        for (final Class<? extends Dict> dictClass : dictClassSet) {
+            try {
+                final Dict[] dictArray = dictClass.isEnum()
+                        ? dictClass.getEnumConstants()
+                        : new Dict[]{dictClass.getDeclaredConstructor().newInstance()};
+                dictsList.add(dictArray);
+            } catch (Exception e) {
+                throw new MojoExecutionException(e);
+            }
+        }
+        this.generate(dictsList, languages, outputDir);
+    }
+
+    abstract void generate(final List<Dict[]> dictList, final List<String> languages, final File outputDir) throws MojoExecutionException;
 }

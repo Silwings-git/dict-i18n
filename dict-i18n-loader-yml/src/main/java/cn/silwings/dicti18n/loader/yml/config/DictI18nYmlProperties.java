@@ -10,8 +10,8 @@ public class DictI18nYmlProperties {
 
     /**
      * Specify the resource path, and support Spring Resource path formats such as classpath: file:.
-     * Default path: classpath:dict/dict_*.yml
+     * Default path: classpath:dict-i18n/dict_*.yml
      */
-    private String locationPattern = "classpath:dict/dict_*.yml";
+    private String locationPattern = "classpath:dict-i18n/dict_*.yml";
 
 }
