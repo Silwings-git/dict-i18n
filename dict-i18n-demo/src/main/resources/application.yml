@@ -1,8 +1,9 @@
 dict-i18n:
   loader-order:
     - yml
+    - properties
   max-recursion-depth: 10
-  default-lang: zh-cn
+  default-lang: zh
   check:
     enable-dict-name-unique-check: true
     scan-packages:

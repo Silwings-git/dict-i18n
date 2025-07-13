@@ -59,7 +59,9 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
             Optional<String> result = this.getText(language, dictName, code, loader);
 
             // If the default language is not selected and the default language is configured, the default language is used
-            if (!result.isPresent() && StringUtils.isNotBlank(this.dictI18nProperties.getDefaultLang())) {
+            if (!result.isPresent()
+                && StringUtils.isNotBlank(this.dictI18nProperties.getDefaultLang())
+                && !this.getFallbackLangChain(language).contains(this.dictI18nProperties.getDefaultLang())) {
                 result = this.getText(this.dictI18nProperties.getDefaultLang(), dictName, code, loader);
             }
             if (result.isPresent()) {

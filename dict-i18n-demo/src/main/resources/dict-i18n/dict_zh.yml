@@ -1,0 +1,24 @@
+account_type:
+  GUEST: 游客
+  OPERATION: 运营
+logic_delete:
+  '0': 正常
+  '1': 已删除
+order.order_country:
+  CN: 中国
+  EG: 埃及
+  MY: 马来西亚
+  US: 美国
+orderSource:
+  _: _
+orderType:
+  _: _
+order_status:
+  canceled: 已取消
+  completed: 已完成
+  created: 已创建
+  paid: 已支付
+  shipped: 已发货
+payment_type:
+  alipay: 支付宝
+  weixin: 微信

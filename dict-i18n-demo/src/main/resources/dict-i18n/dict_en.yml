@@ -1,0 +1,24 @@
+account_type:
+  GUEST: Guest
+  OPERATION: Operation
+logic_delete:
+  '0': Normal
+  '1': Deleted
+order.order_country:
+  CN: China
+  EG: EG
+  MY: MY
+  US: US
+orderSource:
+  _: _
+orderType:
+  _: _
+order_status:
+  canceled: Canceled
+  completed: Completed
+  created: Created
+  paid: Paid
+  shipped: Shipped
+payment_type:
+  alipay: Alipay
+  weixin: Weixin
