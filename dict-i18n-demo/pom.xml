@@ -40,14 +40,15 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>generate-yml</goal>
+                            <goal>yml</goal>
+                            <goal>properties</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <basePackages>
-                        <package>cn.silwings.dicti18n.demo.dict</package>
-                    </basePackages>
+                    <!--                    <basePackages>-->
+                    <!--                        <package>cn.silwings.dicti18n.demo.dict</package>-->
+                    <!--                    </basePackages>-->
                     <languages>
                         <language>zh</language>
                         <language>en</language>

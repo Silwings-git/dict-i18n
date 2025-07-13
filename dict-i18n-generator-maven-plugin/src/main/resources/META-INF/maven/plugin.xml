@@ -3,8 +3,19 @@
     <goalPrefix>dict</goalPrefix>
     <mojos>
         <mojo>
-            <goal>generate-yml</goal>
+            <goal>yml</goal>
             <implementation>cn.silwings.dicti18n.plugin.generate.GenerateYmlMojo</implementation>
+            <phase>generate-resources</phase>
+            <configuration>
+                <basePackages implementation="java.util.List"/>
+                <languages implementation="java.util.List"/>
+                <outputDir implementation="java.io.File"/>
+            </configuration>
+        </mojo>
+
+        <mojo>
+            <goal>properties</goal>
+            <implementation>cn.silwings.dicti18n.plugin.generate.GeneratePropertiesMojo</implementation>
             <phase>generate-resources</phase>
             <configuration>
                 <basePackages implementation="java.util.List"/>

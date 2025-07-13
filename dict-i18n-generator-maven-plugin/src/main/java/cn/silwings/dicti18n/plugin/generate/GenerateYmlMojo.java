@@ -17,13 +17,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Mojo(name = "generate-yml", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
+@Mojo(name = "yml", defaultPhase = LifecyclePhase.COMPILE)
 public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
 
     @Override
@@ -35,7 +33,6 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
             final Map<String, Map<String, String>> newDictMap = this.parseDictListToMap(dictsList);
             final Map<String, Map<String, String>> oldDictMap = this.loadDictFromFile(outFile);
             final Map<String, Map<String, String>> targetDictMap = this.merge(oldDictMap, newDictMap);
-            // TODO_Silwings: 2025/7/10 需要自然排序,目前顺序存在错误 
             this.write(targetDictMap, outFile);
         }
     }
@@ -60,21 +57,19 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
     }
 
     private Map<String, Map<String, String>> merge(final Map<String, Map<String, String>> oldDictMap, final Map<String, Map<String, String>> newDictMap) {
-        // 创建结果Map，先复制旧Map的所有内容
-        final Map<String, Map<String, String>> mergedMap = new HashMap<>(oldDictMap);
-        // 遍历新Map
+        final Map<String, Map<String, String>> mergedMap = new TreeMap<>(oldDictMap);
         for (Map.Entry<String, Map<String, String>> newEntry : newDictMap.entrySet()) {
             final String outerKey = newEntry.getKey();
             final Map<String, String> newInnerMap = newEntry.getValue();
-            // 如果旧Map中没有这个外部键，直接添加整个内部Map
+            // If the old map does not have this external key, add the entire internal map
             if (!mergedMap.containsKey(outerKey)) {
                 mergedMap.put(outerKey, new TreeMap<>(newInnerMap));
             } else {
-                // 如果旧Map中有这个外部键，合并内部Map
+                // If there is this external key in the old map, merge the internal map
                 final Map<String, String> oldInnerMap = mergedMap.get(outerKey);
                 final Map<String, String> mergedInnerMap = new TreeMap<>(oldInnerMap);
 
-                // 遍历新内部Map，添加旧内部Map中没有的条目
+                // Go through the new internal map and add entries that are not in the old internal map
                 for (Map.Entry<String, String> innerEntry : newInnerMap.entrySet()) {
                     if (!mergedInnerMap.containsKey(innerEntry.getKey())) {
                         mergedInnerMap.put(innerEntry.getKey(), innerEntry.getValue());
@@ -83,6 +78,7 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
                 mergedMap.put(outerKey, mergedInnerMap);
             }
         }
+
         return mergedMap;
     }
 
@@ -91,14 +87,14 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
             final Yaml yaml = new Yaml(new SafeConstructor());
             final Object obj = yaml.load(input);
             if (obj instanceof Map<?, ?>) {
-                final Map<String, Map<String, String>> result = new LinkedHashMap<>();
+                final Map<String, Map<String, String>> result = new TreeMap<>();
                 for (Map.Entry<?, ?> entry : ((Map<?, ?>) obj).entrySet()) {
                     if (!(entry.getKey() instanceof String) || !(entry.getValue() instanceof Map)) {
                         continue;
                     }
 
                     final Map<?, ?> innerMap = (Map<?, ?>) entry.getValue();
-                    final Map<String, String> innerResult = new LinkedHashMap<>();
+                    final Map<String, String> innerResult = new TreeMap<>();
                     for (Map.Entry<?, ?> innerEntry : innerMap.entrySet()) {
                         if (innerEntry.getKey() instanceof String && innerEntry.getValue() instanceof String) {
                             innerResult.put((String) innerEntry.getKey(), (String) innerEntry.getValue());
@@ -111,11 +107,11 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
         } catch (Exception e) {
             this.getLog().warn("Failed to load yaml: " + outFile.getName());
         }
-        return new LinkedHashMap<>();
+        return new TreeMap<>();
     }
 
     private Map<String, Map<String, String>> parseDictListToMap(final List<Dict[]> dictArrayList) {
-        final Map<String, Map<String, String>> dictMap = new HashMap<>();
+        final Map<String, Map<String, String>> dictMap = new TreeMap<>();
         dictArrayList.forEach(dictArray -> {
             final Map<String, String> itemMap = dictMap.computeIfAbsent(dictArray[0].dictName(), k -> new TreeMap<>());
             for (final Dict dict : dictArray) {

@@ -25,6 +25,7 @@ public class DemoController {
                 .setOrderNo("123456")
                 .setOrderStatus(OrderStatus.CREATED.code())
                 .setCountryCode(OrderCountry.CN.code())
+                .setCountryCode("es")
         );
 
         return ResponseEntity.ok(orderList);

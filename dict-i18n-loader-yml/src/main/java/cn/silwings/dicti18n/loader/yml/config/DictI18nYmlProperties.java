@@ -14,4 +14,9 @@ public class DictI18nYmlProperties {
      */
     private String locationPattern = "classpath:dict-i18n/dict_*.yml";
 
+    /**
+     * Whether to ignore the dict case
+     */
+    private boolean ignoreCase = true;
+
 }

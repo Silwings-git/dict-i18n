@@ -2,13 +2,7 @@ package cn.silwings.dicti18n.demo.dict;
 
 import cn.silwings.dicti18n.dict.Dict;
 
-/**
- * @ClassName AccountType
- * @Description
- * @Author Silwings
- * @Date 2025/7/10 0:53
- * @Since
- **/
+
 public enum AccountType implements Dict {
     OPERATION,
     GUEST;

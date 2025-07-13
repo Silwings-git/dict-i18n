@@ -16,13 +16,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @ClassName DictScanner
- * @Description
- * @Author Silwings
- * @Date 2025/7/8 23:26
- * @Since
- **/
 public class DictScanner {
 
     public Set<Class<? extends Dict>> scan(final ScanContext context) throws MojoExecutionException {
@@ -115,7 +108,7 @@ public class DictScanner {
                 // Invalid URL
             }
         }
-        return "未知位置";
+        return "Unknown location";
     }
 
 }

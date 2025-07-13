@@ -44,9 +44,22 @@ public class YmlDictI18nLoader implements DictI18nLoader {
                 final Map<String, String> flatMap = new HashMap<>();
                 this.flatten("", content, flatMap);
 
-                this.dictData.computeIfAbsent(lang, __ -> new HashMap<>()).putAll(flatMap);
+                this.dictData.computeIfAbsent(this.processString(lang), __ -> new ConcurrentHashMap<>()).putAll(flatMap);
             }
         }
+    }
+
+    /**
+     * Decide whether to ignore string case based on the configuration
+     *
+     * @param input Enter a string
+     * @return Processed string (lowercase is returned when case is ignored, otherwise it is returned as is)
+     */
+    public String processString(final String input) {
+        if (null == input || input.isEmpty()) {
+            return input;
+        }
+        return this.dictI18nYmlProperties.isIgnoreCase() ? input.toLowerCase() : input;
     }
 
     private String extractLangFromFilename(String filename) {
@@ -77,7 +90,7 @@ public class YmlDictI18nLoader implements DictI18nLoader {
             if (value instanceof Map<?, ?>) {
                 flatten(key, (Map<String, Object>) value, target);
             } else {
-                target.put(key, String.valueOf(value));
+                target.put(this.processString(key), String.valueOf(value));
             }
         }
     }

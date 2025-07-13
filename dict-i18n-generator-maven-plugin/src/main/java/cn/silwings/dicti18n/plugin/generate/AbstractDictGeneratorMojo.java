@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
 
@@ -33,6 +34,22 @@ public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
+
+            if (null == this.basePackages) {
+                this.basePackages = new ArrayList<>();
+            }
+            if (this.basePackages.isEmpty()) {
+                String sourceDir = this.project.getBuild().getSourceDirectory();
+                final File sourceDirectory = new File(sourceDir);
+                if (!sourceDirectory.exists() || !sourceDirectory.isDirectory()) {
+                    getLog().warn("The source code directory does not exist: " + sourceDir);
+                    return;
+                }
+                List<String> packages = this.findPackagesInDirectory(sourceDirectory, sourceDirectory);
+                this.getLog().info("The base package is not specified, the default package is used: " + packages.stream().collect(Collectors.joining(",")));
+                this.basePackages.addAll(packages);
+            }
+
             final ScanContext context = new ScanContext(this.project, this.basePackages, this.verbose, this.getLog());
             final DictScanner scanner = new DictScanner();
             final Set<Class<? extends Dict>> dictClassSet = scanner.scan(context);
@@ -58,7 +75,7 @@ public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
             this.getLog().info("Use the user-specified output directory: " + this.outputDir.getAbsolutePath());
         }
 
-        // 确保目录存在
+        // Make sure the directory exists
         if (!outputDir.exists()) {
             if (this.outputDir.mkdirs()) {
                 this.getLog().info("An output directory has been created: " + this.outputDir.getAbsolutePath());
@@ -81,6 +98,51 @@ public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
             }
         }
         this.generate(dictsList, languages, outputDir);
+    }
+
+    private List<String> findPackagesInDirectory(final File rootDir, final File currentDir) {
+        final List<String> packages = new ArrayList<>();
+
+        final File[] files = currentDir.listFiles();
+        if (null == files) {
+            return packages;
+        }
+
+        boolean hasJavaFiles = false;
+        for (File file : files) {
+            if (file.isDirectory()) {
+                packages.addAll(this.findPackagesInDirectory(rootDir, file));
+            } else if (file.getName().endsWith(".java")) {
+                hasJavaFiles = true;
+            }
+        }
+
+        // If the current directory contains Java files, calculate the package name
+        if (hasJavaFiles) {
+            final String packageName = this.calculatePackageName(rootDir, currentDir);
+            if (!packageName.isEmpty()) {
+                packages.add(packageName);
+            }
+        }
+
+        return packages;
+    }
+
+    private String calculatePackageName(final File rootDir, final File dir) {
+        final String rootPath = rootDir.getAbsolutePath();
+        final String dirPath = dir.getAbsolutePath();
+
+        if (!dirPath.startsWith(rootPath)) {
+            return "";
+        }
+
+        // Calculate relative paths
+        String relPath = dirPath.substring(rootPath.length()).replace(File.separatorChar, '.');
+        if (relPath.startsWith(".")) {
+            relPath = relPath.substring(1);
+        }
+
+        return relPath;
     }
 
     abstract void generate(final List<Dict[]> dictList, final List<String> languages, final File outputDir) throws MojoExecutionException;

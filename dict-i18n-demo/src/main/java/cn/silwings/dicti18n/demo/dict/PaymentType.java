@@ -2,24 +2,24 @@ package cn.silwings.dicti18n.demo.dict;
 
 import cn.silwings.dicti18n.dict.Dict;
 
-public enum LogicDelete implements Dict {
 
-    DELETE("0"),
-    NOT_DELETE("1");
+public enum PaymentType implements Dict {
+    WEIXIN("weixin"),
+    ALIPAY("alipay");
 
     private final String code;
 
-    LogicDelete(final String code) {
+    PaymentType(final String code) {
         this.code = code;
     }
 
     @Override
     public String dictName() {
-        return "logic_delete";
+        return "payment_type";
     }
 
     @Override
     public String code() {
-        return String.valueOf(this.code);
+        return this.code;
     }
 }
