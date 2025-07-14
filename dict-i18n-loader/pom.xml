@@ -8,22 +8,16 @@
         <artifactId>dict-i18n-parent</artifactId>
         <version>${revision}</version>
     </parent>
+    <packaging>pom</packaging>
+    <modules>
+        <module>dict-i18n-loader-core</module>
+        <module>dict-i18n-loader-db</module>
+        <module>dict-i18n-loader-properties</module>
+        <module>dict-i18n-loader-redis</module>
+        <module>dict-i18n-loader-yml</module>
+        <module>dict-i18n-loader-static</module>
+    </modules>
 
     <artifactId>dict-i18n-loader</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>cn.silwings.dicti18n</groupId>
-            <artifactId>dict-i18n-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
 </project>

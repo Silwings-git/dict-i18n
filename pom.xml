@@ -13,10 +13,6 @@
         <module>dict-i18n-core</module>
         <module>dict-i18n-spring-boot-starter</module>
         <module>dict-i18n-loader</module>
-        <module>dict-i18n-loader-yml</module>
-        <module>dict-i18n-loader-properties</module>
-        <module>dict-i18n-loader-db</module>
-        <module>dict-i18n-loader-redis</module>
         <module>dict-i18n-demo</module>
         <module>dict-i18n-generator-maven-plugin</module>
     </modules>
@@ -63,6 +59,11 @@
             </dependency>
             <dependency>
                 <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-loader-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
                 <artifactId>dict-i18n-loader-yml</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -74,6 +75,11 @@
             <dependency>
                 <groupId>cn.silwings.dicti18n</groupId>
                 <artifactId>dict-i18n-loader-db</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-loader-static</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

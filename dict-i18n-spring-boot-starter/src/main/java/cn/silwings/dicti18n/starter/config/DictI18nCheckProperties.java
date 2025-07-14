@@ -3,7 +3,7 @@ package cn.silwings.dicti18n.starter.config;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,6 +19,6 @@ public class DictI18nCheckProperties {
     /**
      * A list of package paths to scan to find the {@link cn.silwings.dicti18n.dict.Dict} implementation class.
      */
-    private List<String> scanPackages = Collections.emptyList();
+    private List<String> scanPackages = new ArrayList<>();
 
 }

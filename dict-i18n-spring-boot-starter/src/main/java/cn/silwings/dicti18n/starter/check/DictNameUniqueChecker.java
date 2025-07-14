@@ -1,8 +1,8 @@
 package cn.silwings.dicti18n.starter.check;
 
 import cn.silwings.dicti18n.dict.Dict;
+import cn.silwings.dicti18n.loader.scan.DictScanner;
 import cn.silwings.dicti18n.starter.config.DictI18nCheckProperties;
-import cn.silwings.dicti18n.starter.scan.DictScanner;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,6 @@ import org.springframework.context.ApplicationContextException;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -66,7 +65,7 @@ public class DictNameUniqueChecker implements ApplicationContextAware {
         final List<String> basePackages = this.dictI18nCheckProperties.getScanPackages().isEmpty()
                 ? AutoConfigurationPackages.get(this.applicationContext)
                 : this.dictI18nCheckProperties.getScanPackages();
-        final Set<Class<Dict>> dictClasses = new DictScanner().scan(new HashSet<>(basePackages));
+        final Set<Class<Dict>> dictClasses = new DictScanner().scan(basePackages);
 
         final Map<String, Class<?>> dictNameMap = new HashMap<>();
 
