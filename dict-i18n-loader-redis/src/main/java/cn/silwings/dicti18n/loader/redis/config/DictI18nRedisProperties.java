@@ -8,9 +8,9 @@ import lombok.Setter;
 public class DictI18nRedisProperties {
     /**
      * Specify the resource path, and support Spring Resource path formats such as classpath: file:.
-     * Default path: classpath:dict-i18n/dict_*.yml
+     * Default path: classpath:dict_i18n/dict_*.yml
      */
-    private String locationPattern = "classpath:dict-i18n/dict_*.yml";
+    private String locationPattern = "classpath:dict_i18n/dict_*.yml";
 
     /**
      * Whether to load dict data from the resource file into Redis on startup.

@@ -69,7 +69,7 @@ public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
 
     protected void initOutputDir() throws MojoExecutionException {
         if (null == this.outputDir) {
-            this.outputDir = new File(this.project.getBasedir(), "src/main/resources/dict-i18n");
+            this.outputDir = new File(this.project.getBasedir(), "src/main/resources/dict_i18n");
             this.getLog().info("The output directory is not specified, the default directory is used: " + this.outputDir.getAbsolutePath());
         } else {
             this.getLog().info("Use the user-specified output directory: " + this.outputDir.getAbsolutePath());

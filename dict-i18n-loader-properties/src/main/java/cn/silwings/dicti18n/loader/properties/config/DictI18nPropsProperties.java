@@ -9,9 +9,9 @@ public class DictI18nPropsProperties {
 
     /**
      * Specify the resource path, and support Spring Resource path formats such as classpath: file:.
-     * Default path: classpath:dict-i18n/dict_*.properties
+     * Default path: classpath:dict_i18n/dict_*.properties
      */
-    private String locationPattern = "classpath:dict-i18n/dict_*.properties";
+    private String locationPattern = "classpath:dict_i18n/dict_*.properties";
 
     /**
      * Whether to ignore the dict case
