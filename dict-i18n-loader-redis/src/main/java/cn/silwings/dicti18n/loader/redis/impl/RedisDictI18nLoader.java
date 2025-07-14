@@ -5,6 +5,7 @@ import cn.silwings.dicti18n.loader.DictI18nLoader;
 import cn.silwings.dicti18n.loader.redis.config.DictI18nRedisProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 public class RedisDictI18nLoader implements DictI18nLoader {
@@ -17,6 +18,14 @@ public class RedisDictI18nLoader implements DictI18nLoader {
         this.dictI18nRedisProperties = dictI18nRedisProperties;
         this.redisTemplate = redisTemplate;
     }
+
+    @PostConstruct
+    public void preload() {
+        // 预加载redis数据
+
+
+    }
+
 
     @Override
     public String loaderName() {

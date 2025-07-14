@@ -1,12 +1,10 @@
 package cn.silwings.dicti18n.loader.properties.impl;
 
-import cn.silwings.dicti18n.loader.DictI18nLoader;
+import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.properties.config.DictI18nPropsProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -17,7 +15,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PropertiesDictI18nLoader implements DictI18nLoader {
+public class PropertiesDictI18nLoader implements ClassPathDictI18nLoader {
 
     private static final Logger log = LoggerFactory.getLogger(PropertiesDictI18nLoader.class);
     private static final String FILE_SUFFIX = ".properties";
@@ -32,9 +30,9 @@ public class PropertiesDictI18nLoader implements DictI18nLoader {
     }
 
     @PostConstruct
-    public void loadAll() throws IOException {
-        final ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        final Resource[] resources = resolver.getResources(this.dictI18nPropsProperties.getLocationPattern());
+    public void loadAll() {
+
+        final Resource[] resources = this.loadResourcesFromPattern(this.dictI18nPropsProperties.getLocationPattern());
 
         for (final Resource resource : resources) {
             final String filename = resource.getFilename();

@@ -1,10 +1,10 @@
 package cn.silwings.dicti18n.loader.yml.impl;
 
-import cn.silwings.dicti18n.loader.DictI18nLoader;
+import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.yml.config.DictI18nYmlProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.PostConstruct;
@@ -13,8 +13,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class YmlDictI18nLoader implements DictI18nLoader {
+public class YmlDictI18nLoader implements ClassPathDictI18nLoader {
 
+    private static final Logger log = LoggerFactory.getLogger(YmlDictI18nLoader.class);
     private static final String FILE_SUFFIX = ".yml";
 
     private final DictI18nYmlProperties dictI18nYmlProperties;
@@ -26,9 +27,9 @@ public class YmlDictI18nLoader implements DictI18nLoader {
     }
 
     @PostConstruct
-    public void loadAll() throws IOException {
-        final ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        final Resource[] resources = resolver.getResources(this.dictI18nYmlProperties.getLocationPattern());
+    public void loadAll() {
+
+        final Resource[] resources = this.loadResourcesFromPattern(this.dictI18nYmlProperties.getLocationPattern());
 
         for (final Resource resource : resources) {
             final String filename = resource.getFilename();
@@ -38,11 +39,15 @@ public class YmlDictI18nLoader implements DictI18nLoader {
 
             final String lang = this.extractLangFromFilename(filename);
             if (null != lang) {
-                final Yaml yaml = new Yaml();
-                final Map<String, Object> content = yaml.load(resource.getInputStream());
-                final Map<String, String> flatMap = new ConcurrentHashMap<>();
-                this.flatten("", content, flatMap);
-                this.dictData.putIfAbsent(lang.toLowerCase(), flatMap);
+                try {
+                    final Yaml yaml = new Yaml();
+                    final Map<String, Object> content = yaml.load(resource.getInputStream());
+                    final Map<String, String> flatMap = new ConcurrentHashMap<>();
+                    this.flatten("", content, flatMap);
+                    this.dictData.putIfAbsent(lang.toLowerCase(), flatMap);
+                } catch (IOException e) {
+                    log.error("Failed to read the YML file: {}", e.getMessage(), e);
+                }
             }
         }
     }

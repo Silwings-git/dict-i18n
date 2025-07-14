@@ -20,7 +20,6 @@ public class RedisDictI18nLoaderAutoConfiguration {
         return new DictI18nRedisProperties();
     }
 
-    // 响应式版本优先注入
     @Bean
     @ConditionalOnBean(ReactiveStringRedisTemplate.class)
     public ReactiveRedisDictI18nLoader reactiveRedisDictI18nLoader(
@@ -29,7 +28,6 @@ public class RedisDictI18nLoaderAutoConfiguration {
         return new ReactiveRedisDictI18nLoader(dictI18nRedisProperties, reactiveRedisTemplate);
     }
 
-    // 否则注入阻塞式版本
     @Bean
     @ConditionalOnMissingBean(ReactiveRedisDictI18nLoader.class)
     public RedisDictI18nLoader redisDictI18nLoader(
