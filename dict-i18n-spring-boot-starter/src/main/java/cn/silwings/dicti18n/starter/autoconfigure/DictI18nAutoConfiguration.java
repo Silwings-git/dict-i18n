@@ -2,28 +2,36 @@ package cn.silwings.dicti18n.starter.autoconfigure;
 
 import cn.silwings.dicti18n.config.DictI18nProperties;
 import cn.silwings.dicti18n.loader.DictI18nLoader;
+import cn.silwings.dicti18n.loader.scan.DictScanner;
 import cn.silwings.dicti18n.processor.DictI18nProcessor;
 import cn.silwings.dicti18n.provider.CompositeDictI18nProvider;
 import cn.silwings.dicti18n.provider.DictI18nProvider;
 import cn.silwings.dicti18n.sorter.DictLoaderConfigSorter;
 import cn.silwings.dicti18n.sorter.DictLoaderSorter;
-import cn.silwings.dicti18n.starter.advice.DictI18nResponseEnhancer;
-import cn.silwings.dicti18n.starter.advice.filter.AlwaysTrueDictI18nResponseFilter;
-import cn.silwings.dicti18n.starter.advice.filter.DictI18nResponseFilter;
-import cn.silwings.dicti18n.starter.check.DictNameUniqueChecker;
+import cn.silwings.dicti18n.starter.check.UniqueDictNameChecker;
 import cn.silwings.dicti18n.starter.config.DefaultLanguageProvider;
-import cn.silwings.dicti18n.starter.config.DictI18nCheckProperties;
-import cn.silwings.dicti18n.starter.config.DictI18nResponseEnhancerProperties;
+import cn.silwings.dicti18n.starter.config.DictI18nStarterProperties;
 import cn.silwings.dicti18n.starter.config.LanguageProvider;
+import cn.silwings.dicti18n.starter.endpoint.DictItemsHandler;
+import cn.silwings.dicti18n.starter.enhancer.DictI18nResponseEnhancer;
+import cn.silwings.dicti18n.starter.enhancer.filter.AlwaysTrueDictI18nResponseFilter;
+import cn.silwings.dicti18n.starter.enhancer.filter.DictI18nResponseFilter;
 import cn.silwings.dicti18n.starter.sorter.SpringDictLoaderSorter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.HttpRequestHandler;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @EnableConfigurationProperties
@@ -36,15 +44,8 @@ public class DictI18nAutoConfiguration {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "dict-i18n.response-enhancer")
-    public DictI18nResponseEnhancerProperties dictI18nResponseEnhancerProperties() {
-        return new DictI18nResponseEnhancerProperties();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "dict-i18n.check")
-    public DictI18nCheckProperties dictI18nCheckProperties() {
-        return new DictI18nCheckProperties();
+    public DictI18nStarterProperties dictI18nCheckProperties() {
+        return new DictI18nStarterProperties();
     }
 
     @Bean
@@ -85,13 +86,39 @@ public class DictI18nAutoConfiguration {
     public DictI18nResponseEnhancer dictI18nResponseEnhancer(final DictI18nProcessor dictI18nProcessor,
                                                              final LanguageProvider languageProvider,
                                                              final DictI18nResponseFilter dictI18nResponseFilter,
-                                                             final DictI18nResponseEnhancerProperties dictI18nResponseEnhancerProperties) {
-        return new DictI18nResponseEnhancer(dictI18nProcessor, languageProvider, dictI18nResponseFilter, dictI18nResponseEnhancerProperties);
+                                                             final DictI18nStarterProperties dictI18nStarterProperties) {
+        return new DictI18nResponseEnhancer(dictI18nProcessor, languageProvider, dictI18nResponseFilter, dictI18nStarterProperties);
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "dict-i18n.check", name = "enable-dict-name-unique-check", havingValue = "true")
-    public DictNameUniqueChecker dictNameUniqueChecker(final DictI18nCheckProperties dictI18nCheckProperties) {
-        return new DictNameUniqueChecker(dictI18nCheckProperties);
+    public DictScanner dictScanner() {
+        return new DictScanner();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "dict-i18n.starter.check.unique-dict-name", name = "enabled", havingValue = "true", matchIfMissing = true)
+    public UniqueDictNameChecker dictNameUniqueChecker(final DictScanner dictScanner, final DictI18nStarterProperties dictI18NStarterProperties) {
+        return new UniqueDictNameChecker(dictScanner, dictI18NStarterProperties);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "dict-i18n.starter.endpoint.dict-items", name = "enabled", havingValue = "true", matchIfMissing = true)
+    public DictItemsHandler dictItemsHandler(final DictScanner dictScanner, final LanguageProvider languageProvider, final CompositeDictI18nProvider compositeDictI18nProvider, final DictI18nStarterProperties dictI18nStarterProperties, final RequestMappingHandlerAdapter handlerAdapter) {
+        return new DictItemsHandler(dictScanner, languageProvider, compositeDictI18nProvider, dictI18nStarterProperties, handlerAdapter);
+    }
+
+    @Bean
+    @ConditionalOnBean(DictItemsHandler.class)
+    public HandlerMapping dictItemsHandlerMapping(final DictItemsHandler dictItemsHandler) {
+        return this.buildHandlerMapping("/dict-i18n/api/items", dictItemsHandler);
+    }
+
+    private HandlerMapping buildHandlerMapping(final String path, final HttpRequestHandler handler) {
+        final Map<String, HttpRequestHandler> urlMap = new HashMap<>();
+        urlMap.put(path, handler);
+        final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+        mapping.setUrlMap(urlMap);
+        mapping.setOrder(0);
+        return mapping;
     }
 }

@@ -79,7 +79,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.silwings.dicti18n</groupId>
-                <artifactId>dict-i18n-loader-static</artifactId>
+                <artifactId>dict-i18n-loader-declared</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

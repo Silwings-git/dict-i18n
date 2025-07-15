@@ -1,15 +1,35 @@
 dict-i18n:
   loader-order:
+    - declared
     - yml
     - properties
+    - redis
   max-recursion-depth: 10
   default-lang: zh
-  check:
-    enable-dict-name-unique-check: true
-    scan-packages:
-      - cn.silwings.dicti18n.demo
-  response-enhancer:
-    enabled: true
   loader:
+    declared:
+      enabled: true
+    properties:
+      enabled: false
+    redis:
+      enabled: true
     yml:
+      enabled: false
       location-pattern: classpath:dict_i18n/dict_*.yml
+  starter:
+    endpoint:
+      dict-items:
+        enabled: true
+    enhancer:
+      enabled: true
+    check:
+      unique-dict-name:
+        enabled: true
+    scan-packages:
+spring:
+  redis:
+    host: localhost
+    port: 6379
+logging:
+  level:
+    cn.silwings: debug

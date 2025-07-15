@@ -1,7 +1,7 @@
 package cn.silwings.dicti18n.loader.yml.impl;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
-import cn.silwings.dicti18n.loader.yml.config.DictI18nYmlProperties;
+import cn.silwings.dicti18n.loader.yml.config.YmlDictI18nLoaderProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -18,18 +18,18 @@ public class YmlDictI18nLoader implements ClassPathDictI18nLoader {
     private static final Logger log = LoggerFactory.getLogger(YmlDictI18nLoader.class);
     private static final String FILE_SUFFIX = ".yml";
 
-    private final DictI18nYmlProperties dictI18nYmlProperties;
+    private final YmlDictI18nLoaderProperties ymlDictI18nLoaderProperties;
 
     private final Map<String, Map<String, String>> dictData = new ConcurrentHashMap<>();
 
-    public YmlDictI18nLoader(final DictI18nYmlProperties dictI18nYmlProperties) {
-        this.dictI18nYmlProperties = dictI18nYmlProperties;
+    public YmlDictI18nLoader(final YmlDictI18nLoaderProperties ymlDictI18nLoaderProperties) {
+        this.ymlDictI18nLoaderProperties = ymlDictI18nLoaderProperties;
     }
 
     @PostConstruct
     public void loadAll() {
 
-        final Resource[] resources = this.loadResourcesFromPattern(this.dictI18nYmlProperties.getLocationPattern());
+        final Resource[] resources = this.loadResourcesFromPattern(this.ymlDictI18nLoaderProperties.getLocationPattern());
 
         for (final Resource resource : resources) {
             final String filename = resource.getFilename();
@@ -62,7 +62,7 @@ public class YmlDictI18nLoader implements ClassPathDictI18nLoader {
         if (null == key || key.isEmpty()) {
             return key;
         }
-        return this.dictI18nYmlProperties.isIgnoreCase() ? key.toLowerCase() : key;
+        return this.ymlDictI18nLoaderProperties.isIgnoreCase() ? key.toLowerCase() : key;
     }
 
     private String extractLangFromFilename(String filename) {
@@ -92,7 +92,7 @@ public class YmlDictI18nLoader implements ClassPathDictI18nLoader {
             Object value = entry.getValue();
             if (value instanceof Map<?, ?>) {
                 flatten(key, (Map<String, Object>) value, target);
-            } else {
+            } else if (null != value) {
                 target.put(this.processKey(key), String.valueOf(value));
             }
         }

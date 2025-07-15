@@ -1,6 +1,6 @@
 package cn.silwings.dicti18n.starter.annotation;
 
-import cn.silwings.dicti18n.starter.advice.DictI18nResponseEnhancer;
+import cn.silwings.dicti18n.starter.enhancer.DictI18nResponseEnhancer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

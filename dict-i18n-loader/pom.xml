@@ -15,7 +15,7 @@
         <module>dict-i18n-loader-properties</module>
         <module>dict-i18n-loader-redis</module>
         <module>dict-i18n-loader-yml</module>
-        <module>dict-i18n-loader-static</module>
+        <module>dict-i18n-loader-declared</module>
     </modules>
 
     <artifactId>dict-i18n-loader</artifactId>
