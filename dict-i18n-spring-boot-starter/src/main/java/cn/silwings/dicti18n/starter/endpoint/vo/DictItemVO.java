@@ -1,10 +1,6 @@
 package cn.silwings.dicti18n.starter.endpoint.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,12 +10,12 @@ import lombok.ToString;
 public class DictItemVO {
 
     /**
-     * 字典项编码
+     * Dictionary entry encoding
      */
     private String code;
 
     /**
-     * 字典项描述
+     * Dictionary entry description
      */
     private String desc;
 }

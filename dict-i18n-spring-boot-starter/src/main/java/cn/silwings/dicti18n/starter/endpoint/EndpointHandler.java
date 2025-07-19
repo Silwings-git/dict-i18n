@@ -13,13 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-/**
- * @ClassName EndpointHandler
- * @Description
- * @Author Silwings
- * @Date 2025/7/15 16:37
- * @Since
- **/
 public interface EndpointHandler extends HttpRequestHandler {
 
     @SuppressWarnings("unchecked")

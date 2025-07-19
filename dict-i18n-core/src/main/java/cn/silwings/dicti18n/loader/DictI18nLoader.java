@@ -13,9 +13,9 @@ public interface DictI18nLoader {
     /**
      * Get translations based on language and key
      *
-     * @param lang 语言
-     * @param key  字典键
-     * @return 译文
+     * @param lang    language
+     * @param dictKey dictionary key
+     * @return translation
      */
-    Optional<String> get(String lang, String key);
+    Optional<String> get(String lang, String dictKey);
 }

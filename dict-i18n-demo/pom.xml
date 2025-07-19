@@ -18,11 +18,7 @@
         </dependency>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>
-            <artifactId>dict-i18n-loader-yml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.silwings.dicti18n</groupId>
-            <artifactId>dict-i18n-loader-properties</artifactId>
+            <artifactId>dict-i18n-loader-file</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>

@@ -84,6 +84,11 @@
             </dependency>
             <dependency>
                 <groupId>cn.silwings.dicti18n</groupId>
+                <artifactId>dict-i18n-loader-file</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.silwings.dicti18n</groupId>
                 <artifactId>dict-i18n-loader-redis</artifactId>
                 <version>${revision}</version>
             </dependency>

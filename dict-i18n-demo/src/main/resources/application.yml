@@ -9,15 +9,14 @@ dict-i18n:
   loader:
     declared:
       enabled: false
-    properties:
-      enabled: false
-    redis:
-      enabled: false
-    yml:
+    file:
       enabled: true
       location-patterns:
-        - classpath:dict_i18n/dict_*.yml
-        - classpath:abc/dict_*.yml
+        #        - http://127.0.0.1:8081/dict_zh-CN.yml
+        - dict_i18n/dict_*.yml
+    redis:
+      enabled: false
+
   starter:
     endpoint:
       dict-items:

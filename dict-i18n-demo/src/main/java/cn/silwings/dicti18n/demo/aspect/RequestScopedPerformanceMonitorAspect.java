@@ -19,22 +19,22 @@ public class RequestScopedPerformanceMonitorAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestScopedPerformanceMonitorAspect.class);
 
-    // 存储每个请求的方法调用信息（RequestID → 调用栈）
+    // Store the method call information for each request (RequestID → call stack)
     private final ThreadLocal<Stack<MethodCall>> methodCallStack = ThreadLocal.withInitial(Stack::new);
-    // 存储每个请求的总耗时（RequestID → 总时间）
+    // Store the total duration of each request (RequestID → Total time)
     private final ThreadLocal<Map<String, Long>> requestTotalTime = ThreadLocal.withInitial(HashMap::new);
 
-    // 方法调用信息
+    // method invocation information
     private static class MethodCall {
         String className;
         String methodName;
         long startTime;
         long duration;
-        // 方法在请求中的调用顺序
+        // The calling order of methods in the request
         int methodIndex;
-        // 嵌套深度
+        // nested depth
         int depth;
-        // 父方法的methodIndex（即父ID）
+        // the methodIndex of the parent method (i.e., the parent ID)
         int parentIndex;
     }
 
@@ -42,21 +42,21 @@ public class RequestScopedPerformanceMonitorAspect {
     public Object monitor(ProceedingJoinPoint joinPoint) throws Throwable {
         String requestId = RequestContext.getRequestId();
         Stack<MethodCall> stack = methodCallStack.get();
-        int depth = stack.size(); // 当前嵌套深度
+        int depth = stack.size();
 
-        // 获取父方法信息（如果存在）
+        // Get the parent method information; if the stack is empty, it means this is the first method call.
         final int parentIndex = stack.isEmpty() ? 0 : stack.peek().methodIndex;
 
         if (stack.isEmpty()) {
-            logger.info("========== 请求开始 ==========");
+            logger.info("========== Request initiated ==========");
         }
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String className = signature.getDeclaringType().getSimpleName();
         String methodName = signature.getName();
 
-        // 创建方法调用记录
-        MethodCall currentCall = new MethodCall();
+        // Create method call record
+        final MethodCall currentCall = new MethodCall();
         currentCall.className = className;
         currentCall.methodName = methodName;
         currentCall.startTime = System.currentTimeMillis();
@@ -66,34 +66,32 @@ public class RequestScopedPerformanceMonitorAspect {
 
         stack.push(currentCall);
 
-        // 打印进入方法日志
-        String indent = this.repeatStr("  ", depth);
+        final String indent = this.repeatStr("  ", depth);
         logger.info("{}[{} >> {}] #{}.{}",
                 indent, currentCall.parentIndex, currentCall.methodIndex, className, methodName);
 
         try {
             return joinPoint.proceed();
         } finally {
-            // 计算方法耗时
+            // Computation method time consumption
             long endTime = System.currentTimeMillis();
             currentCall.duration = endTime - currentCall.startTime;
 
-            // 更新请求总耗时
+            // Total time taken for update request
             Map<String, Long> totalTimeMap = requestTotalTime.get();
             totalTimeMap.put(requestId, totalTimeMap.getOrDefault(requestId, 0L) + currentCall.duration);
 
-            // 打印退出方法日志
             logger.info("{}[{} << {}] #{}.{} - 耗时:{}ms",
                     indent, currentCall.parentIndex, currentCall.methodIndex, className, methodName, currentCall.duration);
 
             stack.pop();
 
-            // 如果栈为空，说明当前请求的所有方法都已执行完毕
+            // If the stack is empty, it means all methods in the current request have been executed.
             if (stack.isEmpty()) {
                 long totalTime = totalTimeMap.get(requestId);
-                logger.info("========== 请求总耗时: {}ms ==========", totalTime);
+                logger.info("========== Total request time: {}ms ==========", totalTime);
 
-                // 清理ThreadLocal
+                // clean ThreadLocal
                 methodCallStack.remove();
                 requestTotalTime.remove();
             }
@@ -101,7 +99,7 @@ public class RequestScopedPerformanceMonitorAspect {
     }
 
     private String repeatStr(final String str, final int depth) {
-        // 生成缩进字符串
+        // Generate indent string
         StringBuilder indentBuilder = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             indentBuilder.append(str);

@@ -12,10 +12,9 @@
     <modules>
         <module>dict-i18n-loader-core</module>
         <module>dict-i18n-loader-db</module>
-        <module>dict-i18n-loader-properties</module>
         <module>dict-i18n-loader-redis</module>
-        <module>dict-i18n-loader-yml</module>
         <module>dict-i18n-loader-declared</module>
+        <module>dict-i18n-loader-file</module>
     </modules>
 
     <artifactId>dict-i18n-loader</artifactId>

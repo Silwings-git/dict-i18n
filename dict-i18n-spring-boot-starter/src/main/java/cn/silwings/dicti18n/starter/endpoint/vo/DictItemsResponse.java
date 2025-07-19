@@ -1,10 +1,6 @@
 package cn.silwings.dicti18n.starter.endpoint.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class DictItemsResponse {
     /**
-     * 字典项
+     * The mapping relationship between dictionary names and their item lists
      */
     private Map<String, List<DictItemVO>> items = new HashMap<>();
 

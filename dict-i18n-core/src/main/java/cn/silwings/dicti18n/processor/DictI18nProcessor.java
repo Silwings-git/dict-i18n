@@ -11,15 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DictI18nProcessor {
@@ -94,7 +86,7 @@ public class DictI18nProcessor {
     private void processField(final Object target, final Field descField, final Class<?> clazz, final String language, final int depth, final Set<Object> visited) throws Exception {
         descField.setAccessible(true);
 
-        // 优先处理 @DictDesc 注解字段
+        // Prioritize fields annotated with @DictDesc
         final DictDesc annotation = descField.getAnnotation(DictDesc.class);
         if (null != annotation) {
             this.setDictDescToField(target, descField, annotation, clazz, language);
@@ -102,7 +94,7 @@ public class DictI18nProcessor {
             final Object nestedValue = descField.get(target);
             if (null != nestedValue) {
                 final Class<?> fieldType = nestedValue.getClass();
-                // 支持 Collection、Map、对象（前提是标注了 @DictModel）
+                // Supports Collection, Map, and objects (provided they are annotated with @DictModel)
                 if (nestedValue instanceof Collection<?>) {
                     ((Collection<?>) nestedValue).forEach(e -> this.processObject(e, language, depth + 1, visited));
                 } else if (nestedValue instanceof Map<?, ?>) {
@@ -169,12 +161,12 @@ public class DictI18nProcessor {
 
     private boolean isJavaBasicType(final Class<?> clazz) {
         return clazz == String.class
-               || clazz == Date.class
-               || clazz.isPrimitive()
-               || clazz.isEnum()
-               || Number.class.isAssignableFrom(clazz)
-               || Boolean.class.isAssignableFrom(clazz)
-               || Character.class.isAssignableFrom(clazz);
+                || clazz == Date.class
+                || clazz.isPrimitive()
+                || clazz.isEnum()
+                || Number.class.isAssignableFrom(clazz)
+                || Boolean.class.isAssignableFrom(clazz)
+                || Character.class.isAssignableFrom(clazz);
     }
 
     private String getBaseFieldName(final DictDesc annotation, final Field descField) {
@@ -205,7 +197,7 @@ public class DictI18nProcessor {
     private boolean deepScanForDictDesc(final Class<?> clazz, final int depth) {
 
         if (depth > this.getMaxRecursionDepth()) {
-            log.debug("DEEP SCAN MAX_RECURSION_DEPTH ERROR");
+            log.debug("Recursion depth exceeds maximum limit: {}", this.getMaxRecursionDepth());
             return false;
         }
 

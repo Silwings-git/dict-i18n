@@ -1,6 +1,6 @@
 package cn.silwings.dicti18n.declared.config;
 
-import cn.silwings.dicti18n.declared.impl.DeclaredDictLoader;
+import cn.silwings.dicti18n.declared.DeclaredDictI18nLoader;
 import cn.silwings.dicti18n.loader.scan.DictScanner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +16,8 @@ public class DeclaredDictI18nLoaderAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "dict-i18n.loader.declared", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public DeclaredDictLoader declaredDictLoader(final DictScanner dictScanner, final DeclaredDictI18nLoaderProperties declaredDictI18nLoaderProperties) {
-        return new DeclaredDictLoader(dictScanner, declaredDictI18nLoaderProperties);
+    public DeclaredDictI18nLoader declaredDictLoader(final DictScanner dictScanner, final DeclaredDictI18nLoaderProperties declaredDictI18nLoaderProperties) {
+        return new DeclaredDictI18nLoader(dictScanner, declaredDictI18nLoaderProperties);
     }
 
 }
