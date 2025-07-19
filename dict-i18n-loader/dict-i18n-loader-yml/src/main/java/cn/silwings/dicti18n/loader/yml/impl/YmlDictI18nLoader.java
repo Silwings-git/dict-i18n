@@ -2,6 +2,7 @@ package cn.silwings.dicti18n.loader.yml.impl;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.yml.config.YmlDictI18nLoaderProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -29,7 +30,7 @@ public class YmlDictI18nLoader implements ClassPathDictI18nLoader {
     @PostConstruct
     public void loadAll() {
 
-        final Resource[] resources = this.loadResourcesFromPattern(this.ymlDictI18nLoaderProperties.getLocationPattern());
+        final Resource[] resources = this.loadResourcesFromPattern(this.ymlDictI18nLoaderProperties.getLocationPatterns());
 
         for (final Resource resource : resources) {
             final String filename = resource.getFilename();
@@ -42,9 +43,9 @@ public class YmlDictI18nLoader implements ClassPathDictI18nLoader {
                 try {
                     final Yaml yaml = new Yaml();
                     final Map<String, Object> content = yaml.load(resource.getInputStream());
-                    final Map<String, String> flatMap = new ConcurrentHashMap<>();
+                    // Merge data from multiple files in the same language.
+                    final Map<String, String> flatMap = this.dictData.computeIfAbsent(lang.toLowerCase(), key -> new ConcurrentHashMap<>());
                     this.flatten("", content, flatMap);
-                    this.dictData.putIfAbsent(lang.toLowerCase(), flatMap);
                 } catch (IOException e) {
                     log.error("Failed to read the YML file: {}", e.getMessage(), e);
                 }
@@ -88,12 +89,12 @@ public class YmlDictI18nLoader implements ClassPathDictI18nLoader {
             return;
         }
         for (Map.Entry<String, Object> entry : source.entrySet()) {
-            String key = null == prefix || prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
-            Object value = entry.getValue();
-            if (value instanceof Map<?, ?>) {
-                flatten(key, (Map<String, Object>) value, target);
-            } else if (null != value) {
-                target.put(this.processKey(key), String.valueOf(value));
+            final String dictKey = null == prefix || prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
+            final Object dictDesc = entry.getValue();
+            if (dictDesc instanceof Map<?, ?>) {
+                flatten(dictKey, (Map<String, Object>) dictDesc, target);
+            } else if (null != dictDesc && StringUtils.isNotEmpty(dictDesc.toString())) {
+                target.put(this.processKey(dictKey), dictDesc.toString());
             }
         }
     }

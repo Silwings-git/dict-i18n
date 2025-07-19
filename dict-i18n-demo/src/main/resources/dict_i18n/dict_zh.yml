@@ -16,7 +16,7 @@ orderType:
 order_status:
   canceled: 已取消
   completed: 已完成
-  created: 已创建
+  #  created: 已创建
   paid: 已支付
   shipped: 已发货
 payment_type:

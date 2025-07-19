@@ -62,7 +62,7 @@ public class RequestScopedPerformanceMonitorAspect {
         currentCall.startTime = System.currentTimeMillis();
         currentCall.methodIndex = StringUtils.isBlank(RequestContext.getRequestId()) ? 1 : RequestContext.nextMethodIndex();
         currentCall.depth = depth;
-        currentCall.parentIndex = parentIndex; // 保存父ID
+        currentCall.parentIndex = parentIndex;
 
         stack.push(currentCall);
 

@@ -2,6 +2,7 @@ package cn.silwings.dicti18n.loader.properties.impl;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.properties.config.PropsDictI18nLoaderProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -32,7 +33,7 @@ public class PropertiesDictI18nLoader implements ClassPathDictI18nLoader {
     @PostConstruct
     public void loadAll() {
 
-        final Resource[] resources = this.loadResourcesFromPattern(this.propsDictI18nLoaderProperties.getLocationPattern());
+        final Resource[] resources = this.loadResourcesFromPattern(this.propsDictI18nLoaderProperties.getLocationPatterns());
 
         for (final Resource resource : resources) {
             final String filename = resource.getFilename();
@@ -48,15 +49,22 @@ public class PropertiesDictI18nLoader implements ClassPathDictI18nLoader {
                 } catch (IOException e) {
                     log.warn("Failed to load properties: {}", resource.getFilename(), e);
                 }
-                final Map<String, String> dictMap = new ConcurrentHashMap<>();
+                // Merge data from multiple files in the same language.
+                final Map<String, String> dictMap = this.dictMap.computeIfAbsent(lang.toLowerCase(), key -> new ConcurrentHashMap<>());
                 properties.forEach((dictKey, dictDesc) -> {
-                    if (null != dictDesc) {
-                        dictMap.put(this.processKey(String.valueOf(dictKey)), String.valueOf(dictDesc));
+                    if (null != dictDesc && StringUtils.isNotEmpty(dictDesc.toString())) {
+                        dictMap.put(this.processKey(String.valueOf(dictKey)), this.processDesc(dictDesc));
                     }
                 });
-                this.dictMap.put(lang.toLowerCase(), dictMap);
             }
         }
+    }
+
+    private String processDesc(final Object dictDesc) {
+        if (null == dictDesc) {
+            return "";
+        }
+        return String.valueOf(dictDesc);
     }
 
     /**

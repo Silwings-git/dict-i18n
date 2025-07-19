@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "dict-i18n.loader.redis")
@@ -13,7 +16,7 @@ public class RedisDictI18nLoaderProperties extends AbstractDictI18nLoaderPropert
      * Specify the resource path, and support Spring Resource path formats such as classpath: file:.
      * Default path: classpath:dict_i18n/dict_*.yml
      */
-    private String locationPattern = "classpath:dict_i18n/dict_*.yml";
+    private List<String> locationPatterns = Arrays.asList("classpath:dict_i18n/dict_*.yml", "classpath:dict_i18n/dict_*.properties");
 
     /**
      * Whether to load dict data from the resource file into Redis on startup.

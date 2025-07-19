@@ -6,6 +6,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import java.util.Arrays;
+import java.util.List;
+
 public interface ClassPathDictI18nLoader extends DictI18nLoader {
 
     Logger log = LoggerFactory.getLogger(ClassPathDictI18nLoader.class);
@@ -22,6 +25,10 @@ public interface ClassPathDictI18nLoader extends DictI18nLoader {
             log.warn("Failed to load yml: {}", e, e);
             return new Resource[0];
         }
+    }
+
+    default Resource[] loadResourcesFromPattern(final List<String> locationPatterns) {
+        return locationPatterns.stream().map(this::loadResourcesFromPattern).flatMap(Arrays::stream).toArray(Resource[]::new);
     }
 
 }

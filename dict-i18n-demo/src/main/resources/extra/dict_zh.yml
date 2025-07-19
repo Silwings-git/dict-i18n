@@ -1,0 +1,24 @@
+account_type:
+  GUEST: 游客 extra
+  OPERATION: 运营 extra
+logic_delete:
+  '0': 正常 extra
+  '1': 已删除 extra
+order.order_country:
+  CN: 中国 extra
+  EG: 埃及 extra
+  MY: 马来西亚 extra
+  US: 美国 extra
+orderSource:
+  _: _ extra
+orderType:
+  _: _ extra
+order_status:
+  canceled: 已取消 extra
+  completed: 已完成 extra
+  created: 已创建 extra
+  paid: 已支付 extra
+  shipped: 已发货 extra
+payment_type:
+  alipay: 支付宝 extra
+  weixin: 微信 extra
