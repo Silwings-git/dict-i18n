@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>dict-i18n-loader-core</module>
-        <module>dict-i18n-loader-db</module>
+        <module>dict-i18n-loader-sql</module>
         <module>dict-i18n-loader-redis</module>
         <module>dict-i18n-loader-declared</module>
         <module>dict-i18n-loader-file</module>

@@ -9,6 +9,6 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>dict-i18n-loader-db</artifactId>
+    <artifactId>dict-i18n-loader-sql</artifactId>
 
 </project>

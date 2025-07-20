@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ClassPathDictI18nLoader extends DictI18nLoader {
 
-    List<String> LOCATION_PATTERNS = Arrays.asList("classpath:dict_i18n/dict_*.yml", "classpath:dict_i18n/dict_*.properties", "classpath:dict_i18n/dict.yml", "classpath:dict_i18n/dict.properties");
+    List<String> LOCATION_PATTERNS = Arrays.asList("classpath:dict_i18n/dict*.yml", "classpath:dict_i18n/dict*.properties");
 
     Logger log = LoggerFactory.getLogger(ClassPathDictI18nLoader.class);
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

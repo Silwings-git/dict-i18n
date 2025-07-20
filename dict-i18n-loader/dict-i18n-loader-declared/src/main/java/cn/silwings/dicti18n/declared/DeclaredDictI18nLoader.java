@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * A DictI18nLoader implementation that loads all {@link Dict} implementations (enums or JavaBeans)
@@ -107,7 +106,7 @@ public class DeclaredDictI18nLoader implements DictI18nLoader, ApplicationContex
                         }
                     }
                 });
-        log.info("{} Dict instances have been loaded: {}", this.dictData.size(), this.dictData.keySet().stream().collect(Collectors.joining(",")));
+        log.info("{} Dict instances have been loaded.", this.dictData.size());
     }
 
     /**

@@ -74,7 +74,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.silwings.dicti18n</groupId>
-                <artifactId>dict-i18n-loader-db</artifactId>
+                <artifactId>dict-i18n-loader-sql</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
