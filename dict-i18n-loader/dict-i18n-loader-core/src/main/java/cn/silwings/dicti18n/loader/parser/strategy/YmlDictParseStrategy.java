@@ -1,6 +1,6 @@
-package cn.silwings.dicti18n.file.parser.strategy;
+package cn.silwings.dicti18n.loader.parser.strategy;
 
-import cn.silwings.dicti18n.file.parser.DictInfo;
+import cn.silwings.dicti18n.loader.parser.DictInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -35,7 +35,7 @@ public class YmlDictParseStrategy implements DictFileParseStrategy {
                     .map(entry -> new DictInfo(entry.getKey(), entry.getValue()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            log.error("Failed to read the YML file: {}", e.getMessage(), e);
+            log.error("Failed to read the YML file({}): {}", resource, e.getMessage(), e);
             return Collections.emptyList();
         }
     }

@@ -1,4 +1,4 @@
-package cn.silwings.dicti18n.file.parser;
+package cn.silwings.dicti18n.loader.parser;
 
 import lombok.*;
 

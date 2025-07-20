@@ -1,8 +1,7 @@
 dict-i18n:
   loader-order:
     - declared
-    - yml
-    - properties
+    - file
     - redis
   max-recursion-depth: 10
   default-lang: zh
@@ -12,11 +11,11 @@ dict-i18n:
     file:
       enabled: true
       location-patterns:
-        #        - http://127.0.0.1:8081/dict_zh-CN.yml
+        - http://127.0.0.1:8081/dict_zh-CN.yml
+        - extra/*
         - dict_i18n/dict_*.yml
     redis:
       enabled: false
-
   starter:
     endpoint:
       dict-items:

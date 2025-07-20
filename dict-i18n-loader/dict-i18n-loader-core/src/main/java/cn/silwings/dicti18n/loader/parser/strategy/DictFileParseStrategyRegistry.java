@@ -1,4 +1,4 @@
-package cn.silwings.dicti18n.file.parser.strategy;
+package cn.silwings.dicti18n.loader.parser.strategy;
 
 import org.springframework.core.io.Resource;
 

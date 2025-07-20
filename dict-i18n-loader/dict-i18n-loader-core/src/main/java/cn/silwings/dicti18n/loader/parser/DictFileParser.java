@@ -1,7 +1,7 @@
-package cn.silwings.dicti18n.file.parser;
+package cn.silwings.dicti18n.loader.parser;
 
-import cn.silwings.dicti18n.file.parser.strategy.DictFileParseStrategy;
-import cn.silwings.dicti18n.file.parser.strategy.DictFileParseStrategyRegistry;
+import cn.silwings.dicti18n.loader.parser.strategy.DictFileParseStrategy;
+import cn.silwings.dicti18n.loader.parser.strategy.DictFileParseStrategyRegistry;
 import org.springframework.core.io.Resource;
 
 import java.util.List;

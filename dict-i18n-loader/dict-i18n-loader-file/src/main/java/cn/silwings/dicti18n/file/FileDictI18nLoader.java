@@ -1,9 +1,9 @@
 package cn.silwings.dicti18n.file;
 
 import cn.silwings.dicti18n.file.config.FileDictI18nLoaderProperties;
-import cn.silwings.dicti18n.file.parser.DictFileParser;
-import cn.silwings.dicti18n.file.parser.DictInfo;
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
+import cn.silwings.dicti18n.loader.parser.DictFileParser;
+import cn.silwings.dicti18n.loader.parser.DictInfo;
 import cn.silwings.dicti18n.provider.CompositeDictI18nProvider;
 import org.springframework.core.io.Resource;
 
