@@ -4,7 +4,6 @@ import cn.silwings.dicti18n.file.config.FileDictI18nLoaderProperties;
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.parser.DictFileParser;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
-import cn.silwings.dicti18n.provider.CompositeDictI18nProvider;
 import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
@@ -43,49 +42,8 @@ public class FileDictI18nLoader implements ClassPathDictI18nLoader {
             final Map<String, String> langDictMap = this.dictData.computeIfAbsent(lang.toLowerCase(), key -> new ConcurrentHashMap<>());
             dictInfoList.stream()
                     .filter(DictInfo::isValid)
-                    .forEach(dictInfo -> langDictMap.put(this.processKey(dictInfo.getDictKey()), dictInfo.getDictDesc()));
+                    .forEach(dictInfo -> langDictMap.put(this.fileDictI18nLoaderProperties.processKey(dictInfo.getDictKey()), dictInfo.getDictDesc()));
         }
-    }
-
-    public String extractLangFromFilename(final Resource resource) {
-
-        final String filename = resource.getFilename();
-
-        if (null == filename || !filename.contains(".") || !filename.startsWith("dict_")) {
-            return null;
-        }
-
-        final String raw = filename.substring(0, filename.lastIndexOf(".")).toLowerCase();
-
-        if ("dict".equals(raw)) {
-            return CompositeDictI18nProvider.FALLBACK_LOCALE_KEY;
-        }
-
-        // Extract the language section
-        int idx = raw.lastIndexOf('_');
-        if (idx == -1) {
-            idx = raw.lastIndexOf('-');
-        }
-        if (idx == -1) {
-            idx = raw.lastIndexOf('.');
-        }
-
-        final String lang = idx == -1 ? raw : raw.substring(idx + 1);
-
-        return lang.isEmpty() ? null : lang;
-    }
-
-    /**
-     * Decide whether to ignore string case based on the configuration
-     *
-     * @param key Enter a string
-     * @return Processed string (lowercase is returned when case is ignored, otherwise it is returned as is)
-     */
-    public String processKey(final String key) {
-        if (null == key || key.isEmpty()) {
-            return key;
-        }
-        return this.fileDictI18nLoaderProperties.isIgnoreCase() ? key.toLowerCase() : key;
     }
 
     @Override
@@ -100,7 +58,7 @@ public class FileDictI18nLoader implements ClassPathDictI18nLoader {
         }
         final String langLowerCase = lang.toLowerCase();
         if (this.dictData.containsKey(langLowerCase)) {
-            return Optional.ofNullable(this.dictData.get(langLowerCase).get(this.processKey(dictKey)));
+            return Optional.ofNullable(this.dictData.get(langLowerCase).get(this.fileDictI18nLoaderProperties.processKey(dictKey)));
         }
         return Optional.empty();
     }

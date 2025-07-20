@@ -1,5 +1,6 @@
 package cn.silwings.dicti18n.loader;
 
+import cn.silwings.dicti18n.provider.CompositeDictI18nProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -10,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public interface ClassPathDictI18nLoader extends DictI18nLoader {
+
+    List<String> LOCATION_PATTERNS = Arrays.asList("classpath:dict_i18n/dict_*.yml", "classpath:dict_i18n/dict_*.properties", "classpath:dict_i18n/dict.yml", "classpath:dict_i18n/dict.properties");
 
     Logger log = LoggerFactory.getLogger(ClassPathDictI18nLoader.class);
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -49,6 +52,34 @@ public interface ClassPathDictI18nLoader extends DictI18nLoader {
                 .map(this::loadResourcesFromPattern)
                 .flatMap(Arrays::stream)
                 .toArray(Resource[]::new);
+    }
+
+    default String extractLangFromFilename(final Resource resource) {
+
+        final String filename = resource.getFilename();
+
+        if (null == filename || !filename.contains(".") || (!filename.startsWith("dict_") && !filename.startsWith("dict."))) {
+            return null;
+        }
+
+        final String raw = filename.substring(0, filename.lastIndexOf(".")).toLowerCase();
+
+        if ("dict".equals(raw)) {
+            return CompositeDictI18nProvider.FALLBACK_LOCALE_KEY;
+        }
+
+        // Extract the language section
+        int idx = raw.lastIndexOf('_');
+        if (idx == -1) {
+            idx = raw.lastIndexOf('-');
+        }
+        if (idx == -1) {
+            idx = raw.lastIndexOf('.');
+        }
+
+        final String lang = idx == -1 ? raw : raw.substring(idx + 1);
+
+        return lang.isEmpty() ? null : lang;
     }
 
 }

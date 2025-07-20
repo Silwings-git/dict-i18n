@@ -7,15 +7,19 @@ dict-i18n:
   default-lang: zh
   loader:
     declared:
-      enabled: false
+      enabled: true
     file:
       enabled: true
       location-patterns:
-        - http://127.0.0.1:8081/dict_zh-CN.yml
-        - extra/*
-        - dict_i18n/dict_*.yml
+    #        - http://127.0.0.1:8081/dict_zh-CN.yml
+    #        - extra/*
+    #        - dict_i18n/dict_*.yml
+    #        - dict_i18n/dict.yml
     redis:
-      enabled: false
+      enabled: true
+      preload: true
+      preload-mode: incremental
+      key-prefix: 'dict_i18n_demo:'
   starter:
     endpoint:
       dict-items:

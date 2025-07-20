@@ -1,11 +1,11 @@
 package cn.silwings.dicti18n.loader.redis.config;
 
+import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.config.AbstractDictI18nLoaderProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -16,13 +16,21 @@ public class RedisDictI18nLoaderProperties extends AbstractDictI18nLoaderPropert
      * Specify the resource path, and support Spring Resource path formats such as classpath: file:.
      * Default path: classpath:dict_i18n/dict_*.yml
      */
-    private List<String> locationPatterns = Arrays.asList("classpath:dict_i18n/dict_*.yml", "classpath:dict_i18n/dict_*.properties");
+    private List<String> locationPatterns = ClassPathDictI18nLoader.LOCATION_PATTERNS;
 
     /**
      * Whether to load dict data from the resource file into Redis on startup.
      * Default is false.
      */
     private boolean preload = false;
+
+    /**
+     * Whether to fail fast when loading dict data into Redis.
+     * If true, the application will fail to start if there is an error during loading.
+     * If false, it will log the error and continue.
+     * Default is true.
+     */
+    private boolean failFast = true;
 
     /**
      * Load mode when preloading to Redis.

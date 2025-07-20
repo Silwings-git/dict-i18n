@@ -6,9 +6,11 @@ import cn.silwings.dicti18n.loader.parser.strategy.DictFileParseStrategyRegistry
 import cn.silwings.dicti18n.loader.parser.strategy.PropertiesDictParseStrategy;
 import cn.silwings.dicti18n.loader.parser.strategy.YmlDictParseStrategy;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+@Configuration
 public class CoreDictI18nLoaderAutoConfiguration {
 
     @Bean

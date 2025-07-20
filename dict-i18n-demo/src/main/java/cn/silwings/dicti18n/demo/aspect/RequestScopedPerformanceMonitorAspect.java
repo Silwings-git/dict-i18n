@@ -48,7 +48,7 @@ public class RequestScopedPerformanceMonitorAspect {
         final int parentIndex = stack.isEmpty() ? 0 : stack.peek().methodIndex;
 
         if (stack.isEmpty()) {
-            logger.info("========== Request initiated ==========");
+            logger.debug("========== Request initiated ==========");
         }
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -67,7 +67,7 @@ public class RequestScopedPerformanceMonitorAspect {
         stack.push(currentCall);
 
         final String indent = this.repeatStr("  ", depth);
-        logger.info("{}[{} >> {}] #{}.{}",
+        logger.debug("{}[{} >> {}] #{}.{}",
                 indent, currentCall.parentIndex, currentCall.methodIndex, className, methodName);
 
         try {
@@ -81,7 +81,7 @@ public class RequestScopedPerformanceMonitorAspect {
             Map<String, Long> totalTimeMap = requestTotalTime.get();
             totalTimeMap.put(requestId, totalTimeMap.getOrDefault(requestId, 0L) + currentCall.duration);
 
-            logger.info("{}[{} << {}] #{}.{} - 耗时:{}ms",
+            logger.debug("{}[{} << {}] #{}.{} - 耗时:{}ms",
                     indent, currentCall.parentIndex, currentCall.methodIndex, className, methodName, currentCall.duration);
 
             stack.pop();
@@ -89,7 +89,7 @@ public class RequestScopedPerformanceMonitorAspect {
             // If the stack is empty, it means all methods in the current request have been executed.
             if (stack.isEmpty()) {
                 long totalTime = totalTimeMap.get(requestId);
-                logger.info("========== Total request time: {}ms ==========", totalTime);
+                logger.debug("========== Total request time: {}ms ==========", totalTime);
 
                 // clean ThreadLocal
                 methodCallStack.remove();

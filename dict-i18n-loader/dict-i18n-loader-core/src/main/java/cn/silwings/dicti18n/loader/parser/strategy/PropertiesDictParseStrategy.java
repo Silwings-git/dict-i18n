@@ -29,6 +29,7 @@ public class PropertiesDictParseStrategy implements DictFileParseStrategy {
         try (InputStreamReader input = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
             properties.load(input);
         } catch (IOException e) {
+            // todo 如果是空文件，异常要如何处理?
             log.warn("Failed to load properties: {}", resource.getFilename(), e);
         }
 

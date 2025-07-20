@@ -35,6 +35,7 @@ public class YmlDictParseStrategy implements DictFileParseStrategy {
                     .map(entry -> new DictInfo(entry.getKey(), entry.getValue()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
+            // todo 如果是空文件，异常要如何处理?
             log.error("Failed to read the YML file({}): {}", resource, e.getMessage(), e);
             return Collections.emptyList();
         }
