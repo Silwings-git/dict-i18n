@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public class GuavaDictI18nLoaderCacheProvider implements DictI18nLoaderCacheProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(GuavaDictI18nLoaderCacheProvider.class);
+    private final Logger log = LoggerFactory.getLogger(GuavaDictI18nLoaderCacheProvider.class);
     private final Cache<String, Optional<String>> cache;
 
     public GuavaDictI18nLoaderCacheProvider(final SqlDictI18nLoaderProperties.SqlDictI18nLoaderCacheProperties sqlDictI18nLoaderCacheProperties) {
@@ -31,7 +31,7 @@ public class GuavaDictI18nLoaderCacheProvider implements DictI18nLoaderCacheProv
                 try {
                     return dbQuery.get();
                 } catch (Exception e) {
-                    log.error("Failed to query internationalized dictionary data from the database: {}", e.getMessage(), e);
+                    log.error("[DictI18n] Failed to query internationalized dictionary data from the database: {}", e.getMessage(), e);
                     return Optional.empty();
                 }
             });

@@ -4,19 +4,21 @@ import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class PropertiesDictParseStrategy implements DictFileParseStrategy {
 
-    private static final Logger log = LoggerFactory.getLogger(PropertiesDictParseStrategy.class);
+    private final Logger log = LoggerFactory.getLogger(PropertiesDictParseStrategy.class);
 
     @Override
     public boolean supports(final Resource resource) {
@@ -27,22 +29,41 @@ public class PropertiesDictParseStrategy implements DictFileParseStrategy {
     @Override
     public List<DictInfo> parse(final Resource resource) {
 
-        final Properties properties = new Properties();
-        try (InputStreamReader input = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
-            properties.load(input);
-        } catch (IOException e) {
-            if (!(e instanceof FileNotFoundException && ClassPathDictI18nLoader.LOCATION_PATTERNS.contains(resource.getFilename()))) {
-                log.warn("Failed to load properties: {}", resource.getFilename(), e);
-            }
+        if (!resource.exists()) {
+            this.handleMissingResource(resource);
+            return Collections.emptyList();
         }
 
-        final List<DictInfo> dictList = new ArrayList<>();
-        properties.forEach((dictKey, dictDesc) -> {
-            if (null != dictKey && null != dictDesc) {
-                dictList.add(new DictInfo(dictKey.toString(), dictDesc.toString()));
+        return this.loadProperties(resource)
+                .map(this::convertToDictInfoList)
+                .orElse(Collections.emptyList());
+    }
+
+    private List<DictInfo> convertToDictInfoList(final Properties properties) {
+        return properties.entrySet().stream()
+                .filter(entry -> null != entry.getKey() && null != entry.getValue())
+                .map(entry -> new DictInfo(entry.getKey().toString(), entry.getValue().toString()))
+                .collect(Collectors.toList());
+    }
+
+    private Optional<Properties> loadProperties(final Resource resource) {
+        try (InputStreamReader input = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+            final Properties properties = new Properties();
+            properties.load(input);
+            return Optional.of(properties);
+        } catch (IOException e) {
+            log.error("[DictI18n] Failed to load properties: {}", resource.getDescription(), e);
+            return Optional.empty();
+        }
+    }
+
+    private void handleMissingResource(final Resource resource) {
+        if (resource instanceof ClassPathResource) {
+            final String targetPath = ((ClassPathResource) resource).getPath();
+            if (!ClassPathDictI18nLoader.LOCATION_PATTERNS.contains(targetPath)) {
+                log.warn("[DictI18n] Failed to load properties: {}", resource.getDescription());
             }
-        });
-        return dictList;
+        }
     }
 
 }

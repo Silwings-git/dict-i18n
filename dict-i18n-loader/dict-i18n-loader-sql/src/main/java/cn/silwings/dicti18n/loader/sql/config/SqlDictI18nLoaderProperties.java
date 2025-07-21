@@ -105,5 +105,4 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
     }
 
     // todo 所有disable的地方应该打印日志
-    // todo 所有日志添加dicti18n标识
 }

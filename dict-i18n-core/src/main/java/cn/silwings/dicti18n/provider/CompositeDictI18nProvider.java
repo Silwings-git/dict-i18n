@@ -42,7 +42,7 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
         this.loaders = sorter.getOrderedLoaders();
         this.fallbackLangChainCache = new ConcurrentHashMap<>();
         if (this.loaders.isEmpty()) {
-            throw new IllegalArgumentException("Provide at least one DictI18nLoader.");
+            throw new IllegalArgumentException("[DictI18n] Provide at least one DictI18nLoader.");
         }
     }
 

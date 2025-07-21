@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:${user.dir}/dict_i18n.db
+    username:
+    password:
+    driver-class-name: org.sqlite.JDBC

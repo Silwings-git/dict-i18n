@@ -34,7 +34,7 @@ public interface EndpointHandler extends HttpRequestHandler {
                 }
             }
         }
-        throw new HttpMediaTypeNotAcceptableException("No suitable HttpMessageConverter found");
+        throw new HttpMediaTypeNotAcceptableException("[DictI18n] No suitable HttpMessageConverter found");
     }
 
     RequestMappingHandlerAdapter getHandlerAdapter();

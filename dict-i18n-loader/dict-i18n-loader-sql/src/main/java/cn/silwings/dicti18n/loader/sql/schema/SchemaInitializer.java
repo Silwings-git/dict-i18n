@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class SchemaInitializer {
 
-    private static final Logger log = LoggerFactory.getLogger(SchemaInitializer.class);
+    private final Logger log = LoggerFactory.getLogger(SchemaInitializer.class);
     private final JdbcTemplate jdbcTemplate;
     private final SqlDictI18nLoaderProperties.SqlDictI18nLoaderSqlSchemaInitProperties properties;
 
@@ -55,12 +55,12 @@ public class SchemaInitializer {
         try {
             final DataSource dataSource = this.jdbcTemplate.getDataSource();
             if (null == dataSource) {
-                throw new IllegalStateException("JdbcTemplate has no DataSource");
+                throw new IllegalStateException("[DictI18n] JdbcTemplate has no DataSource");
             }
             final DatabaseMetaData metaData = dataSource.getConnection().getMetaData();
             return metaData.getDatabaseProductName();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to get database product name", e);
+            throw new RuntimeException("[DictI18n] Failed to get database product name", e);
         }
     }
 
@@ -69,42 +69,44 @@ public class SchemaInitializer {
             case "mysql":
                 return new String[]{
                         "CREATE TABLE IF NOT EXISTS dict_i18n (" +
-                        "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
-                        "dict_key VARCHAR(512) NOT NULL," +
-                        "lang VARCHAR(10) NOT NULL," +
-                        "description VARCHAR(1024) NOT NULL," +
-                        "UNIQUE KEY uidx_dicti18n_dict_lang (dict_key, lang)" +
-                        ") ENGINE=InnoDB;",
-                        "CREATE INDEX idx_dict_key ON dict_i18n (dict_key);",
-                        "CREATE INDEX idx_lang ON dict_i18n (lang);"
+                                "id BIGINT AUTO_INCREMENT PRIMARY KEY," +
+                                "dict_key VARCHAR(512) NOT NULL," +
+                                "lang VARCHAR(10) NOT NULL," +
+                                "description VARCHAR(1024) NOT NULL," +
+                                "enabled TINYINT NOT NULL DEFAULT 1 COMMENT 'Enable or not: 1-Enable, 0-Disable'," +
+                                "UNIQUE KEY uidx_dicti18n_dictkey_lang (dict_key, lang)" +
+                                ") ENGINE=InnoDB;",
+                        "CREATE INDEX idx_dicti18n_dictkey ON dict_i18n (dict_key);",
+                        "CREATE INDEX idx_dicti18n_lang ON dict_i18n (lang);"
                 };
             case "postgresql":
                 return new String[]{
                         "CREATE TABLE IF NOT EXISTS dict_i18n (" +
-                        "id BIGSERIAL PRIMARY KEY," +
-                        "dict_key VARCHAR(512) NOT NULL," +
-                        "lang VARCHAR(10) NOT NULL," +
-                        "description VARCHAR(1024) NOT NULL," +
-                        "UNIQUE (dict_key, lang)" +
-                        ");",
-                        "CREATE INDEX IF NOT EXISTS idx_dict_key ON dict_i18n (dict_key);",
-                        "CREATE INDEX IF NOT EXISTS idx_lang ON dict_i18n (lang);"
+                                "id BIGSERIAL PRIMARY KEY," +
+                                "dict_key VARCHAR(512) NOT NULL," +
+                                "lang VARCHAR(10) NOT NULL," +
+                                "description VARCHAR(1024) NOT NULL," +
+                                "enabled SMALLINT NOT NULL DEFAULT 1," +
+                                "UNIQUE (dict_key, lang)" +
+                                ");",
+                        "CREATE INDEX IF NOT EXISTS idx_dicti18n_dictkey ON dict_i18n (dict_key);",
+                        "CREATE INDEX IF NOT EXISTS idx_dicti18n_lang ON dict_i18n (lang);"
                 };
-            // todo 待测试
             case "sqlite":
                 return new String[]{
                         "CREATE TABLE IF NOT EXISTS dict_i18n (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "dict_key TEXT NOT NULL," +
-                        "lang TEXT NOT NULL," +
-                        "description TEXT NOT NULL," +
-                        "UNIQUE(dict_key, lang)" +
-                        ");",
-                        "CREATE INDEX IF NOT EXISTS idx_dict_key ON dict_i18n (dict_key);",
-                        "CREATE INDEX IF NOT EXISTS idx_lang ON dict_i18n (lang);"
+                                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                "dict_key TEXT NOT NULL," +
+                                "lang TEXT NOT NULL," +
+                                "description TEXT NOT NULL," +
+                                "enabled INTEGER NOT NULL DEFAULT 1 CHECK (enabled IN (0, 1))," +
+                                "UNIQUE(dict_key, lang)" +
+                                ");",
+                        "CREATE INDEX IF NOT EXISTS idx_dicti18n_dictkey ON dict_i18n (dict_key);",
+                        "CREATE INDEX IF NOT EXISTS idx_dicti18n_lang ON dict_i18n (lang);"
                 };
             default:
-                throw new UnsupportedOperationException("Unsupported database: " + databaseProductName);
+                throw new UnsupportedOperationException("[DictI18n] Unsupported database: " + databaseProductName);
         }
     }
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DictI18nProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(DictI18nProcessor.class);
+    private final Logger log = LoggerFactory.getLogger(DictI18nProcessor.class);
 
     private final DictI18nProvider i18nProvider;
     // Whether the cache type should be handled to improve performance
@@ -53,7 +53,7 @@ public class DictI18nProcessor {
     private void processObject(final Object target, final String language, final int depth, final Set<Object> visited) {
         if (target == null || this.isJavaBasicType(target.getClass()) || depth > this.getMaxRecursionDepth()) {
             if (depth > this.getMaxRecursionDepth()) {
-                log.debug("When looking up a field, the recursion exceeds the maximum recursion depth");
+                log.debug("[DictI18n] When looking up a field, the recursion exceeds the maximum recursion depth");
             }
             return;
         }
@@ -68,7 +68,7 @@ public class DictI18nProcessor {
             try {
                 this.processField(target, descField, clazz, language, depth, visited);
             } catch (Exception e) {
-                log.debug("The processing field failed and the reason for the failure: {}", e.getMessage(), e);
+                log.debug("[DictI18n] The processing field failed and the reason for the failure: {}", e.getMessage(), e);
             }
         }
     }
@@ -111,7 +111,7 @@ public class DictI18nProcessor {
                                     final DictDesc annotation,
                                     final Class<?> clazz,
                                     final String language) {
-        final String dictName = getDictName(annotation);
+        final String dictName = this.getDictName(annotation);
 
         final String baseFieldName = this.getBaseFieldName(annotation, descField);
 
@@ -126,12 +126,12 @@ public class DictI18nProcessor {
                     descField.set(target, text);
                 }
             } catch (Exception e) {
-                log.debug("setDictDescToField failed: {}", e.getMessage(), e);
+                log.debug("[DictI18n] SetDictDescToField failed: {}", e.getMessage(), e);
             }
         }
     }
 
-    private static String getDictName(final DictDesc annotation) {
+    private String getDictName(final DictDesc annotation) {
         final Dict[] enums = annotation.value().getEnumConstants();
         if (enums.length > 0) {
             return enums[0].dictName();
@@ -142,7 +142,7 @@ public class DictI18nProcessor {
                      | NoSuchMethodException
                      | InvocationTargetException
                      | InstantiationException e) {
-                log.error("Failed to instantiate Dict enum class '{}' via no-arg constructor. Please check class design.", annotation.value().getName(), e);
+                log.error("[DictI18n] Failed to instantiate Dict enum class '{}' via no-arg constructor. Please check class design.", annotation.value().getName(), e);
             }
         }
         return null;
@@ -156,7 +156,7 @@ public class DictI18nProcessor {
                 clazz = clazz.getSuperclass();
             }
         }
-        throw new NoSuchFieldException("Field '" + fieldName + "' not found in class hierarchy");
+        throw new NoSuchFieldException("[DictI18n] Field '" + fieldName + "' not found in class hierarchy");
     }
 
     private boolean isJavaBasicType(final Class<?> clazz) {
@@ -197,7 +197,7 @@ public class DictI18nProcessor {
     private boolean deepScanForDictDesc(final Class<?> clazz, final int depth) {
 
         if (depth > this.getMaxRecursionDepth()) {
-            log.debug("Recursion depth exceeds maximum limit: {}", this.getMaxRecursionDepth());
+            log.debug("[DictI18n] Recursion depth exceeds maximum limit: {}", this.getMaxRecursionDepth());
             return false;
         }
 

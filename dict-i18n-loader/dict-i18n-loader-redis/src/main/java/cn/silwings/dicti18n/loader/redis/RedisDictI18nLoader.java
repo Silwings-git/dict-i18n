@@ -5,6 +5,8 @@ import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.parser.DictFileParser;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
 import cn.silwings.dicti18n.loader.redis.config.RedisDictI18nLoaderProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,20 +22,22 @@ import java.util.stream.Collectors;
 public class RedisDictI18nLoader implements ClassPathDictI18nLoader {
 
     private static final String SCRIPT = "local mode = ARGV[1]\n" +
-                                         "for i = 2, #ARGV, 2 do\n" +
-                                         "    local key = ARGV[i]\n" +
-                                         "    local value = ARGV[i + 1]\n" +
-                                         "    if mode == \"FULL\" then\n" +
-                                         "        redis.call(\"SET\", key, value)\n" +
-                                         "    elseif mode == \"INCREMENTAL\" then\n" +
-                                         "        if redis.call(\"EXISTS\", key) == 0 then\n" +
-                                         "            redis.call(\"SET\", key, value)\n" +
-                                         "        end\n" +
-                                         "    else\n" +
-                                         "        return redis.error_reply(\"Invalid mode: \" .. mode)\n" +
-                                         "    end\n" +
-                                         "end\n" +
-                                         "return \"OK\"\n";
+            "for i = 2, #ARGV, 2 do\n" +
+            "    local key = ARGV[i]\n" +
+            "    local value = ARGV[i + 1]\n" +
+            "    if mode == \"FULL\" then\n" +
+            "        redis.call(\"SET\", key, value)\n" +
+            "    elseif mode == \"INCREMENTAL\" then\n" +
+            "        if redis.call(\"EXISTS\", key) == 0 then\n" +
+            "            redis.call(\"SET\", key, value)\n" +
+            "        end\n" +
+            "    else\n" +
+            "        return redis.error_reply(\"Invalid mode: \" .. mode)\n" +
+            "    end\n" +
+            "end\n" +
+            "return \"OK\"";
+
+    private final Logger log = LoggerFactory.getLogger(RedisDictI18nLoader.class);
 
     private final RedisDictI18nLoaderProperties redisDictI18nLoaderProperties;
 
@@ -47,10 +51,16 @@ public class RedisDictI18nLoader implements ClassPathDictI18nLoader {
         this.dictFileParser = dictFileParser;
     }
 
+    @Override
+    public Logger getLog() {
+        return log;
+    }
+
     @PostConstruct
     public void preload() {
 
         if (!this.redisDictI18nLoaderProperties.getPreload().isEnabled()) {
+            log.info("[DictI18n] Redis preload is disabled.");
             return;
         }
 
@@ -83,18 +93,18 @@ public class RedisDictI18nLoader implements ClassPathDictI18nLoader {
                 result = this.redisTemplate.execute(redisScript, Collections.emptyList(), args.toArray());
             } catch (Exception e) {
                 if (this.redisDictI18nLoaderProperties.getPreload().isFailFast()) {
-                    throw new RedisSystemException("Failed to execute Redis script due to connection error.", e);
+                    throw new RedisSystemException("[DictI18n] Failed to execute Redis script due to connection error.", e);
                 } else {
-                    log.warn("Redis connection failed: {}", e.getMessage(), e);
+                    log.warn("[DictI18n] Redis connection failed: {}", e.getMessage(), e);
                     return;
                 }
             }
             if ("OK".equals(result)) {
-                log.info("Preloaded {} entries for language: {}", dictInfoList.size(), lang.isEmpty() ? "default" : lang);
+                log.info("[DictI18n] Preloaded {} entries for language: {}", dictInfoList.size(), lang.isEmpty() ? "default" : lang);
             } else {
                 final String errorMsg = "Redis script execution failed. PreloadMode: " + this.redisDictI18nLoaderProperties.getPreload().getPreloadMode().name() + ", Result: " + result + ".";
                 if (this.redisDictI18nLoaderProperties.getPreload().isFailFast()) {
-                    throw new RedisSystemException(errorMsg, new RuntimeException("Redis script execution failed."));
+                    throw new RedisSystemException(errorMsg, new RuntimeException("[DictI18n] Redis script execution failed."));
                 } else {
                     log.warn(errorMsg);
                 }

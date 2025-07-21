@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </p>
  */
 public class DeclaredDictI18nLoader implements DictI18nLoader, ApplicationContextAware, ApplicationRunner {
-    private static final Logger log = LoggerFactory.getLogger(DeclaredDictI18nLoader.class);
+    private final Logger log = LoggerFactory.getLogger(DeclaredDictI18nLoader.class);
     private final DictScanner dictScanner;
     private final DeclaredDictI18nLoaderProperties declaredDictI18nLoaderProperties;
     private ApplicationContext applicationContext;
@@ -102,11 +102,11 @@ public class DeclaredDictI18nLoader implements DictI18nLoader, ApplicationContex
                             final Dict instance = (Dict) constructor.newInstance();
                             this.dictData.put(this.processKey(String.format("%s.%s", instance.dictName(), instance.code())), instance);
                         } catch (Exception e) {
-                            throw new IllegalStateException("JavaBean Dict class must have a no-arg constructor: " + clazz.getName(), e);
+                            throw new IllegalStateException("[DictI18n] JavaBean Dict class must have a no-arg constructor: " + clazz.getName(), e);
                         }
                     }
                 });
-        log.info("{} Dict instances have been loaded.", this.dictData.size());
+        log.info("[DictI18n] {} Dict instances have been loaded.", this.dictData.size());
     }
 
     /**
@@ -159,7 +159,7 @@ public class DeclaredDictI18nLoader implements DictI18nLoader, ApplicationContex
             } catch (NoSuchMethodException ignored) {
                 // The getDesc method does not exist
             } catch (Exception e) {
-                log.warn("Unexpected error when scanning getDesc() of class {}: {}", clazz.getName(), e.getMessage());
+                log.warn("[DictI18n] Unexpected error when scanning getDesc() of class {}: {}", clazz.getName(), e.getMessage());
             }
             return Optional.empty();
         });
@@ -169,7 +169,7 @@ public class DeclaredDictI18nLoader implements DictI18nLoader, ApplicationContex
                 final String desc = (String) optionalMethod.get().invoke(dict);
                 return Optional.ofNullable(desc);
             } catch (Exception e) {
-                log.warn("Failed to invoke getDesc() on {}: {}", dict.getClass().getName(), e.getMessage());
+                log.warn("[DictI18n] Failed to invoke getDesc() on {}: {}", dict.getClass().getName(), e.getMessage());
             }
         }
 

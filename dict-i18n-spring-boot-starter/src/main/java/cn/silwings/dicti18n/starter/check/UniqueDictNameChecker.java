@@ -14,11 +14,7 @@ import org.springframework.context.ApplicationContextException;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Checks for uniqueness of {@link Dict#dictName()} across all Dict implementations at application startup.
@@ -33,7 +29,7 @@ import java.util.Set;
  */
 public class UniqueDictNameChecker implements ApplicationContextAware {
 
-    private static final Logger log = LoggerFactory.getLogger(UniqueDictNameChecker.class);
+    private final Logger log = LoggerFactory.getLogger(UniqueDictNameChecker.class);
 
     private ApplicationContext applicationContext;
     private final DictScanner dictScanner;
@@ -60,6 +56,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
     public void checkDictNames() {
 
         if (!this.dictI18NStarterProperties.getCheck().getUniqueDictName().isEnabled()) {
+            log.info("[DictI18n] Dict name check is disabled.");
             return;
         }
 
@@ -74,7 +71,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
         for (Class<Dict> dictClass : dictClasses) {
             try {
                 final String dictName = this.resolveDictName(dictClass);
-                checkDictNameNotBlank(dictName, dictClass);
+                this.checkDictNameNotBlank(dictName, dictClass);
 
                 final String lowerCaseDictName = dictName.toLowerCase();
 
@@ -89,7 +86,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
                 dictNameMap.put(lowerCaseDictName, dictClass);
 
             } catch (Exception e) {
-                throw new ApplicationContextException("Dict validation failed for class: " + dictClass.getName(), e);
+                throw new ApplicationContextException("[DictI18n] Dict validation failed for class: " + dictClass.getName(), e);
             }
         }
 
@@ -108,7 +105,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
         if (clazz.isEnum()) {
             final Object[] enumConstants = clazz.getEnumConstants();
             if (null == enumConstants || enumConstants.length == 0) {
-                throw new IllegalStateException("Enum " + clazz.getName() + " has no constants");
+                throw new IllegalStateException("[DictI18n] Enum " + clazz.getName() + " has no constants");
             }
 
             final String firstDictName = ((Dict) enumConstants[0]).dictName();
@@ -117,7 +114,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
                 if (!Objects.equals(firstDictName, currentName)) {
                     throw new ApplicationContextException(
                             "All enum constants of " + clazz.getName() + " must have the same dictName. Found: '"
-                            + firstDictName + "' and '" + currentName + "'");
+                                    + firstDictName + "' and '" + currentName + "'");
                 }
             }
             return firstDictName;
@@ -128,7 +125,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
                 final Dict instance = (Dict) constructor.newInstance();
                 return instance.dictName();
             } catch (Exception e) {
-                throw new IllegalStateException("JavaBean Dict class must have a no-arg constructor: " + clazz.getName(), e);
+                throw new IllegalStateException("[DictI18n] JavaBean Dict class must have a no-arg constructor: " + clazz.getName(), e);
             }
         }
     }
@@ -136,10 +133,10 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
     /**
      * Throws an exception if the provided dict name is null or blank.
      */
-    private static void checkDictNameNotBlank(final String dictName, final Class<?> dictClass) {
+    private void checkDictNameNotBlank(final String dictName, final Class<?> dictClass) {
         if (StringUtils.isBlank(dictName)) {
-            log.debug("Validating dictName='{}' from class '{}'", dictName, dictClass.getName());
-            throw new ApplicationContextException("dictName cannot be null or blank. Invalid Dict: " + dictClass.getName());
+            log.debug("[DictI18n] Validating dictName='{}' from class '{}'", dictName, dictClass.getName());
+            throw new ApplicationContextException("[DictI18n] dictName cannot be null or blank. Invalid Dict: " + dictClass.getName());
         }
     }
 

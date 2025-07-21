@@ -7,8 +7,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -19,16 +19,16 @@ import java.util.Stack;
 @Aspect
 @Component
 @Order
-public class RequestScopedPerformanceMonitorAspect implements ApplicationRunner {
+public class RequestScopedPerformanceMonitorAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestScopedPerformanceMonitorAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(RequestScopedPerformanceMonitorAspect.class);
 
     // Store the method call information for each request (RequestID → call stack)
     private final ThreadLocal<Stack<MethodCall>> methodCallStack = ThreadLocal.withInitial(Stack::new);
     // Store the total duration of each request (RequestID → Total time)
     private final ThreadLocal<Map<String, Long>> requestTotalTime = ThreadLocal.withInitial(HashMap::new);
 
-    private boolean start = false;
+    private boolean ready = false;
 
     // method invocation information
     private static class MethodCall {
@@ -44,15 +44,15 @@ public class RequestScopedPerformanceMonitorAspect implements ApplicationRunner 
         int parentIndex;
     }
 
-    @Override
-    public void run(final ApplicationArguments args) {
-        this.start = true;
+    @EventListener(ApplicationReadyEvent.class)
+    public void ready() {
+        this.ready = true;
     }
 
     @Around("execution(* cn.silwings.dicti18n..*.*(..))")
     public Object monitor(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        if (!this.start) {
+        if (!this.ready) {
             return joinPoint.proceed();
         }
 

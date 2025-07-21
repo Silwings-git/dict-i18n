@@ -80,7 +80,7 @@ public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
             if (this.outputDir.mkdirs()) {
                 this.getLog().info("An output directory has been created: " + this.outputDir.getAbsolutePath());
             } else {
-                throw new MojoExecutionException("Unable to create output directory: " + this.outputDir.getAbsolutePath());
+                throw new MojoExecutionException("[DictI18n] Unable to create output directory: " + this.outputDir.getAbsolutePath());
             }
         }
     }

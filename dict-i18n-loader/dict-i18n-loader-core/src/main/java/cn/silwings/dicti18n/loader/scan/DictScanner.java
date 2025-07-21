@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class DictScanner {
 
-    private static final Logger log = LoggerFactory.getLogger(DictScanner.class);
+    private final Logger log = LoggerFactory.getLogger(DictScanner.class);
 
     /**
      * Scans the given packages and returns all classes that implement the {@link Dict} interface.
@@ -54,7 +54,7 @@ public class DictScanner {
         try {
             return (Class<Dict>) Class.forName(className);
         } catch (ClassNotFoundException e) {
-            log.warn("Class not found: {}", e.getMessage(), e);
+            log.warn("[DictI18n] Class not found: {}", e.getMessage(), e);
             return null;
         }
     }

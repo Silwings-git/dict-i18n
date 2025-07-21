@@ -4,6 +4,8 @@ import cn.silwings.dicti18n.file.config.FileDictI18nLoaderProperties;
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.parser.DictFileParser;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FileDictI18nLoader implements ClassPathDictI18nLoader {
 
+    private final Logger log = LoggerFactory.getLogger(FileDictI18nLoader.class);
     private final FileDictI18nLoaderProperties fileDictI18nLoaderProperties;
     private final DictFileParser dictFileParser;
     private final Map<String, Map<String, String>> dictData;
@@ -25,6 +28,11 @@ public class FileDictI18nLoader implements ClassPathDictI18nLoader {
         this.fileDictI18nLoaderProperties = fileDictI18nLoaderProperties;
         this.dictFileParser = dictFileParser;
         this.dictData = new ConcurrentHashMap<>();
+    }
+
+    @Override
+    public Logger getLog() {
+        return log;
     }
 
     @PostConstruct

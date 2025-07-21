@@ -17,6 +17,6 @@ public class DictFileParseStrategyRegistry {
                 .stream()
                 .filter(s -> s.supports(resource))
                 .findFirst()
-                .orElseThrow(() -> new UnsupportedOperationException("Unsupported file format: " + resource.getFilename()));
+                .orElseThrow(() -> new UnsupportedOperationException("[DictI18n] Unsupported file format: " + resource.getFilename()));
     }
 }

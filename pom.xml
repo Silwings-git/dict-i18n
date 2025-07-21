@@ -29,7 +29,7 @@
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.plugin.plugin.version>3.5.2</maven.plugin.plugin.version>
         <flatten.maven.plugin.version>1.5.0</flatten.maven.plugin.version>
-        <guava.version>29.0-jre</guava.version>
+        <guava.version>33.4.8-jre</guava.version>
     </properties>
 
     <dependencyManagement>

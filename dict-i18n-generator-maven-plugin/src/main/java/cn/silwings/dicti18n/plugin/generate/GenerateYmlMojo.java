@@ -10,11 +10,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -105,7 +101,7 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
                 return result;
             }
         } catch (Exception e) {
-            this.getLog().warn("Failed to load yaml: " + outFile.getName());
+            this.getLog().debug("Failed to load yaml: " + outFile.getName());
         }
         return new TreeMap<>();
     }

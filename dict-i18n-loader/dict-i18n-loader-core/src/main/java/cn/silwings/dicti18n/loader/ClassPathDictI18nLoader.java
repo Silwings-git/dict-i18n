@@ -2,7 +2,6 @@ package cn.silwings.dicti18n.loader;
 
 import cn.silwings.dicti18n.provider.CompositeDictI18nProvider;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -13,9 +12,8 @@ import java.util.List;
 
 public interface ClassPathDictI18nLoader extends DictI18nLoader {
 
-    List<String> LOCATION_PATTERNS = Arrays.asList("classpath:dict_i18n/dict_*.yml", "classpath:dict_i18n/dict_*.properties", "classpath:dict_i18n/dict.yml", "classpath:dict_i18n/dict.properties");
+    List<String> LOCATION_PATTERNS = Arrays.asList("dict_i18n/dict_*.yml", "dict_i18n/dict_*.properties", "dict_i18n/dict.yml", "dict_i18n/dict.properties");
 
-    Logger log = LoggerFactory.getLogger(ClassPathDictI18nLoader.class);
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
     /**
@@ -26,20 +24,22 @@ public interface ClassPathDictI18nLoader extends DictI18nLoader {
      */
     default Resource[] loadResourcesFromPattern(final String locationPattern) {
         if (null == locationPattern || locationPattern.trim().isEmpty()) {
-            log.warn("Location pattern is null or empty.");
+            this.getLog().warn("[DictI18n] Location pattern is null or empty.");
             return new Resource[0];
         }
         try {
             final Resource[] resources = resolver.getResources(locationPattern);
-            log.debug("Loaded {} resource(s) from pattern: {}", resources.length, locationPattern);
+            this.getLog().debug("[DictI18n] Loaded {} resource(s) from pattern: {}", resources.length, locationPattern);
             return resources;
         } catch (Throwable e) {
             if (!(e instanceof FileNotFoundException && LOCATION_PATTERNS.contains(locationPattern))) {
-                log.warn("Failed to load resources from pattern '{}': {}", locationPattern, e.toString());
+                this.getLog().warn("[DictI18n] Failed to load resources from pattern '{}': {}", locationPattern, e.toString());
             }
             return new Resource[0];
         }
     }
+
+    Logger getLog();
 
     /**
      * Load resources in bulk under multiple path patterns.。

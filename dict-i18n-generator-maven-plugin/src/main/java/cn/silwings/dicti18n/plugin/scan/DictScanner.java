@@ -85,7 +85,7 @@ public class DictScanner {
                 return concreteImplementations;
             }
         } catch (Exception e) {
-            throw new MojoExecutionException("Dict implementation of class-like scan failed", e);
+            throw new MojoExecutionException("[DictI18n] Dict implementation of class-like scan failed", e);
         }
     }
 
