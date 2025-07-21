@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </p>
  */
 public class DeclaredDictI18nLoader implements DictI18nLoader, ApplicationContextAware, ApplicationRunner {
-    private final Logger log = LoggerFactory.getLogger(DeclaredDictI18nLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(DeclaredDictI18nLoader.class);
     private final DictScanner dictScanner;
     private final DeclaredDictI18nLoaderProperties declaredDictI18nLoaderProperties;
     private ApplicationContext applicationContext;

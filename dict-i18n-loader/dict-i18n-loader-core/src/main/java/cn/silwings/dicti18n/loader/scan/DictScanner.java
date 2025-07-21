@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class DictScanner {
 
-    private final Logger log = LoggerFactory.getLogger(DictScanner.class);
+    private static final Logger log = LoggerFactory.getLogger(DictScanner.class);
 
     /**
      * Scans the given packages and returns all classes that implement the {@link Dict} interface.

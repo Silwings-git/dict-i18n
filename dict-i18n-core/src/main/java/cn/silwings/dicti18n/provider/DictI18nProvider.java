@@ -6,5 +6,5 @@ public interface DictI18nProvider {
     /**
      * Get internationalized copywriting
      */
-    Optional<String> getText(String language, String dictName, String code);
+    Optional<String> getText(String language, String defaultLanguage, String dictName, String code);
 }

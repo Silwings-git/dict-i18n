@@ -11,12 +11,20 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DictI18nProcessor {
 
-    private final Logger log = LoggerFactory.getLogger(DictI18nProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(DictI18nProcessor.class);
 
     private final DictI18nProvider i18nProvider;
     // Whether the cache type should be handled to improve performance
@@ -122,7 +130,9 @@ public class DictI18nProcessor {
                 final Object baseFieldValue = baseField.get(target);
 
                 if (baseFieldValue instanceof String) {
-                    final String text = this.i18nProvider.getText(language, dictName, (String) baseFieldValue).orElse("");
+                    final String text = this.i18nProvider.getText(language, this.dictI18nProperties.getDefaultLang(), dictName, (String) baseFieldValue)
+                            .filter(s -> !s.isEmpty())
+                            .orElseGet(() -> this.dictI18nProperties.isReturnKeyIfEmpty() ? dictName + "." + baseFieldValue : "");
                     descField.set(target, text);
                 }
             } catch (Exception e) {
@@ -161,12 +171,12 @@ public class DictI18nProcessor {
 
     private boolean isJavaBasicType(final Class<?> clazz) {
         return clazz == String.class
-                || clazz == Date.class
-                || clazz.isPrimitive()
-                || clazz.isEnum()
-                || Number.class.isAssignableFrom(clazz)
-                || Boolean.class.isAssignableFrom(clazz)
-                || Character.class.isAssignableFrom(clazz);
+               || clazz == Date.class
+               || clazz.isPrimitive()
+               || clazz.isEnum()
+               || Number.class.isAssignableFrom(clazz)
+               || Boolean.class.isAssignableFrom(clazz)
+               || Character.class.isAssignableFrom(clazz);
     }
 
     private String getBaseFieldName(final DictDesc annotation, final Field descField) {

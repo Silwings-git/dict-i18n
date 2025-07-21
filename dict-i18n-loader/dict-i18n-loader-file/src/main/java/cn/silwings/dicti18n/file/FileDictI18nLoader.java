@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FileDictI18nLoader implements ClassPathDictI18nLoader {
 
-    private final Logger log = LoggerFactory.getLogger(FileDictI18nLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(FileDictI18nLoader.class);
     private final FileDictI18nLoaderProperties fileDictI18nLoaderProperties;
     private final DictFileParser dictFileParser;
     private final Map<String, Map<String, String>> dictData;

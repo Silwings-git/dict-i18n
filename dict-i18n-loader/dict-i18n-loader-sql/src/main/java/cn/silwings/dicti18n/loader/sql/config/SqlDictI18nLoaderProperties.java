@@ -2,6 +2,7 @@ package cn.silwings.dicti18n.loader.sql.config;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.config.AbstractDictI18nLoaderProperties;
+import cn.silwings.dicti18n.loader.enums.LoadMode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -40,13 +41,13 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
     public static class SqlDictI18nLoaderPreloadProperties {
 
         /**
-         * Whether to load dict data from the resource file into Redis on startup.
+         * Whether to load dict data from the resource file into database on startup.
          * Default is false.
          */
         private boolean enabled = false;
 
         /**
-         * Whether to fail fast when loading dict data into Redis.
+         * Whether to fail fast when loading dict data into database.
          * If true, the application will fail to start if there is an error during loading.
          * If false, it will log the error and continue.
          * Default is true.
@@ -54,27 +55,15 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
         private boolean failFast = true;
 
         /**
-         * Load mode when preloading to Redis.
+         * Load mode when preloading to database.
          * - FULL: Full overwrite. All keys will be written (even if they exist).
-         * - INCREMENTAL: Only write keys that do not exist in Redis.
+         * - INCREMENTAL: Only write keys that do not exist in database.
          * Default is INCREMENTAL.
          */
         private LoadMode preloadMode = LoadMode.INCREMENTAL;
 
-        public enum LoadMode {
-            FULL,
-            INCREMENTAL
-        }
-
     }
 
-    /**
-     * @ClassName CacheProperties
-     * @Description
-     * @Author Silwings
-     * @Date 2025/7/21 16:49
-     * @Since
-     **/
     @Getter
     @Setter
     @ToString
@@ -104,5 +93,4 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
         private boolean enabled = false;
     }
 
-    // todo 所有disable的地方应该打印日志
 }

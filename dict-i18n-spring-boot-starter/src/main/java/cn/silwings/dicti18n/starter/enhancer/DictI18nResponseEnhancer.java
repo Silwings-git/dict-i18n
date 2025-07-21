@@ -45,7 +45,7 @@ import java.lang.reflect.Method;
 @ControllerAdvice
 public class DictI18nResponseEnhancer implements ResponseBodyAdvice<Object> {
 
-    private final Logger log = LoggerFactory.getLogger(DictI18nResponseEnhancer.class);
+    private static final Logger log = LoggerFactory.getLogger(DictI18nResponseEnhancer.class);
 
     private final DictI18nProcessor processor;
     private final LanguageProvider languageProvider;
@@ -111,7 +111,7 @@ public class DictI18nResponseEnhancer implements ResponseBodyAdvice<Object> {
             try {
                 final Class<?> annotationClass = Class.forName(annotationClassName);
                 if (controllerClass.isAnnotationPresent((Class<? extends Annotation>) annotationClass) ||
-                        (null != method && method.isAnnotationPresent((Class<? extends Annotation>) annotationClass))) {
+                    (null != method && method.isAnnotationPresent((Class<? extends Annotation>) annotationClass))) {
                     return false;
                 }
             } catch (ClassNotFoundException e) {

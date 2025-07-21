@@ -12,7 +12,7 @@ import cn.silwings.dicti18n.starter.check.UniqueDictNameChecker;
 import cn.silwings.dicti18n.starter.config.DefaultLanguageProvider;
 import cn.silwings.dicti18n.starter.config.DictI18nStarterProperties;
 import cn.silwings.dicti18n.starter.config.LanguageProvider;
-import cn.silwings.dicti18n.starter.endpoint.DictItemsHandler;
+import cn.silwings.dicti18n.starter.endpoint.DictItemsEndpointHandler;
 import cn.silwings.dicti18n.starter.enhancer.DictI18nResponseEnhancer;
 import cn.silwings.dicti18n.starter.enhancer.filter.AlwaysTrueDictI18nResponseFilter;
 import cn.silwings.dicti18n.starter.enhancer.filter.DictI18nResponseFilter;
@@ -61,8 +61,8 @@ public class DictI18nAutoConfiguration {
     }
 
     @Bean
-    public CompositeDictI18nProvider compositeDictI18nProvider(final DictLoaderSorter dictLoaderSorter, final DictI18nProperties dictI18nProperties) {
-        return new CompositeDictI18nProvider(dictLoaderSorter, dictI18nProperties);
+    public CompositeDictI18nProvider compositeDictI18nProvider(final DictLoaderSorter dictLoaderSorter) {
+        return new CompositeDictI18nProvider(dictLoaderSorter);
     }
 
     @Bean
@@ -103,14 +103,24 @@ public class DictI18nAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "dict-i18n.starter.endpoint.dict-items", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public DictItemsHandler dictItemsHandler(final DictScanner dictScanner, final LanguageProvider languageProvider, final CompositeDictI18nProvider compositeDictI18nProvider, final DictI18nStarterProperties dictI18nStarterProperties, final RequestMappingHandlerAdapter handlerAdapter) {
-        return new DictItemsHandler(dictScanner, languageProvider, compositeDictI18nProvider, dictI18nStarterProperties, handlerAdapter);
+    public DictItemsEndpointHandler dictItemsHandler(final DictScanner dictScanner,
+                                                     final LanguageProvider languageProvider,
+                                                     final DictI18nProperties dictI18nProperties,
+                                                     final CompositeDictI18nProvider compositeDictI18nProvider,
+                                                     final DictI18nStarterProperties dictI18nStarterProperties,
+                                                     final RequestMappingHandlerAdapter handlerAdapter) {
+        return new DictItemsEndpointHandler(dictScanner,
+                languageProvider,
+                dictI18nProperties,
+                compositeDictI18nProvider,
+                dictI18nStarterProperties,
+                handlerAdapter);
     }
 
     @Bean
-    @ConditionalOnBean(DictItemsHandler.class)
-    public HandlerMapping dictItemsHandlerMapping(final DictItemsHandler dictItemsHandler) {
-        return this.buildHandlerMapping("/dict-i18n/api/items", dictItemsHandler);
+    @ConditionalOnBean(DictItemsEndpointHandler.class)
+    public HandlerMapping dictItemsHandlerMapping(final DictItemsEndpointHandler dictItemsEndpointHandler) {
+        return this.buildHandlerMapping("/dict-i18n/api/items", dictItemsEndpointHandler);
     }
 
     private HandlerMapping buildHandlerMapping(final String path, final HttpRequestHandler handler) {

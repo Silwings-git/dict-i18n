@@ -1,11 +1,12 @@
 package cn.silwings.dicti18n.loader.sql.cache;
 
+import cn.silwings.dicti18n.loader.sql.DictI18nDatabaseQuery;
+
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class NoCacheDictCacheProvider implements DictI18nLoaderCacheProvider {
     @Override
-    public Optional<String> getDesc(final String lang, final String key, final Supplier<Optional<String>> dbQuery) {
-        return dbQuery.get();
+    public Optional<String> getDesc(final String lang, final String dictKey, final DictI18nDatabaseQuery dbQuery) {
+        return dbQuery.select(lang, dictKey);
     }
 }

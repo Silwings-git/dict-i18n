@@ -16,9 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * YML format dictionary file parsing strategy
+ * Parse .yml files, support nested YML data structures, and flatten them into key-value pair dictionary information.
+ */
 public class YmlDictParseStrategy implements DictFileParseStrategy {
 
-    private final Logger log = LoggerFactory.getLogger(YmlDictParseStrategy.class);
+    private static final Logger log = LoggerFactory.getLogger(YmlDictParseStrategy.class);
 
     @Override
     public boolean supports(final Resource resource) {
@@ -46,6 +50,12 @@ public class YmlDictParseStrategy implements DictFileParseStrategy {
         }
     }
 
+    /**
+     * Convert the flattened key-value pair mapping into a list of DictInfo
+     *
+     * @param flatMap Flattened key-value pair mapping
+     * @return Converted DictInfo list
+     */
     private List<DictInfo> convertToDictInfoList(final Map<String, String> flatMap) {
         return flatMap.entrySet()
                 .stream()
@@ -53,6 +63,11 @@ public class YmlDictParseStrategy implements DictFileParseStrategy {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Handling cases where resource files do not exist
+     *
+     * @param resource Non-existent resource file
+     */
     private void handleMissingResource(final Resource resource) {
         if (resource instanceof ClassPathResource) {
             final String targetPath = ((ClassPathResource) resource).getPath();
@@ -62,17 +77,29 @@ public class YmlDictParseStrategy implements DictFileParseStrategy {
         }
     }
 
+    /**
+     * Recursively flatten nested Map structures in YML, converting nested keys into flat keys in the form of "parentKey.childKey"
+     *
+     * @param prefix Parent key prefix (used for concatenating nested keys)
+     * @param source Map structure to be flattened
+     * @param target Map storing flattened results
+     */
     @SuppressWarnings("unchecked")
     private void flatten(final String prefix, final Map<String, Object> source, final Map<String, String> target) {
         if (null == source) {
             return;
         }
         for (Map.Entry<String, Object> entry : source.entrySet()) {
+            // Concatenate the current key (using "." to connect if there is a prefix)
             final String dictKey = null == prefix || prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
             final Object dictDesc = entry.getValue();
+
+            // If the value is still a Map, recursively flatten it
             if (dictDesc instanceof Map<?, ?>) {
                 flatten(dictKey, (Map<String, Object>) dictDesc, target);
-            } else if (null != dictKey && null != dictDesc) {
+            }
+            // If both the key and value are not empty, add them to the flat Map
+            else if (null != dictKey && null != dictDesc) {
                 target.put(dictKey, dictDesc.toString());
             }
         }

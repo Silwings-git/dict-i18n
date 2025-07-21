@@ -25,6 +25,11 @@ public class DictI18nProperties {
     private int maxRecursionDepth = 10;
 
     /**
+     * Whether to return dictKey when description is empty
+     */
+    private boolean returnKeyIfEmpty = true;
+
+    /**
      * The default language to use when a translation is not found
      */
     private String defaultLang = "";

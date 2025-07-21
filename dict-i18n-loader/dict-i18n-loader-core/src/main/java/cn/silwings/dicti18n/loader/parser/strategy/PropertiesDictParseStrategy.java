@@ -16,9 +16,13 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+/**
+ * Properties format dictionary file parsing strategy
+ * Implemented parsing of .properties type files, converting key-value pairs into a list of dictionary information objects.
+ */
 public class PropertiesDictParseStrategy implements DictFileParseStrategy {
 
-    private final Logger log = LoggerFactory.getLogger(PropertiesDictParseStrategy.class);
+    private static final Logger log = LoggerFactory.getLogger(PropertiesDictParseStrategy.class);
 
     @Override
     public boolean supports(final Resource resource) {
@@ -65,6 +69,5 @@ public class PropertiesDictParseStrategy implements DictFileParseStrategy {
             }
         }
     }
-
 }
 

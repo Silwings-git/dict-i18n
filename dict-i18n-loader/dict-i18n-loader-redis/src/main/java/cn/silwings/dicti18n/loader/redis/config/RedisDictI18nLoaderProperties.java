@@ -2,6 +2,7 @@ package cn.silwings.dicti18n.loader.redis.config;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.config.AbstractDictI18nLoaderProperties;
+import cn.silwings.dicti18n.loader.enums.LoadMode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,13 +25,6 @@ public class RedisDictI18nLoaderProperties extends AbstractDictI18nLoaderPropert
      */
     private RedisDictI18nLoaderPreloadProperties preload = new RedisDictI18nLoaderPreloadProperties();
 
-    /**
-     * @ClassName RedisDictI18nLoaderPreloadProperties
-     * @Description
-     * @Author Silwings
-     * @Date 2025/7/21 18:13
-     * @Since
-     **/
     @Getter
     @Setter
     @ToString
@@ -57,10 +51,5 @@ public class RedisDictI18nLoaderProperties extends AbstractDictI18nLoaderPropert
          * Default is INCREMENTAL.
          */
         private LoadMode preloadMode = LoadMode.INCREMENTAL;
-
-        public enum LoadMode {
-            FULL,
-            INCREMENTAL
-        }
     }
 }

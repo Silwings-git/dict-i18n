@@ -14,7 +14,11 @@ import org.springframework.context.ApplicationContextException;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Checks for uniqueness of {@link Dict#dictName()} across all Dict implementations at application startup.
@@ -29,7 +33,7 @@ import java.util.*;
  */
 public class UniqueDictNameChecker implements ApplicationContextAware {
 
-    private final Logger log = LoggerFactory.getLogger(UniqueDictNameChecker.class);
+    private static final Logger log = LoggerFactory.getLogger(UniqueDictNameChecker.class);
 
     private ApplicationContext applicationContext;
     private final DictScanner dictScanner;
@@ -90,7 +94,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
             }
         }
 
-        log.info("DictName uniqueness validation passed. Total valid Dicts: {}", dictNameMap.size());
+        log.info("[DictInfo] DictName uniqueness validation passed. Total valid Dicts: {}", dictNameMap.size());
     }
 
     /**
@@ -114,7 +118,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
                 if (!Objects.equals(firstDictName, currentName)) {
                     throw new ApplicationContextException(
                             "All enum constants of " + clazz.getName() + " must have the same dictName. Found: '"
-                                    + firstDictName + "' and '" + currentName + "'");
+                            + firstDictName + "' and '" + currentName + "'");
                 }
             }
             return firstDictName;

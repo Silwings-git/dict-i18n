@@ -2,7 +2,6 @@ package cn.silwings.dicti18n.loader.sql;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.sql.cache.DictI18nLoaderCacheProvider;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,12 +9,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Optional;
 
-@AllArgsConstructor
+/**
+ * SQL Dictionary Internationalization Loader
+ * Responsible for loading dictionary data from relational databases and supporting caching mechanisms to improve performance
+ */
 public class SqlDictI18nLoader implements ClassPathDictI18nLoader {
 
-    private final Logger log = LoggerFactory.getLogger(SqlDictI18nLoader.class);
-    private JdbcTemplate jdbcTemplate;
+    private static final Logger log = LoggerFactory.getLogger(SqlDictI18nLoader.class);
+    private final JdbcTemplate jdbcTemplate;
     private final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider;
+
+    public SqlDictI18nLoader(final JdbcTemplate jdbcTemplate, final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.dictI18nLoaderCacheProvider = dictI18nLoaderCacheProvider;
+    }
 
     @Override
     public Logger getLog() {
@@ -27,18 +34,33 @@ public class SqlDictI18nLoader implements ClassPathDictI18nLoader {
         return "sql";
     }
 
+    /**
+     * Get the internationalized description for the specified language and dictionary key
+     * Fetch from cache first, perform a database query on cache miss.
+     */
     @Override
     public Optional<String> get(final String lang, final String dictKey) {
-        try {
-            final String sql = "SELECT description FROM dict_i18n_items " +
-                    "WHERE dict_key = ? AND lang = ? AND enabled = true LIMIT 1";
-
-            final String description = this.jdbcTemplate.queryForObject(sql, String.class, dictKey, lang);
-
-            return Optional.of(description);
-
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
+        return this.dictI18nLoaderCacheProvider.getDesc(lang, dictKey, this.getDatabaseQuery());
     }
+
+    /**
+     * Get database query function
+     * This function defines how to query dictionary data from the database.
+     *
+     * @return database query function
+     */
+    public DictI18nDatabaseQuery getDatabaseQuery() {
+        return (lang, dictKey) -> {
+            try {
+                final String sql = "SELECT description FROM dict_i18n WHERE dict_key = ? AND lang = ? AND enabled = 1 LIMIT 1";
+
+                final String description = this.jdbcTemplate.queryForObject(sql, String.class, dictKey, lang);
+
+                return Optional.of(description);
+            } catch (EmptyResultDataAccessException e) {
+                return Optional.empty();
+            }
+        };
+    }
+
 }

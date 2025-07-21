@@ -1,6 +1,5 @@
 package cn.silwings.dicti18n.provider;
 
-import cn.silwings.dicti18n.config.DictI18nProperties;
 import cn.silwings.dicti18n.loader.DictI18nLoader;
 import cn.silwings.dicti18n.sorter.DictLoaderSorter;
 import cn.silwings.dicti18n.utils.LangFallbackUtils;
@@ -19,8 +18,6 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
 
     public static final String FALLBACK_LOCALE_KEY = "";
 
-    private final DictI18nProperties dictI18nProperties;
-
     /**
      * A collection of loaders that have been sorted, in the order determined by {@link DictLoaderSorter}.
      */
@@ -34,11 +31,9 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
     /**
      * Constructors, receive sequencers and configuration items, initialize loader lists.
      *
-     * @param sorter             A loader sequencer that controls the order in which the loader is executed
-     * @param dictI18nProperties Dictionary configuration properties
+     * @param sorter A loader sequencer that controls the order in which the loader is executed
      */
-    public CompositeDictI18nProvider(final DictLoaderSorter sorter, final DictI18nProperties dictI18nProperties) {
-        this.dictI18nProperties = dictI18nProperties;
+    public CompositeDictI18nProvider(final DictLoaderSorter sorter) {
         this.loaders = sorter.getOrderedLoaders();
         this.fallbackLangChainCache = new ConcurrentHashMap<>();
         if (this.loaders.isEmpty()) {
@@ -57,17 +52,17 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
      * <p>
      * Once any step in a loader successfully finds a result, it immediately returns that result.
      *
-     * @param language User language, such as "en-US", "zh-CN"
-     * @param dictName Dictionary name, such as "order_status"
-     * @param code     Dictionary keys, such as "pending"
+     * @param language        User language, such as "en-US", "zh-CN"
+     * @param defaultLanguage Default language, such as "en-US", "zh-CN"
+     * @param dictName        Dictionary name, such as "order_status"
+     * @param code            Dictionary keys, such as "pending"
      * @return The dictionary description in the corresponding language, or returns Optional.empty() if not found.
      */
     @Override
-    public Optional<String> getText(final String language, final String dictName, final String code) {
+    public Optional<String> getText(final String language, String defaultLanguage, final String dictName, final String code) {
 
         final List<String> langChain = this.getFallbackLangChain(language);
-        final String defaultLang = this.dictI18nProperties.getDefaultLang();
-        final boolean includeDefaultLang = !langChain.contains(defaultLang);
+        final boolean includeDefaultLang = !langChain.contains(defaultLanguage);
 
         for (DictI18nLoader loader : this.loaders) {
 
@@ -76,11 +71,11 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
 
             // attempt to search using the configured default language
             if (!dictDesc.isPresent() && includeDefaultLang) {
-                dictDesc = this.getTextFromLoader(this.getFallbackLangChain(defaultLang), dictName, code, loader);
+                dictDesc = this.getTextFromLoader(this.getFallbackLangChain(defaultLanguage), dictName, code, loader);
             }
 
             // try looking it up with the special fallback key ("")
-            if (!dictDesc.isPresent() && !FALLBACK_LOCALE_KEY.equals(defaultLang)) {
+            if (!dictDesc.isPresent() && !FALLBACK_LOCALE_KEY.equals(defaultLanguage)) {
                 dictDesc = this.getTextFromLoader(this.getFallbackLangChain(FALLBACK_LOCALE_KEY), dictName, code, loader);
             }
 

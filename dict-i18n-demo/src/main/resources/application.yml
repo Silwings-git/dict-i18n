@@ -16,12 +16,17 @@ dict-i18n:
       enabled: true
       key-prefix: 'dict_i18n_demo:'
       preload:
-        enabled: true
+        enabled: false
         fail-fast: true
         preload-mode: full
     sql:
       schema:
         enabled: true
+      preload:
+        enabled: false
+        preload-mode: full
+      cache:
+        enabled: false
 
   starter:
     endpoint:

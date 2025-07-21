@@ -1,7 +1,8 @@
 package cn.silwings.dicti18n.loader.sql.cache;
 
+import cn.silwings.dicti18n.loader.sql.DictI18nDatabaseQuery;
+
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @FunctionalInterface
 public interface DictI18nLoaderCacheProvider {
@@ -13,6 +14,6 @@ public interface DictI18nLoaderCacheProvider {
      * @param dbQuery Supplier to load data if cache miss
      * @return Optional containing description if found, or empty if not found
      */
-    Optional<String> getDesc(String lang, String key, Supplier<Optional<String>> dbQuery);
+    Optional<String> getDesc(String lang, String key, DictI18nDatabaseQuery dbQuery);
 
 }
