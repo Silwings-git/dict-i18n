@@ -1,11 +1,13 @@
 package cn.silwings.dicti18n.loader.parser.strategy;
 
+import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,8 +37,9 @@ public class YmlDictParseStrategy implements DictFileParseStrategy {
                     .map(entry -> new DictInfo(entry.getKey(), entry.getValue()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            // todo 如果是空文件，异常要如何处理?
-            log.error("Failed to read the YML file({}): {}", resource, e.getMessage(), e);
+            if (!(e instanceof FileNotFoundException && ClassPathDictI18nLoader.LOCATION_PATTERNS.contains(resource.getFilename()))) {
+                log.debug("Failed to read the YML file({}): {}", resource, e.getMessage(), e);
+            }
             return Collections.emptyList();
         }
     }

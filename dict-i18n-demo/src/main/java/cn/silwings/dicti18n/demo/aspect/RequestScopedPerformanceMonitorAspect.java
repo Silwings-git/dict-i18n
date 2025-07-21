@@ -7,6 +7,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,7 +18,8 @@ import java.util.Stack;
 
 @Aspect
 @Component
-public class RequestScopedPerformanceMonitorAspect {
+@Order
+public class RequestScopedPerformanceMonitorAspect implements ApplicationRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestScopedPerformanceMonitorAspect.class);
 
@@ -23,6 +27,8 @@ public class RequestScopedPerformanceMonitorAspect {
     private final ThreadLocal<Stack<MethodCall>> methodCallStack = ThreadLocal.withInitial(Stack::new);
     // Store the total duration of each request (RequestID → Total time)
     private final ThreadLocal<Map<String, Long>> requestTotalTime = ThreadLocal.withInitial(HashMap::new);
+
+    private boolean start = false;
 
     // method invocation information
     private static class MethodCall {
@@ -38,8 +44,18 @@ public class RequestScopedPerformanceMonitorAspect {
         int parentIndex;
     }
 
+    @Override
+    public void run(final ApplicationArguments args) {
+        this.start = true;
+    }
+
     @Around("execution(* cn.silwings.dicti18n..*.*(..))")
     public Object monitor(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        if (!this.start) {
+            return joinPoint.proceed();
+        }
+
         String requestId = RequestContext.getRequestId();
         Stack<MethodCall> stack = methodCallStack.get();
         int depth = stack.size();

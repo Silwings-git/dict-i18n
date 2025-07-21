@@ -1,10 +1,12 @@
 package cn.silwings.dicti18n.loader.parser.strategy;
 
+import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -29,8 +31,9 @@ public class PropertiesDictParseStrategy implements DictFileParseStrategy {
         try (InputStreamReader input = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
             properties.load(input);
         } catch (IOException e) {
-            // todo 如果是空文件，异常要如何处理?
-            log.warn("Failed to load properties: {}", resource.getFilename(), e);
+            if (!(e instanceof FileNotFoundException && ClassPathDictI18nLoader.LOCATION_PATTERNS.contains(resource.getFilename()))) {
+                log.warn("Failed to load properties: {}", resource.getFilename(), e);
+            }
         }
 
         final List<DictInfo> dictList = new ArrayList<>();

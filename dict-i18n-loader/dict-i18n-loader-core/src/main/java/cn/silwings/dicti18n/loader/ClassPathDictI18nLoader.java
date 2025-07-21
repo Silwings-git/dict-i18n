@@ -7,12 +7,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
 public interface ClassPathDictI18nLoader extends DictI18nLoader {
 
-    List<String> LOCATION_PATTERNS = Arrays.asList("classpath:dict_i18n/dict*.yml", "classpath:dict_i18n/dict*.properties");
+    List<String> LOCATION_PATTERNS = Arrays.asList("classpath:dict_i18n/dict_*.yml", "classpath:dict_i18n/dict_*.properties", "classpath:dict_i18n/dict.yml", "classpath:dict_i18n/dict.properties");
 
     Logger log = LoggerFactory.getLogger(ClassPathDictI18nLoader.class);
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -33,7 +34,9 @@ public interface ClassPathDictI18nLoader extends DictI18nLoader {
             log.debug("Loaded {} resource(s) from pattern: {}", resources.length, locationPattern);
             return resources;
         } catch (Throwable e) {
-            log.warn("Failed to load resources from pattern '{}': {}", locationPattern, e.toString());
+            if (!(e instanceof FileNotFoundException && LOCATION_PATTERNS.contains(locationPattern))) {
+                log.warn("Failed to load resources from pattern '{}': {}", locationPattern, e.toString());
+            }
             return new Resource[0];
         }
     }
