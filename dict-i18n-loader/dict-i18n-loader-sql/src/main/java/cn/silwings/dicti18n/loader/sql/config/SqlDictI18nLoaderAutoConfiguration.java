@@ -50,8 +50,8 @@ public class SqlDictI18nLoaderAutoConfiguration {
 
     @Bean
     @ConditionalOnBean(DictI18nSchemaInitializer.class)
-    public DictI18nSchemaInitRunner dictI18nSchemaInitRunner(final DictI18nSchemaInitializer dictI18nSchemaInitializer, final SqlDictI18nLoaderProperties sqlDictI18nLoaderProperties) {
-        return new DictI18nSchemaInitRunner(dictI18nSchemaInitializer, sqlDictI18nLoaderProperties.getSchema());
+    public DictI18nSchemaInitRunner dictI18nSchemaInitRunner(final DictI18nSchemaInitializer dictI18nSchemaInitializer) {
+        return new DictI18nSchemaInitRunner(dictI18nSchemaInitializer);
     }
 
     @Bean
