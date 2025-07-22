@@ -30,7 +30,10 @@ dict-i18n:
 
   starter:
     endpoint:
+      enabled: true
       dict-items:
+        enabled: true
+      dict-names:
         enabled: true
     enhancer:
       enabled: true

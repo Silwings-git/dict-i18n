@@ -59,9 +59,19 @@ public class DictI18nStarterProperties {
     public static class Endpoint {
 
         /**
+         * Whether to enable endpoint
+         */
+        private boolean enabled = true;
+
+        /**
          * Dict items endpoint configuration
          */
         private DictItems dictItems = new DictItems();
+
+        /**
+         * Dict names endpoint configuration
+         */
+        private DictNames dictNames = new DictNames();
 
         @Getter
         @Setter
@@ -70,6 +80,27 @@ public class DictI18nStarterProperties {
              * Whether to enable dict items endpoint
              */
             private boolean enabled = true;
+
+            /**
+             * The path for the dict items endpoint.
+             * Default is "/dict-i18n/dict-items".
+             */
+            private String path = "/dict-i18n/dict-items";
+        }
+
+        @Getter
+        @Setter
+        public static class DictNames {
+            /**
+             * Whether to enable dict items endpoint
+             */
+            private boolean enabled = true;
+
+            /**
+             * The path for the dict names endpoint.
+             * Default is "/dict-i18n/dict-names".
+             */
+            private String path = "/dict-i18n/dict-names";
         }
     }
 

@@ -13,6 +13,8 @@ import cn.silwings.dicti18n.starter.config.DefaultLanguageProvider;
 import cn.silwings.dicti18n.starter.config.DictI18nStarterProperties;
 import cn.silwings.dicti18n.starter.config.LanguageProvider;
 import cn.silwings.dicti18n.starter.endpoint.DictItemsEndpointHandler;
+import cn.silwings.dicti18n.starter.endpoint.DictMapHolder;
+import cn.silwings.dicti18n.starter.endpoint.DictNamesEndpointHandler;
 import cn.silwings.dicti18n.starter.enhancer.DictI18nResponseEnhancer;
 import cn.silwings.dicti18n.starter.enhancer.filter.AlwaysTrueDictI18nResponseFilter;
 import cn.silwings.dicti18n.starter.enhancer.filter.DictI18nResponseFilter;
@@ -102,25 +104,43 @@ public class DictI18nAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "dict-i18n.starter.endpoint", name = "enabled", havingValue = "true", matchIfMissing = true)
+    public DictMapHolder dictMapHolder(final DictScanner dictScanner, final DictI18nStarterProperties dictI18nStarterProperties) {
+        return new DictMapHolder(dictScanner, dictI18nStarterProperties);
+    }
+
+    @Bean
     @ConditionalOnProperty(prefix = "dict-i18n.starter.endpoint.dict-items", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public DictItemsEndpointHandler dictItemsHandler(final DictScanner dictScanner,
-                                                     final LanguageProvider languageProvider,
-                                                     final DictI18nProperties dictI18nProperties,
-                                                     final CompositeDictI18nProvider compositeDictI18nProvider,
-                                                     final DictI18nStarterProperties dictI18nStarterProperties,
-                                                     final RequestMappingHandlerAdapter handlerAdapter) {
-        return new DictItemsEndpointHandler(dictScanner,
-                languageProvider,
+    @ConditionalOnBean(DictMapHolder.class)
+    public DictItemsEndpointHandler dictItemsEndpointHandler(final LanguageProvider languageProvider,
+                                                             final DictI18nProperties dictI18nProperties,
+                                                             final CompositeDictI18nProvider compositeDictI18nProvider,
+                                                             final RequestMappingHandlerAdapter handlerAdapter,
+                                                             final DictMapHolder dictMapHolder) {
+        return new DictItemsEndpointHandler(languageProvider,
                 dictI18nProperties,
                 compositeDictI18nProvider,
-                dictI18nStarterProperties,
-                handlerAdapter);
+                handlerAdapter,
+                dictMapHolder);
     }
 
     @Bean
     @ConditionalOnBean(DictItemsEndpointHandler.class)
-    public HandlerMapping dictItemsHandlerMapping(final DictItemsEndpointHandler dictItemsEndpointHandler) {
-        return this.buildHandlerMapping("/dict-i18n/api/items", dictItemsEndpointHandler);
+    public HandlerMapping dictItemsEndpointHandlerMapping(final DictItemsEndpointHandler dictItemsEndpointHandler, final DictI18nStarterProperties dictI18nStarterProperties) {
+        return this.buildHandlerMapping(dictI18nStarterProperties.getEndpoint().getDictItems().getPath(), dictItemsEndpointHandler);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "dict-i18n.starter.endpoint.dict-names", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnBean(DictMapHolder.class)
+    public DictNamesEndpointHandler dictNamesEndpointHandler(final RequestMappingHandlerAdapter handlerAdapter, final DictMapHolder dictMapHolder) {
+        return new DictNamesEndpointHandler(handlerAdapter, dictMapHolder);
+    }
+
+    @Bean
+    @ConditionalOnBean(DictNamesEndpointHandler.class)
+    public HandlerMapping dictNamesEndpointHandlerMapping(final DictNamesEndpointHandler dictNamesEndpointHandler, final DictI18nStarterProperties dictI18nStarterProperties) {
+        return this.buildHandlerMapping(dictI18nStarterProperties.getEndpoint().getDictNames().getPath(), dictNamesEndpointHandler);
     }
 
     private HandlerMapping buildHandlerMapping(final String path, final HttpRequestHandler handler) {
