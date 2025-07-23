@@ -46,9 +46,9 @@ public class DictI18nProcessorTest {
     public void testProcessNullBody() {
         // 测试处理null对象不做任何操作
         // Test processing null object does nothing
-        DictI18nProvider provider = mock(DictI18nProvider.class);
-        DictI18nProperties properties = new DictI18nProperties();
-        DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
+        final DictI18nProvider provider = mock(DictI18nProvider.class);
+        final DictI18nProperties properties = new DictI18nProperties();
+        final DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
 
         processor.process(null, "zh-CN");
         verifyZeroInteractions(provider);
@@ -58,11 +58,11 @@ public class DictI18nProcessorTest {
     public void testProcessCollection() {
         // 测试处理集合对象
         // Test processing collection objects
-        DictI18nProvider provider = mock(DictI18nProvider.class);
-        DictI18nProperties properties = new DictI18nProperties();
-        DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
+        final DictI18nProvider provider = mock(DictI18nProvider.class);
+        final DictI18nProperties properties = new DictI18nProperties();
+        final DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
 
-        List<TestModel> models = Arrays.asList(new TestModel().setOrderStatus(OrderStatus.SHIPPED.name()), new TestModel().setOrderStatus(OrderStatus.PROCESSING.name()));
+        final List<TestModel> models = Arrays.asList(new TestModel().setOrderStatus(OrderStatus.SHIPPED.name()), new TestModel().setOrderStatus(OrderStatus.PROCESSING.name()));
         processor.process(models, "zh-CN");
 
         verify(provider, times(2)).getText(eq("zh-CN"), any(), any(), any());
@@ -72,11 +72,11 @@ public class DictI18nProcessorTest {
     public void testProcessMap() {
         // 测试处理Map对象
         // Test processing Map objects
-        DictI18nProvider provider = mock(DictI18nProvider.class);
-        DictI18nProperties properties = new DictI18nProperties();
-        DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
+        final DictI18nProvider provider = mock(DictI18nProvider.class);
+        final DictI18nProperties properties = new DictI18nProperties();
+        final DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
 
-        Map<String, TestModel> modelMap = new HashMap<>();
+        final Map<String, TestModel> modelMap = new HashMap<>();
         modelMap.put("key1", new TestModel().setOrderStatus(OrderStatus.SHIPPED.name()));
         modelMap.put("key2", new TestModel().setOrderStatus(OrderStatus.PROCESSING.name()));
         processor.process(modelMap, "zh-CN");
@@ -88,13 +88,13 @@ public class DictI18nProcessorTest {
     public void testProcessObjectWithDictDesc() {
         // 测试处理带有DictDesc注解的对象
         // Test processing object with DictDesc annotation
-        DictI18nProvider provider = mock(DictI18nProvider.class);
+        final DictI18nProvider provider = mock(DictI18nProvider.class);
         when(provider.getText(any(), any(), any(), any())).thenReturn(Optional.of("测试值"));
 
-        DictI18nProperties properties = new DictI18nProperties();
-        DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
+        final DictI18nProperties properties = new DictI18nProperties();
+        final DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
 
-        TestModel model = new TestModel();
+        final TestModel model = new TestModel();
         model.setOrderStatus(OrderStatus.PENDING.name());
         processor.process(model, "zh-CN");
 
@@ -105,11 +105,11 @@ public class DictI18nProcessorTest {
     public void testProcessObjectWithNestedObject() {
         // 测试处理嵌套对象
         // Test processing nested objects
-        DictI18nProvider provider = mock(DictI18nProvider.class);
-        DictI18nProperties properties = new DictI18nProperties();
-        DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
+        final DictI18nProvider provider = mock(DictI18nProvider.class);
+        final DictI18nProperties properties = new DictI18nProperties();
+        final DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
 
-        TestNestedModel nestedModel = new TestNestedModel();
+        final TestNestedModel nestedModel = new TestNestedModel();
         nestedModel.setModel(new TestModel().setOrderStatus(OrderStatus.PENDING.name()));
         processor.process(nestedModel, "zh-CN");
 
@@ -120,15 +120,15 @@ public class DictI18nProcessorTest {
     public void testProcessObjectWithRecursionLimit() {
         // 测试递归深度限制
         // Test recursion depth limit
-        DictI18nProvider provider = mock(DictI18nProvider.class);
-        DictI18nProperties properties = new DictI18nProperties();
-        DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
+        final DictI18nProvider provider = mock(DictI18nProvider.class);
+        final DictI18nProperties properties = new DictI18nProperties();
+        final DictI18nProcessor processor = new DictI18nProcessor(provider, properties);
 
-        TestRecursiveModel recursiveModel = new TestRecursiveModel();
+        final TestRecursiveModel recursiveModel = new TestRecursiveModel();
         initRecursiveModel(recursiveModel, 100_000);
 
-        // 200ms 内必须完成，否则测试失败
-        // It must be completed within 200ms or the test will fail
+        // 短时间内必须完成，否则测试失败
+        // It must be completed within a short time, otherwise the test will fail
         assertTimeoutPreemptively(
                 Duration.ofMillis(3),
                 () -> processor.process(recursiveModel, "zh-CN")
@@ -148,7 +148,7 @@ public class DictI18nProcessorTest {
     public void testIsJavaBasicType() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         // 测试基本类型判断
         // Test basic type detection
-        DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
+        final DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
         final Method isJavaBasicType = processor.getClass().getDeclaredMethod("isJavaBasicType", Class.class);
         isJavaBasicType.setAccessible(true);
 
@@ -165,7 +165,7 @@ public class DictI18nProcessorTest {
     public void testGetAllFields() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         // 测试获取所有字段
         // Test getting all fields
-        DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
+        final DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
         final Method getAllFields = processor.getClass().getDeclaredMethod("getAllFields", Class.class);
         getAllFields.setAccessible(true);
 
@@ -178,23 +178,25 @@ public class DictI18nProcessorTest {
     public void testShouldProcessTypeWithAnnotation() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         // 测试带有DictModel注解的类型处理
         // Test processing type with DictModel annotation
-        DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
+        final DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
         final Method shouldProcessType = processor.getClass().getDeclaredMethod("shouldProcessType", Class.class, int.class);
         shouldProcessType.setAccessible(true);
 
         assertTrue((boolean) shouldProcessType.invoke(processor, TestModel.class, 0));
+        assertFalse((boolean) shouldProcessType.invoke(processor, String.class, 0));
     }
 
     @Test
     public void testShouldProcessTypeWithCollection() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         // 测试集合类型处理
         // Test processing collection type
-        DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
+        final DictI18nProcessor processor = new DictI18nProcessor(mock(DictI18nProvider.class), new DictI18nProperties());
 
         final Method shouldProcessType = processor.getClass().getDeclaredMethod("shouldProcessType", Class.class, int.class);
         shouldProcessType.setAccessible(true);
 
         assertTrue((boolean) shouldProcessType.invoke(processor, List.class, 0));
+        assertTrue((boolean) shouldProcessType.invoke(processor, Map.class, 0));
     }
 
     @DictModel

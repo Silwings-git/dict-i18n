@@ -1,7 +1,7 @@
 package cn.silwings.dicti18n.plugin.generate;
 
 import cn.silwings.dicti18n.dict.Dict;
-import cn.silwings.dicti18n.plugin.utils.ConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -10,7 +10,11 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -111,7 +115,7 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
         dictArrayList.forEach(dictArray -> {
             final Map<String, String> itemMap = dictMap.computeIfAbsent(dictArray[0].dictName(), k -> new TreeMap<>());
             for (final Dict dict : dictArray) {
-                itemMap.put(ConvertUtil.getOrDefault(dict.code(), "_"), "");
+                itemMap.put(StringUtils.defaultIfBlank(dict.code(), "_"), "");
             }
         });
         return dictMap;

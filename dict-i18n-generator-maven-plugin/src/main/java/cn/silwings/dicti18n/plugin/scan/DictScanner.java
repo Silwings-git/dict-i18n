@@ -16,8 +16,22 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Scans the classpath for implementation classes of the {@link Dict} interface.
+ * <p>
+ * This scanner uses Reflections library to search for non-abstract, non-interface classes
+ * that implement the Dict interface, optionally limited by base packages.
+ * </p>
+ */
 public class DictScanner {
 
+    /**
+     * Scans for all concrete (non-abstract, non-interface) classes that implement the {@link Dict} interface.
+     *
+     * @param context the context containing configuration and Maven project/classpath info
+     * @return a set of classes implementing the Dict interface
+     * @throws MojoExecutionException if scanning fails
+     */
     public Set<Class<? extends Dict>> scan(final ScanContext context) throws MojoExecutionException {
 
         context.getLog().info("Start looking for the implementation class of the Dict interface...");
@@ -89,11 +103,24 @@ public class DictScanner {
         }
     }
 
-    private boolean isAbstract(final Class<?> cls) {
+    /**
+     * Checks whether a class is abstract.
+     *
+     * @param cls the class to check
+     * @return true if abstract, false otherwise
+     */
+    public boolean isAbstract(final Class<?> cls) {
         return (cls.getModifiers() & java.lang.reflect.Modifier.ABSTRACT) != 0;
     }
 
-    private String findClassLocation(Class<?> cls, List<URL> classpathUrls) {
+    /**
+     * Attempts to determine the URL location of a class file.
+     *
+     * @param cls           the class whose location is to be found
+     * @param classpathUrls list of classpath root URLs to search in
+     * @return the URL as a string, or "Unknown location" if not found
+     */
+    public String findClassLocation(final Class<?> cls, final List<URL> classpathUrls) {
         final String className = cls.getName().replace('.', '/') + ".class";
         for (URL url : classpathUrls) {
             try {

@@ -23,27 +23,5 @@
                 <outputDir implementation="java.io.File"/>
             </configuration>
         </mojo>
-
-        <!--        <mojo>-->
-        <!--            <goal>generate-mysql</goal>-->
-        <!--            <implementation>cn.silwings.dicti18n.plugin.GenerateMysqlMojo</implementation>-->
-        <!--            <phase>generate-resources</phase>-->
-        <!--            <configuration>-->
-        <!--                <basePackages implementation="java.util.List" />-->
-        <!--                <languages implementation="java.util.List" />-->
-        <!--                <outputDir implementation="java.io.File" />-->
-        <!--            </configuration>-->
-        <!--        </mojo>-->
-
-        <!--        <mojo>-->
-        <!--            <goal>generate-redis</goal>-->
-        <!--            <implementation>cn.silwings.dicti18n.plugin.GenerateRedisMojo</implementation>-->
-        <!--            <phase>generate-resources</phase>-->
-        <!--            <configuration>-->
-        <!--                <basePackages implementation="java.util.List" />-->
-        <!--                <languages implementation="java.util.List" />-->
-        <!--                <outputDir implementation="java.io.File" />-->
-        <!--            </configuration>-->
-        <!--        </mojo>-->
     </mojos>
 </plugin>

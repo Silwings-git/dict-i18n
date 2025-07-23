@@ -13,32 +13,48 @@ import java.util.Vector;
  */
 public class OrderedProperties extends Properties {
 
-    private final TreeSet<Object> sortedKeys = new TreeSet<>();
+    private final TreeSet<String> sortedKeys = new TreeSet<>();
 
     @Override
     public synchronized Object put(final Object key, final Object value) {
-        this.sortedKeys.add(key);
+        if (null == key) {
+            throw new NullPointerException("Key cannot be null");
+        }
+        if (key instanceof String) {
+            this.sortedKeys.add((String) key);
+        } else {
+            throw new IllegalArgumentException("Key must be a String");
+        }
         return super.put(key, value);
     }
 
     @Override
     public synchronized void putAll(final Map<?, ?> t) {
-        this.sortedKeys.addAll(t.keySet());
+        for (Object key : t.keySet()) {
+            if (!(key instanceof String)) {
+                throw new IllegalArgumentException("Key must be a String");
+            }
+        }
+        for (Object key : t.keySet()) {
+            this.sortedKeys.add((String) key);
+        }
         super.putAll(t);
     }
 
     @Override
     public synchronized Object remove(final Object key) {
-        this.sortedKeys.remove(key);
+        if (key instanceof String) {
+            this.sortedKeys.remove(key);
+        }
         return super.remove(key);
     }
 
     @Override
     public Set<String> stringPropertyNames() {
         final LinkedHashSet<String> orderedNames = new LinkedHashSet<>();
-        for (Object key : this.sortedKeys) {
-            if (key instanceof String) {
-                orderedNames.add((String) key);
+        for (String key : this.sortedKeys) {
+            if (null != key) {
+                orderedNames.add(key);
             }
         }
         return orderedNames;
@@ -47,9 +63,9 @@ public class OrderedProperties extends Properties {
     @Override
     public Enumeration<?> propertyNames() {
         final Vector<String> orderedNames = new Vector<>();
-        for (Object key : this.sortedKeys) {
-            if (key instanceof String) {
-                orderedNames.add((String) key);
+        for (String key : this.sortedKeys) {
+            if (null != key) {
+                orderedNames.add(key);
             }
         }
         return orderedNames.elements();

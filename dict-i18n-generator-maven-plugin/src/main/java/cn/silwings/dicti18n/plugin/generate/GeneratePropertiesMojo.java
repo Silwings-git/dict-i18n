@@ -1,8 +1,8 @@
 package cn.silwings.dicti18n.plugin.generate;
 
 import cn.silwings.dicti18n.dict.Dict;
-import cn.silwings.dicti18n.plugin.utils.ConvertUtil;
 import cn.silwings.dicti18n.plugin.utils.OrderedProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -78,7 +78,7 @@ public class GeneratePropertiesMojo extends AbstractDictGeneratorMojo {
             final String dictName = dictArray[0].dictName();
 
             for (final Dict dict : dictArray) {
-                String code = ConvertUtil.getOrDefault(dict.code(), "_");
+                final String code = StringUtils.defaultIfBlank(dict.code(), "_");
                 dictProperties.put(String.format("%s.%s", dictName, code), "");
             }
         });
