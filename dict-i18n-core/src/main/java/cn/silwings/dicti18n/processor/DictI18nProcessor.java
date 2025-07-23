@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -210,41 +212,59 @@ public class DictI18nProcessor {
     }
 
     /**
-     * Deep recursion determines whether the type needs to be processed (whether it contains a @DictDesc field or a nested field)
+     * Deep scan determines whether the type needs to be processed
      */
-    // TODO_Silwings: 2025/7/23 需要从递归形式改造为迭代形式
-    private boolean deepScanForDictDesc(final Class<?> clazz, final int depth, final Set<Class<?>> visitedClasses) {
+    private boolean deepScanForDictDesc(final Class<?> rootClass, final int startDepth, final Set<Class<?>> visitedClasses) {
+        final int maxDepth = this.getMaxRecursionDepth();
+        final Deque<ScanNode> stack = new ArrayDeque<>();
+        stack.push(new ScanNode(rootClass, startDepth));
 
-        if (depth > this.getMaxRecursionDepth()) {
-            log.debug("[DictI18n] Recursion depth exceeds maximum limit: {}", this.getMaxRecursionDepth());
-            return false;
-        }
+        while (!stack.isEmpty()) {
+            final ScanNode current = stack.pop();
 
-        if (visitedClasses.contains(clazz)) {
-            return false;
-        }
-        visitedClasses.add(clazz);
+            final Class<?> clazz = current.clazz;
+            final int depth = current.depth;
 
-        if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) {
-            return true;
-        }
+            if (depth > maxDepth) {
+                log.debug("[DictI18n] Recursion depth exceeds maximum limit: {}", maxDepth);
+                continue;
+            }
 
-        if (clazz.isAnnotationPresent(DictModel.class)) {
-            return true;
-        }
+            if (visitedClasses.contains(clazz)) {
+                continue;
+            }
+            visitedClasses.add(clazz);
 
-        for (final Field field : this.getAllFields(clazz)) {
-            if (field.isAnnotationPresent(DictDesc.class)) {
+            if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) {
                 return true;
             }
 
-            // Avoid dealing with primitive types and avoid infinite recursion
-            final Class<?> fieldType = field.getType();
-            if (!this.isJavaBasicType(fieldType) && this.deepScanForDictDesc(fieldType, depth + 1, visitedClasses)) {
+            if (clazz.isAnnotationPresent(DictModel.class)) {
                 return true;
+            }
+
+            for (final Field field : this.getAllFields(clazz)) {
+                if (field.isAnnotationPresent(DictDesc.class)) {
+                    return true;
+                }
+
+                final Class<?> fieldType = field.getType();
+                if (!this.isJavaBasicType(fieldType) && !visitedClasses.contains(fieldType)) {
+                    stack.push(new ScanNode(fieldType, depth + 1));
+                }
             }
         }
 
         return false;
+    }
+
+    private static class ScanNode {
+        final Class<?> clazz;
+        final int depth;
+
+        ScanNode(final Class<?> clazz, final int depth) {
+            this.clazz = clazz;
+            this.depth = depth;
+        }
     }
 }
