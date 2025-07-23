@@ -201,41 +201,4 @@ public class AbstractDictGeneratorMojoTest {
 
         this.mojo.execute();
     }
-
-    // 测试用实现
-    // Test implementations
-
-    public static class TestDictGeneratorMojo extends AbstractDictGeneratorMojo {
-        @Override
-        public void generate(List<Dict[]> dictList, List<String> languages, File outputDir) {
-            // 测试实现方法
-        }
-    }
-
-    public enum MockEnumDict implements Dict {
-        TEST1, TEST2;
-
-        @Override
-        public String dictName() {
-            return "mock";
-        }
-
-        @Override
-        public String code() {
-            return this.name();
-        }
-
-    }
-
-    public static class MockClassDict implements Dict {
-        @Override
-        public String dictName() {
-            return "classDict";
-        }
-
-        @Override
-        public String code() {
-            return "123";
-        }
-    }
 }

@@ -5,6 +5,8 @@ import org.apache.maven.project.MavenProject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class GenerateYmlMojoTest {
+    private static final Logger log = LoggerFactory.getLogger(GenerateYmlMojoTest.class);
 
     private GenerateYmlMojo mojo;
     private File tempOutputDir;
@@ -90,6 +93,8 @@ class GenerateYmlMojoTest {
                 deleteRecursive(child);
             }
         }
-        file.delete();
+        if (!file.delete()) {
+            log.error("Failed to delete file: {}", file.getAbsolutePath());
+        }
     }
 }
