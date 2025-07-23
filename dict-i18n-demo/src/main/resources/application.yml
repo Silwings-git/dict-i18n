@@ -4,7 +4,7 @@ dict-i18n:
     - redis
     - file
     - declared
-  max-recursion-depth: 10
+  max-nesting-depth: 10
   default-lang: zh
   loader:
     declared:

@@ -9,7 +9,7 @@ public enum AccountType implements Dict {
 
     @Override
     public String dictName() {
-        return "account_type";
+        return "Account_type";
     }
 
     @Override

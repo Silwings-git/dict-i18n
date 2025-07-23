@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * Provide language degradation policies, such as:
@@ -29,7 +30,7 @@ public final class LangFallbackUtils {
         }
 
         // Replace the underscore with an underscore to unify the format
-        lang = lang.trim().toLowerCase().replace('_', '-');
+        lang = lang.trim().replace('_', '-');
 
         final List<String> fallbackList = new ArrayList<>();
         fallbackList.add(lang);
@@ -40,13 +41,13 @@ public final class LangFallbackUtils {
             fallbackList.add(baseLang);
         }
 
-        return fallbackList;
+        return toLowerCase(fallbackList);
     }
 
     /**
      * Locale to fallback chain
      */
-    public static List<String> fallbackLangChain(Locale locale) {
+    public static List<String> fallbackLangChain(final Locale locale) {
         if (null == locale) {
             return Collections.emptyList();
         }
@@ -57,13 +58,17 @@ public final class LangFallbackUtils {
         final List<String> fallbackList = new ArrayList<>();
 
         if (!language.isEmpty() && !country.isEmpty()) {
-            fallbackList.add((language + "-" + country).toLowerCase());
+            fallbackList.add((language + "-" + country));
         }
 
         if (!language.isEmpty()) {
-            fallbackList.add(language.toLowerCase());
+            fallbackList.add(language);
         }
 
-        return fallbackList;
+        return toLowerCase(fallbackList);
+    }
+
+    private static List<String> toLowerCase(final List<String> fallbackList) {
+        return fallbackList.stream().map(String::toLowerCase).collect(Collectors.toList());
     }
 }

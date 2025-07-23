@@ -47,7 +47,7 @@ public class FileDictI18nLoader implements ClassPathDictI18nLoader {
             }
             final List<DictInfo> dictInfoList = this.dictFileParser.parse(resource);
 
-            final Map<String, String> langDictMap = this.dictData.computeIfAbsent(lang.toLowerCase(), key -> new ConcurrentHashMap<>());
+            final Map<String, String> langDictMap = this.dictData.computeIfAbsent(lang, key -> new ConcurrentHashMap<>());
             dictInfoList.stream()
                     .filter(DictInfo::isValid)
                     .forEach(dictInfo -> langDictMap.put(this.fileDictI18nLoaderProperties.processKey(dictInfo.getDictKey()), dictInfo.getDictDesc()));
@@ -64,9 +64,8 @@ public class FileDictI18nLoader implements ClassPathDictI18nLoader {
         if (null == lang || lang.isEmpty() || null == dictKey || dictKey.isEmpty()) {
             return Optional.empty();
         }
-        final String langLowerCase = lang.toLowerCase();
-        if (this.dictData.containsKey(langLowerCase)) {
-            return Optional.ofNullable(this.dictData.get(langLowerCase).get(this.fileDictI18nLoaderProperties.processKey(dictKey)));
+        if (this.dictData.containsKey(lang)) {
+            return Optional.ofNullable(this.dictData.get(lang).get(this.fileDictI18nLoaderProperties.processKey(dictKey)));
         }
         return Optional.empty();
     }

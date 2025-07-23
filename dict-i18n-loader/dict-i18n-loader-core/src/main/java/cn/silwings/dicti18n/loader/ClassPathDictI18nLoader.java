@@ -65,7 +65,7 @@ public interface ClassPathDictI18nLoader extends DictI18nLoader {
             return null;
         }
 
-        final String raw = filename.substring(0, filename.lastIndexOf(".")).toLowerCase();
+        final String raw = filename.substring(0, filename.lastIndexOf("."));
 
         if ("dict".equals(raw)) {
             return CompositeDictI18nProvider.FALLBACK_LOCALE_KEY;
@@ -82,7 +82,7 @@ public interface ClassPathDictI18nLoader extends DictI18nLoader {
 
         final String lang = idx == -1 ? raw : raw.substring(idx + 1);
 
-        return lang.isEmpty() ? null : lang;
+        return lang.isEmpty() ? null : lang.toLowerCase();
     }
 
 }

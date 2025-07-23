@@ -113,10 +113,7 @@ public class DeclaredDictI18nLoader implements DictI18nLoader, ApplicationContex
      * Normalizes the key based on configuration (e.g., ignore case).
      */
     private String processKey(final String key) {
-        if (null == key || key.isEmpty()) {
-            return key;
-        }
-        return this.declaredDictI18nLoaderProperties.isIgnoreCase() ? key.toLowerCase() : key;
+        return this.declaredDictI18nLoaderProperties.processKey(key);
     }
 
     /**

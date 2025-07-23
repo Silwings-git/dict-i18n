@@ -13,7 +13,7 @@ public interface DictI18nLoader {
     /**
      * Get translations based on language and key
      *
-     * @param lang    language
+     * @param lang    lowercase language
      * @param dictKey dictionary key
      * @return translation
      */

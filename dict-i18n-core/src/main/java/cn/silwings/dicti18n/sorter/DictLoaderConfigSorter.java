@@ -4,8 +4,10 @@ import cn.silwings.dicti18n.config.DictI18nProperties;
 import cn.silwings.dicti18n.loader.DictI18nLoader;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,24 +23,34 @@ public class DictLoaderConfigSorter implements DictLoaderSorter {
 
     @Override
     public List<DictI18nLoader> getOrderedLoaders() {
-        // Map<beanName, loader>
-        final Map<String, DictI18nLoader> loaderMap = this.allLoaders.stream().collect(Collectors.toMap(DictI18nLoader::loaderName, Function.identity()));
+        final List<String> configOrder = this.properties.getLoaderOrder();
 
-        // Sorting: Configure the order first, and then add others
+        // No custom order, return in the original order directly.
+        if (null == configOrder || configOrder.isEmpty()) {
+            return new ArrayList<>(this.allLoaders);
+        }
+
+        final Map<String, DictI18nLoader> loaderMap = this.allLoaders.stream()
+                .collect(Collectors.toMap(DictI18nLoader::loaderName, Function.identity()));
+
         final List<DictI18nLoader> ordered = new ArrayList<>();
+        final Set<String> used = new HashSet<>();
 
-        // 1. The order of precedence specified in the configuration
-        for (final String name : this.properties.getLoaderOrder()) {
-            final DictI18nLoader loader = loaderMap.remove(name);
+        // Add the loader in the configuration sequence
+        for (final String name : configOrder) {
+            final DictI18nLoader loader = loaderMap.get(name);
             if (null != loader) {
                 ordered.add(loader);
+                used.add(name);
             }
         }
 
-        // 2. The remaining unconfigured loaders, sorted by class name
-        final List<Map.Entry<String, DictI18nLoader>> remaining = new ArrayList<>(loaderMap.entrySet());
-        remaining.sort(Map.Entry.comparingByKey());
-        remaining.forEach(entry -> ordered.add(entry.getValue()));
+        // Add the remaining loaders in their original order
+        for (final DictI18nLoader loader : this.allLoaders) {
+            if (!used.contains(loader.loaderName())) {
+                ordered.add(loader);
+            }
+        }
 
         return ordered;
     }

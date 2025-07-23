@@ -14,7 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -72,7 +76,6 @@ public class DictItemsEndpointHandler implements EndpointHandler {
         final List<String> dictNameList = Arrays.stream(dictNames.split(","))
                 .filter(StringUtils::isNotBlank)
                 .distinct()
-                .map(String::toLowerCase)
                 .collect(Collectors.toList());
 
         // Determine the actual language to be used, prioritizing the request parameters; otherwise, use the current context language.

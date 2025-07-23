@@ -116,7 +116,7 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
      * @param code     Dictionary key-value, such as "pending"
      * @return spliced key name
      */
-    private String resolveKey(final String dictName, final String code) {
+    public String resolveKey(final String dictName, final String code) {
         return dictName + "." + code;
     }
 

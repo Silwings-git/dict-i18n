@@ -40,7 +40,6 @@ public class DictMapHolder implements ApplicationContextAware, ApplicationRunner
     private final DictI18nStarterProperties dictI18nStarterProperties;
 
     // A mapping of dictionary names to arrays of dictionary entries,
-    // where the keys are lowercase dictionary names and the values are all entries of the corresponding dictionary.
     private final Map<String, Dict[]> dictMap;
 
     public DictMapHolder(final DictScanner dictScanner, final DictI18nStarterProperties dictI18nStarterProperties) {
@@ -73,7 +72,7 @@ public class DictMapHolder implements ApplicationContextAware, ApplicationRunner
                 .forEach(clazz -> {
                     final Dict[] enumConstants = clazz.getEnumConstants();
                     if (ArrayUtils.isNotEmpty(enumConstants)) {
-                        this.dictMap.put(enumConstants[0].dictName().toLowerCase(), enumConstants);
+                        this.dictMap.put(enumConstants[0].dictName(), enumConstants);
                     }
                 });
     }
@@ -91,21 +90,11 @@ public class DictMapHolder implements ApplicationContextAware, ApplicationRunner
     /**
      * Get the list of dictionary items based on the dictionary name.
      *
-     * @param dictName Dictionary name (case insensitive)
+     * @param dictName Dictionary name
      * @return A list of dictionary items, return an empty array if it does not exist
      */
     public Dict[] getDictItems(final String dictName) {
-        return this.dictMap.getOrDefault(dictName.toLowerCase(), EMPTY_DICT_ARRAY);
-    }
-
-    /**
-     * Check if the dictionary exists
-     *
-     * @param dictName Dictionary name (case insensitive)
-     * @return return true if it exists, otherwise return false
-     */
-    public boolean containsDict(final String dictName) {
-        return null != dictName && this.dictMap.containsKey(dictName.toLowerCase());
+        return this.dictMap.getOrDefault(dictName, EMPTY_DICT_ARRAY);
     }
 
     /**

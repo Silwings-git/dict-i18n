@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class DictI18nProcessor {
     }
 
     public int getMaxRecursionDepth() {
-        return this.dictI18nProperties.getMaxRecursionDepth();
+        return this.dictI18nProperties.getMaxNestingDepth();
     }
 
     public void process(final Object body, final String language) {
@@ -74,7 +75,7 @@ public class DictI18nProcessor {
 
         for (final Field descField : this.getAllFields(clazz)) {
             try {
-                this.processField(target, descField, clazz, language, depth, visited);
+                this.processField(target, descField, clazz, language, depth + 1, visited);
             } catch (Exception e) {
                 log.debug("[DictI18n] The processing field failed and the reason for the failure: {}", e.getMessage(), e);
             }
@@ -107,7 +108,7 @@ public class DictI18nProcessor {
                     ((Collection<?>) nestedValue).forEach(e -> this.processObject(e, language, depth + 1, visited));
                 } else if (nestedValue instanceof Map<?, ?>) {
                     ((Map<?, ?>) nestedValue).values().forEach(e -> this.processObject(e, language, depth + 1, visited));
-                } else if (this.shouldProcessType(fieldType)) {
+                } else if (this.shouldProcessType(fieldType, depth + 1)) {
                     this.processObject(nestedValue, language, depth + 1, visited);
                 }
             }
@@ -129,10 +130,17 @@ public class DictI18nProcessor {
                 baseField.setAccessible(true);
                 final Object baseFieldValue = baseField.get(target);
 
-                if (baseFieldValue instanceof String) {
-                    final String text = this.i18nProvider.getText(language, this.dictI18nProperties.getDefaultLang(), dictName, (String) baseFieldValue)
+                final Object dictCode;
+                if (baseFieldValue instanceof Dict) {
+                    dictCode = ((Dict) baseFieldValue).code();
+                } else {
+                    dictCode = baseFieldValue;
+                }
+
+                if (dictCode instanceof String) {
+                    final String text = this.i18nProvider.getText(language, this.dictI18nProperties.getDefaultLang(), dictName, (String) dictCode)
                             .filter(s -> !s.isEmpty())
-                            .orElseGet(() -> this.dictI18nProperties.isReturnKeyIfEmpty() ? dictName + "." + baseFieldValue : "");
+                            .orElseGet(() -> this.dictI18nProperties.isReturnKeyIfEmpty() ? dictName + "." + dictCode : "");
                     descField.set(target, text);
                 }
             } catch (Exception e) {
@@ -192,24 +200,30 @@ public class DictI18nProcessor {
         return null;
     }
 
-    private boolean shouldProcessType(final Class<?> clazz) {
+    private boolean shouldProcessType(final Class<?> clazz, final int depth) {
         // The base type is not processed directly
         if (this.isJavaBasicType(clazz)) {
             return false;
         }
 
-        return this.processableCache.computeIfAbsent(clazz, key -> this.deepScanForDictDesc(key, 0));
+        return this.processableCache.computeIfAbsent(clazz, key -> this.deepScanForDictDesc(key, depth, new HashSet<>()));
     }
 
     /**
      * Deep recursion determines whether the type needs to be processed (whether it contains a @DictDesc field or a nested field)
      */
-    private boolean deepScanForDictDesc(final Class<?> clazz, final int depth) {
+    // TODO_Silwings: 2025/7/23 需要从递归形式改造为迭代形式
+    private boolean deepScanForDictDesc(final Class<?> clazz, final int depth, final Set<Class<?>> visitedClasses) {
 
         if (depth > this.getMaxRecursionDepth()) {
             log.debug("[DictI18n] Recursion depth exceeds maximum limit: {}", this.getMaxRecursionDepth());
             return false;
         }
+
+        if (visitedClasses.contains(clazz)) {
+            return false;
+        }
+        visitedClasses.add(clazz);
 
         if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) {
             return true;
@@ -226,7 +240,7 @@ public class DictI18nProcessor {
 
             // Avoid dealing with primitive types and avoid infinite recursion
             final Class<?> fieldType = field.getType();
-            if (!this.isJavaBasicType(fieldType) && this.deepScanForDictDesc(fieldType, depth + 1)) {
+            if (!this.isJavaBasicType(fieldType) && this.deepScanForDictDesc(fieldType, depth + 1, visitedClasses)) {
                 return true;
             }
         }

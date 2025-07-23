@@ -20,9 +20,9 @@ public class DictI18nProperties {
     private List<String> loaderOrder = new ArrayList<>();
 
     /**
-     * The maximum recursion depth when looking up a field
+     * The maximum nesting depth when looking up a field
      */
-    private int maxRecursionDepth = 10;
+    private int maxNestingDepth = 10;
 
     /**
      * Whether to return dictKey when description is empty
