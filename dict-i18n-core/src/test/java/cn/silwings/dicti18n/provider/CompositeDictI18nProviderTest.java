@@ -3,7 +3,8 @@ package cn.silwings.dicti18n.provider;
 import cn.silwings.dicti18n.loader.DictI18nLoader;
 import cn.silwings.dicti18n.sorter.DictLoaderSorter;
 import cn.silwings.dicti18n.utils.Maps;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,9 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * 测试CompositeDictI18nProvider类中的方法
@@ -54,11 +57,12 @@ public class CompositeDictI18nProviderTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConstructorWithEmptyLoaders() {
         // 测试空加载器构造抛出异常
         // Test constructor throws exception with empty loaders
-        new CompositeDictI18nProvider(new TestDictSorter(Collections.emptyList()));
+        Executable executable = () -> new CompositeDictI18nProvider(new TestDictSorter(Collections.emptyList()));
+        assertThrows(IllegalArgumentException.class, executable);
     }
 
     @Test

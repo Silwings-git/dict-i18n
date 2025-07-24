@@ -3,8 +3,8 @@ package cn.silwings.dicti18n.sorter;
 
 import cn.silwings.dicti18n.config.DictI18nProperties;
 import cn.silwings.dicti18n.loader.DictI18nLoader;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,14 +12,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DictLoaderConfigSorterTest {
     private DictI18nProperties properties;
     private List<DictI18nLoader> allLoaders;
     private DictLoaderConfigSorter sorter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.properties = new DictI18nProperties();
         this.allLoaders = new ArrayList<>();

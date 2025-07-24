@@ -1,7 +1,8 @@
 package cn.silwings.dicti18n.plugin.utils;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.lang.reflect.Field;
 import java.util.Enumeration;
@@ -10,10 +11,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * 测试 OrderedProperties 类的有序属性功能和键类型验证
@@ -22,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class OrderedPropertiesTest {
     private OrderedProperties props;
 
-    @Before
+    @BeforeEach  // 替换 JUnit 4 的 @Before
     public void setUp() {
         this.props = new OrderedProperties();
     }
@@ -41,11 +43,12 @@ public class OrderedPropertiesTest {
         assertEquals("z_key", iterator.next());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test  // JUnit 5 中使用 assertThrows 替代 expected 属性
     public void testPutWithNonStringKey() {
         // 测试非字符串键抛出异常
         // Test putting non-string key throws exception
-        this.props.put(123, "numeric");
+        Executable executable = () -> this.props.put(123, "numeric");
+        assertThrows(IllegalArgumentException.class, executable);
     }
 
     @Test
@@ -63,7 +66,7 @@ public class OrderedPropertiesTest {
         assertEquals(2, this.props.size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testPutAllWithNonStringKeys() {
         // 测试批量插入包含非字符串键抛出异常
         // Test putAll with non-string keys throws exception
@@ -71,26 +74,27 @@ public class OrderedPropertiesTest {
         map.put(123, "numeric");
         map.put("a_key", "string");
 
-        try {
-            this.props.putAll(map);
-        } catch (IllegalArgumentException e) {
-            assertEquals(0, this.props.size());
-            throw e;
-        }
+        Executable executable = () -> this.props.putAll(map);
+        assertThrows(IllegalArgumentException.class, executable);
+
+        // 验证异常后属性为空
+        assertEquals(0, this.props.size());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testPutNullKey() {
         // 测试插入null键抛出异常
         // The test throws an exception when inserting a null key
-        this.props.put(null, "value");
+        Executable executable = () -> this.props.put(null, "value");
+        assertThrows(NullPointerException.class, executable);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testPutNullValue() {
         // 测试插入null值抛出异常
         // The test throws an exception by inserting a null value
-        this.props.put("1", null);
+        Executable executable = () -> this.props.put("1", null);
+        assertThrows(NullPointerException.class, executable);
     }
 
     @Test

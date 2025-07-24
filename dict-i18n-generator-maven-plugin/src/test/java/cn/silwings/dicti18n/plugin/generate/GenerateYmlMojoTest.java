@@ -2,23 +2,19 @@ package cn.silwings.dicti18n.plugin.generate;
 
 import cn.silwings.dicti18n.dict.Dict;
 import org.apache.maven.project.MavenProject;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.jupiter.api.io.TempDir;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,74 +23,67 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class GenerateYmlMojoTest {
-    private static final Logger log = LoggerFactory.getLogger(GenerateYmlMojoTest.class);
 
-    private GenerateYmlMojo mojo;
-    private File tempOutputDir;
+    /**
+     * 测试从枚举字典生成YML文件的功能
+     * 使用 @TempDir 注解自动管理临时目录，替代手动创建和删除
+     *
+     * @param tempDir JUnit 5 自动创建的临时目录路径，测试结束后自动清理
+     */
+    @Test
+    void testGeneratePropertiesFilesFromEnumDict(@TempDir Path tempDir) throws Exception {
+        // 初始化测试目标对象
+        final GenerateYmlMojo mojo = new GenerateYmlMojo();
+        mojo.languages = Arrays.asList("zh", "en");
 
-    @BeforeEach
-    void setUp() throws Exception {
-        this.mojo = new GenerateYmlMojo();
-        this.mojo.languages = Arrays.asList("zh", "en");
-
-        // 模拟 Maven 项目结构
+        // 模拟 Maven 项目基础目录
         final MavenProject mockProject = mock(MavenProject.class);
         when(mockProject.getBasedir()).thenReturn(new File("."));
-        this.mojo.project = mockProject;
+        mojo.project = mockProject;
 
-        // 指定 basePackages，避免 fallback 到自动包扫描
-        this.mojo.basePackages = Collections.singletonList("cn.silwings.dicti18n.plugin.generate");
+        // 指定扫描的基础包，避免自动扫描带来的不可控性
+        mojo.basePackages = Collections.singletonList("cn.silwings.dicti18n.plugin.generate");
 
-        // 输出目录使用临时文件夹
-        this.tempOutputDir = Files.createTempDirectory("dict-test").toFile();
-        this.mojo.outputDir = this.tempOutputDir;
+        // 设置输出目录为临时目录（自动创建，测试后自动删除）
+        mojo.outputDir = tempDir.toFile();
 
-        // 输出调试信息
-        this.mojo.setLog(new SilentMojoLog());
-    }
+        // 设置日志输出（静默模式，避免测试时打印冗余日志）
+        mojo.setLog(new SilentMojoLog());
 
-    @AfterEach
-    void cleanup() {
-        if (this.tempOutputDir != null && this.tempOutputDir.exists()) {
-            deleteRecursive(this.tempOutputDir);
-        }
-    }
-
-    @Test
-    void testGeneratePropertiesFilesFromEnumDict() throws Exception {
-        // 模拟只扫描到一个枚举类
+        // 模拟扫描到的字典枚举类
         final Set<Class<? extends Dict>> classes = buildDictClasses();
-        this.mojo.generate(classes, this.mojo.languages, this.mojo.outputDir);
-        this.mojo.generate(classes, this.mojo.languages, this.mojo.outputDir);
+        // 执行生成逻辑（调用两次以验证幂等性，确保重复生成不会出问题）
+        mojo.generate(classes, mojo.languages, mojo.outputDir);
+        mojo.generate(classes, mojo.languages, mojo.outputDir);
 
-        for (String lang : this.mojo.languages) {
-            final File file = new File(this.tempOutputDir, "dict_" + lang + ".yml");
-            assertTrue(file.exists(), "File should exist: " + file.getName());
+        // 验证每种语言的YML文件是否正确生成
+        for (String lang : mojo.languages) {
+            final File ymlFile = new File(mojo.outputDir, "dict_" + lang + ".yml");
+            // 断言文件存在
+            assertTrue(ymlFile.exists(), "生成的YML文件不存在: " + ymlFile.getName());
 
-            Map<String, Map<String, Object>> content;
-            try (FileInputStream fis = new FileInputStream(file)) {
-                content = new Yaml().load(new InputStreamReader(fis, StandardCharsets.UTF_8));
+            // 读取YML文件内容并验证
+            Map<String, Map<String, Object>> ymlContent;
+            try (FileInputStream fis = new FileInputStream(ymlFile)) {
+                // 使用UTF-8编码读取，避免中文乱码
+                ymlContent = new Yaml().load(new InputStreamReader(fis, StandardCharsets.UTF_8));
             }
 
-            assertEquals("", content.get("test").get("a"));
-            assertEquals("", content.get("test").get("b"));
+            // 验证字典键对应的value是否正确（根据实际业务场景调整断言值）
+            assertEquals("", ymlContent.get("test").get("a"));
+            assertEquals("", ymlContent.get("test").get("b"));
         }
     }
 
+    /**
+     * 构建测试用的字典类集合
+     * 此处添加需要测试的字典枚举类
+     *
+     * @return 字典类集合
+     */
     private static Set<Class<? extends Dict>> buildDictClasses() {
         final Set<Class<? extends Dict>> classes = new HashSet<>();
-        classes.add(TestDictEnum.class);
+        classes.add(TestDictEnum.class); // 添加测试用的枚举字典类
         return classes;
-    }
-
-    private void deleteRecursive(File file) {
-        if (file.isDirectory()) {
-            for (File child : Objects.requireNonNull(file.listFiles())) {
-                deleteRecursive(child);
-            }
-        }
-        if (!file.delete()) {
-            log.error("Failed to delete file: {}", file.getAbsolutePath());
-        }
     }
 }
