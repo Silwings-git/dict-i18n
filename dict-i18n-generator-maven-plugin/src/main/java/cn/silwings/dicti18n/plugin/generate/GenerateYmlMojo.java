@@ -30,14 +30,14 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
             // <dictName, <code, desc>>
             final String outFileName = String.format("dict_%s.yml", lang);
             final File outFile = outputDir.toPath().resolve(outFileName).toFile();
-            final Map<String, Map<String, String>> newDictMap = this.parseDictListToMap(dictsList);
-            final Map<String, Map<String, String>> oldDictMap = this.loadDictFromFile(outFile);
-            final Map<String, Map<String, String>> targetDictMap = this.merge(oldDictMap, newDictMap);
+            final Map<String, Object> newDictMap = this.parseDictListToMap(dictsList);
+            final Map<String, Object> oldDictMap = this.loadDictFromFile(outFile);
+            final Map<String, Object> targetDictMap = this.merge(oldDictMap, newDictMap);
             this.write(targetDictMap, outFile);
         }
     }
 
-    private void write(final Map<String, Map<String, String>> dictMap, final File outFile) throws MojoExecutionException {
+    private void write(final Map<String, Object> dictMap, final File outFile) throws MojoExecutionException {
         final DumperOptions options = new DumperOptions();
         options.setPrettyFlow(true);
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
@@ -46,78 +46,77 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
         options.setDefaultScalarStyle(DumperOptions.ScalarStyle.PLAIN);
         options.setLineBreak(DumperOptions.LineBreak.UNIX);
 
-        Yaml yaml = new Yaml(new SafeConstructor(), new Representer(), options);
+        final Yaml yaml = new Yaml(new SafeConstructor(), new Representer(), options);
 
         try (Writer writer = new OutputStreamWriter(Files.newOutputStream(outFile.toPath()), StandardCharsets.UTF_8)) {
             yaml.dump(dictMap, writer);
         } catch (IOException e) {
-            this.getLog().error("Failed to write yaml: " + outFile.getName());
+            this.getLog().error("[DictI18n] Failed to write yaml: " + outFile.getName());
             throw new MojoExecutionException(e);
         }
     }
 
-    private Map<String, Map<String, String>> merge(final Map<String, Map<String, String>> oldDictMap, final Map<String, Map<String, String>> newDictMap) {
-        final Map<String, Map<String, String>> mergedMap = new TreeMap<>(oldDictMap);
-        for (Map.Entry<String, Map<String, String>> newEntry : newDictMap.entrySet()) {
-            final String outerKey = newEntry.getKey();
-            final Map<String, String> newInnerMap = newEntry.getValue();
-            // If the old map does not have this external key, add the entire internal map
-            if (!mergedMap.containsKey(outerKey)) {
-                mergedMap.put(outerKey, new TreeMap<>(newInnerMap));
-            } else {
-                // If there is this external key in the old map, merge the internal map
-                final Map<String, String> oldInnerMap = mergedMap.get(outerKey);
-                final Map<String, String> mergedInnerMap = new TreeMap<>(oldInnerMap);
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> merge(final Map<String, Object> oldMap, final Map<String, Object> newMap) {
+        final Map<String, Object> merged = new TreeMap<>(oldMap);
 
-                // Go through the new internal map and add entries that are not in the old internal map
-                for (Map.Entry<String, String> innerEntry : newInnerMap.entrySet()) {
-                    if (!mergedInnerMap.containsKey(innerEntry.getKey())) {
-                        mergedInnerMap.put(innerEntry.getKey(), innerEntry.getValue());
-                    }
+        for (Map.Entry<String, Object> entry : newMap.entrySet()) {
+            final String key = entry.getKey();
+            final Object newValue = entry.getValue();
+
+            if (oldMap.containsKey(key)) {
+                final Object oldValue = oldMap.get(key);
+
+                if (newValue instanceof Map && oldValue instanceof Map) {
+                    merged.put(key, this.merge((Map<String, Object>) oldValue, (Map<String, Object>) newValue));
+                } else {
+                    merged.put(key, newValue);
                 }
-                mergedMap.put(outerKey, mergedInnerMap);
+            } else {
+                merged.put(key, newValue);
             }
         }
 
-        return mergedMap;
+        return merged;
     }
 
-    private Map<String, Map<String, String>> loadDictFromFile(final File outFile) {
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> loadDictFromFile(final File outFile) {
         try (InputStream input = Files.newInputStream(outFile.toPath())) {
             final Yaml yaml = new Yaml(new SafeConstructor());
             final Object obj = yaml.load(input);
             if (obj instanceof Map<?, ?>) {
-                final Map<String, Map<String, String>> result = new TreeMap<>();
-                for (Map.Entry<?, ?> entry : ((Map<?, ?>) obj).entrySet()) {
-                    if (!(entry.getKey() instanceof String) || !(entry.getValue() instanceof Map)) {
-                        continue;
-                    }
-
-                    final Map<?, ?> innerMap = (Map<?, ?>) entry.getValue();
-                    final Map<String, String> innerResult = new TreeMap<>();
-                    for (Map.Entry<?, ?> innerEntry : innerMap.entrySet()) {
-                        if (innerEntry.getKey() instanceof String && innerEntry.getValue() instanceof String) {
-                            innerResult.put((String) innerEntry.getKey(), (String) innerEntry.getValue());
-                        }
-                    }
-                    result.put((String) entry.getKey(), innerResult);
-                }
-                return result;
+                return (Map<String, Object>) obj;
             }
         } catch (Exception e) {
-            this.getLog().debug("Failed to load yaml: " + outFile.getName());
+            this.getLog().debug("[DictI18n] Failed to load yaml: " + outFile.getName());
         }
         return new TreeMap<>();
     }
 
-    private Map<String, Map<String, String>> parseDictListToMap(final List<Dict[]> dictArrayList) {
-        final Map<String, Map<String, String>> dictMap = new TreeMap<>();
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> parseDictListToMap(final List<Dict[]> dictArrayList) {
+        final Map<String, Object> dictMap = new TreeMap<>();
+
         dictArrayList.forEach(dictArray -> {
-            final Map<String, String> itemMap = dictMap.computeIfAbsent(dictArray[0].dictName(), k -> new TreeMap<>());
+            final String dictName = dictArray[0].dictName();
+            final String[] keys = dictName.split("\\.");
+
+            Map<String, Object> currentMap = dictMap;
+
+            for (int i = 0; i < keys.length - 1; i++) {
+                String key = keys[i];
+                currentMap = (Map<String, Object>) currentMap.computeIfAbsent(key, k -> new TreeMap<>());
+            }
+
+            final String lastKey = keys[keys.length - 1];
+            final Map<String, String> itemMap = (Map<String, String>) currentMap.computeIfAbsent(lastKey, k -> new TreeMap<>());
+
             for (final Dict dict : dictArray) {
                 itemMap.put(StringUtils.defaultIfBlank(dict.code(), "_"), "");
             }
         });
+
         return dictMap;
     }
 
