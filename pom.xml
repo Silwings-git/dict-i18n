@@ -9,6 +9,31 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
 
+    <developers>
+        <developer>
+            <name>Silwings</name>
+            <email>silwings@163.com</email>
+            <url>https://github.com/Silwings-git/dict-i18n</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/Silwings-git/dict-i18n</url>
+        <connection>https://github.com/Silwings-git/dict-i18n.git</connection>
+        <developerConnection>https://github.com/Silwings-git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
     <modules>
         <module>dict-i18n-core</module>
         <module>dict-i18n-spring-boot-starter</module>
@@ -216,5 +241,17 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>disable-javadoc-doclint</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

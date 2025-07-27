@@ -1,24 +1,24 @@
 Account_type:
-  GUEST: '游客'
-  OPERATION: '运营'
+  GUEST: 游客
+  OPERATION: 运营
 logic_delete:
-  '0': '正常'
-  '1': '已删除'
+  '0': 正常
+  '1': 已删除
 order:
   order_country:
-    CN: '中国'
-    MY: '马来西亚'
-    US: '美国'
+    CN: 中国
+    MY: 马来西亚
+    US: 美国
 orderSource:
-  _: '未知订单来源'
+  _: 未知订单来源
 orderType:
-  _: '未知订单类型'
+  _: 未知订单类型
 order_status:
-  canceled: '已取消'
-  completed: '已完成'
-  created: '已创建'
-  paid: '已支付'
-  shipped: '已发货'
+  canceled: 已取消
+  completed: 已完成
+  created: 已创建
+  paid: 已支付
+  shipped: 已发货
 payment_type:
-  alipay: '支付宝'
-  weixin: '微信'
+  alipay: 支付宝
+  weixin: 微信

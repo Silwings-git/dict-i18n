@@ -70,7 +70,7 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
                 if (newValue instanceof Map && oldValue instanceof Map) {
                     merged.put(key, this.merge((Map<String, Object>) oldValue, (Map<String, Object>) newValue));
                 } else {
-                    merged.put(key, newValue);
+                    merged.put(key, oldValue);
                 }
             } else {
                 merged.put(key, newValue);
