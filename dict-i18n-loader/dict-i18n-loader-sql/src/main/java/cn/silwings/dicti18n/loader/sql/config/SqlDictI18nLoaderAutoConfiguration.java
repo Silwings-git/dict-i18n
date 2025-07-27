@@ -5,6 +5,8 @@ import cn.silwings.dicti18n.loader.sql.SqlDictI18nLoader;
 import cn.silwings.dicti18n.loader.sql.cache.DictI18nLoaderCacheProvider;
 import cn.silwings.dicti18n.loader.sql.cache.GuavaDictI18nLoaderCacheProvider;
 import cn.silwings.dicti18n.loader.sql.cache.NoCacheDictCacheProvider;
+import cn.silwings.dicti18n.loader.sql.db.JdbcSQLTemplate;
+import cn.silwings.dicti18n.loader.sql.db.SQLTemplate;
 import cn.silwings.dicti18n.loader.sql.init.data.DictI18nSqlDataInitRunner;
 import cn.silwings.dicti18n.loader.sql.init.data.DictI18nSqlDataInitializer;
 import cn.silwings.dicti18n.loader.sql.init.schema.DictI18nSchemaInitRunner;
@@ -44,8 +46,8 @@ public class SqlDictI18nLoaderAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "dict-i18n.loader.sql.schema.enabled", havingValue = "true")
-    public DictI18nSchemaInitializer dictI18nSchemaInitializer(final JdbcTemplate jdbcTemplate) {
-        return new DictI18nSchemaInitializer(jdbcTemplate);
+    public DictI18nSchemaInitializer dictI18nSchemaInitializer(final SQLTemplate sqlTemplate) {
+        return new DictI18nSchemaInitializer(sqlTemplate);
     }
 
     @Bean
@@ -56,8 +58,8 @@ public class SqlDictI18nLoaderAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "dict-i18n.loader.sql.preload.enabled", havingValue = "true")
-    public DictI18nSqlDataInitializer dictI18nSqlDataInitializer(final JdbcTemplate jdbcTemplate) {
-        return new DictI18nSqlDataInitializer(jdbcTemplate);
+    public DictI18nSqlDataInitializer dictI18nSqlDataInitializer(final SQLTemplate sqlTemplate) {
+        return new DictI18nSqlDataInitializer(sqlTemplate);
     }
 
     @Bean
@@ -67,7 +69,13 @@ public class SqlDictI18nLoaderAutoConfiguration {
     }
 
     @Bean
-    public SqlDictI18nLoader sqlDictI18nLoader(final JdbcTemplate jdbcTemplate, final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider) {
-        return new SqlDictI18nLoader(jdbcTemplate, dictI18nLoaderCacheProvider);
+    @ConditionalOnMissingBean(SQLTemplate.class)
+    public SQLTemplate sqlTemplate(final JdbcTemplate jdbcTemplate) {
+        return new JdbcSQLTemplate(jdbcTemplate);
+    }
+
+    @Bean
+    public SqlDictI18nLoader sqlDictI18nLoader(final SQLTemplate sqlTemplate, final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider) {
+        return new SqlDictI18nLoader(sqlTemplate, dictI18nLoaderCacheProvider);
     }
 }

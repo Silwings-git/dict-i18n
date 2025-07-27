@@ -2,12 +2,9 @@ package cn.silwings.dicti18n.loader.sql.init.data;
 
 import cn.silwings.dicti18n.loader.enums.PreLoadMode;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.JdbcTemplate;
+import cn.silwings.dicti18n.loader.sql.db.SQLTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -20,10 +17,10 @@ import java.util.stream.Collectors;
  */
 public class DictI18nSqlDataInitializer {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final SQLTemplate sqlTemplate;
 
-    public DictI18nSqlDataInitializer(final JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public DictI18nSqlDataInitializer(final SQLTemplate sqlTemplate) {
+        this.sqlTemplate = sqlTemplate;
     }
 
     /**
@@ -73,12 +70,12 @@ public class DictI18nSqlDataInitializer {
 
         // Query existing data
         final String selectSql = "SELECT dict_key FROM dict_i18n WHERE lang = ? AND dict_key IN (" +
-                                 String.join(",", Collections.nCopies(params.size(), "?")) + ")";
+                String.join(",", Collections.nCopies(params.size(), "?")) + ")";
 
         // The first parameter of SQL is the language code.
         params.add(0, language);
 
-        final List<String> dictKeyList = this.jdbcTemplate.query(selectSql, (rs, rowNum) -> rs.getString("dict_key"), params.toArray());
+        final List<String> dictKeyList = this.sqlTemplate.query(selectSql, rs -> rs.getString("dict_key"), params);
         final Set<String> existingKeys = new HashSet<>(dictKeyList);
 
         // Filter out the new data that needs to be inserted.
@@ -104,10 +101,10 @@ public class DictI18nSqlDataInitializer {
         // Delete all dict_key records that match the language and exist in DictList
         if (!params.isEmpty()) {
             final String deleteSql = "DELETE FROM dict_i18n WHERE lang = ? AND dict_key IN (" +
-                                     String.join(",", Collections.nCopies(params.size(), "?")) + ")";
+                    String.join(",", Collections.nCopies(params.size(), "?")) + ")";
             // The first parameter of SQL is the language code.
             params.add(0, language);
-            this.jdbcTemplate.update(deleteSql, params.toArray());
+            this.sqlTemplate.update(deleteSql, params);
         }
 
         this.batchInsert(language, dictList);
@@ -121,23 +118,13 @@ public class DictI18nSqlDataInitializer {
      */
     private void batchInsert(final String language, final List<DictInfo> dictList) {
         final String insertSql = "INSERT INTO dict_i18n (dict_key, lang, description, enabled) " +
-                                 "VALUES (?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?)";
 
-        this.jdbcTemplate.batchUpdate(insertSql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(final PreparedStatement ps, final int i) throws SQLException {
-                final DictInfo item = dictList.get(i);
-                ps.setString(1, item.getDictKey());
-                ps.setString(2, language);
-                ps.setString(3, item.getDictDesc());
-                ps.setInt(4, 1);
-            }
-
-            @Override
-            public int getBatchSize() {
-                return dictList.size();
-            }
+        this.sqlTemplate.batchUpdate(insertSql, dictList, (ps, index, dict) -> {
+            ps.setString(1, dict.getDictKey());
+            ps.setString(2, language);
+            ps.setString(3, dict.getDictDesc());
+            ps.setInt(4, 1);
         });
     }
-
 }

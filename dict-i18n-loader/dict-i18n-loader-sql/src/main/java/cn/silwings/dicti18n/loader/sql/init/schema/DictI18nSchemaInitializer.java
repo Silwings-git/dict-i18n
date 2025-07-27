@@ -1,25 +1,21 @@
 package cn.silwings.dicti18n.loader.sql.init.schema;
 
+import cn.silwings.dicti18n.loader.sql.db.SQLTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import javax.sql.DataSource;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 
 public class DictI18nSchemaInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(DictI18nSchemaInitializer.class);
-    private final JdbcTemplate jdbcTemplate;
+    private final SQLTemplate sqlTemplate;
 
-    public DictI18nSchemaInitializer(final JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public DictI18nSchemaInitializer(final SQLTemplate sqlTemplate) {
+        this.sqlTemplate = sqlTemplate;
     }
 
     public void initialize() {
-        final String databaseProductName = this.getDatabaseProductName();
+        final String databaseProductName = this.sqlTemplate.getDatabaseProductName();
         if (null == databaseProductName) {
             throw new IllegalStateException("[DictI18n] Failed to determine database product name");
         }
@@ -30,7 +26,7 @@ public class DictI18nSchemaInitializer {
         for (String sql : sqls) {
             try {
                 log.debug("[DictI18n] Executing SQL: {}", sql);
-                this.jdbcTemplate.execute(sql);
+                this.sqlTemplate.execute(sql);
             } catch (DataAccessException e) {
                 final String message = e.getMessage();
                 if (null == message || !(message.contains("Duplicate") || message.contains("already exists"))) {
@@ -43,19 +39,6 @@ public class DictI18nSchemaInitializer {
         }
 
         log.info("[DictI18n] Completed schema initialization for database.");
-    }
-
-    private String getDatabaseProductName() {
-        try {
-            final DataSource dataSource = this.jdbcTemplate.getDataSource();
-            if (null == dataSource) {
-                throw new IllegalStateException("[DictI18n] JdbcTemplate has no DataSource");
-            }
-            final DatabaseMetaData metaData = dataSource.getConnection().getMetaData();
-            return metaData.getDatabaseProductName();
-        } catch (SQLException e) {
-            throw new RuntimeException("[DictI18n] Failed to get database product name", e);
-        }
     }
 
     private String[] getInitSqlByDatabase(final String databaseProductName) {
