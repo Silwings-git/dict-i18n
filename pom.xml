@@ -17,6 +17,13 @@
         </developer>
     </developers>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
     <scm>
         <url>https://github.com/Silwings-git/dict-i18n</url>
         <connection>https://github.com/Silwings-git/dict-i18n.git</connection>
