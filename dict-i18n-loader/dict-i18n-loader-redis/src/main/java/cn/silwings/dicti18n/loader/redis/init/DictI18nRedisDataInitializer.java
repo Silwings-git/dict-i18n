@@ -20,20 +20,20 @@ public class DictI18nRedisDataInitializer {
 
     // Lua script supports both full and incremental modes for loading data into Redis
     private static final String SAVE_SCRIPT = "local mode = ARGV[1]\n" +
-                                              "for i = 2, #ARGV, 2 do\n" +
-                                              "    local key = ARGV[i]\n" +
-                                              "    local value = ARGV[i + 1]\n" +
-                                              "    if mode == \"FULL\" then\n" +
-                                              "        redis.call(\"SET\", key, value)\n" +
-                                              "    elseif mode == \"INCREMENTAL\" then\n" +
-                                              "        if redis.call(\"EXISTS\", key) == 0 then\n" +
-                                              "            redis.call(\"SET\", key, value)\n" +
-                                              "        end\n" +
-                                              "    else\n" +
-                                              "        return redis.error_reply(\"Invalid mode: \" .. mode)\n" +
-                                              "    end\n" +
-                                              "end\n" +
-                                              "return \"OK\"";
+            "for i = 2, #ARGV, 2 do\n" +
+            "    local key = ARGV[i]\n" +
+            "    local value = ARGV[i + 1]\n" +
+            "    if mode == \"FULL\" then\n" +
+            "        redis.call(\"SET\", key, value)\n" +
+            "    elseif mode == \"INCREMENTAL\" then\n" +
+            "        if redis.call(\"EXISTS\", key) == 0 then\n" +
+            "            redis.call(\"SET\", key, value)\n" +
+            "        end\n" +
+            "    else\n" +
+            "        return redis.error_reply(\"Invalid mode: \" .. mode)\n" +
+            "    end\n" +
+            "end\n" +
+            "return \"OK\"";
 
     private static final Logger log = LoggerFactory.getLogger(DictI18nRedisDataInitializer.class);
     private final RedisDictI18nLoaderProperties redisDictI18nLoaderProperties;

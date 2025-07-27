@@ -35,7 +35,7 @@ public class RedisDictI18nLoader implements ClassPathDictI18nLoader {
      * Generate Redis storage keys in the format: prefix + language + ":" + processed key
      */
     public String processKey(String lang, String dictKey) {
-        return this.redisDictI18nLoaderProperties.getKeyPrefix() + lang + ":" + this.redisDictI18nLoaderProperties.processKey(dictKey);
+        return this.redisDictI18nLoaderProperties.getKeyPrefix() + ":" + lang + ":" + this.redisDictI18nLoaderProperties.processKey(dictKey);
     }
 
     @Override

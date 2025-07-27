@@ -21,7 +21,7 @@ public class AbstractDictI18nLoaderProperties {
     /**
      * the prefix of the key in the dict cache
      */
-    private String keyPrefix = "dict_i18n:";
+    private String keyPrefix = "dict_i18n";
 
     /**
      * Decide whether to ignore string case based on the configuration

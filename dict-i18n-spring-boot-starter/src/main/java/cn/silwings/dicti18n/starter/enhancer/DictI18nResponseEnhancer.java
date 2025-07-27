@@ -111,7 +111,7 @@ public class DictI18nResponseEnhancer implements ResponseBodyAdvice<Object> {
             try {
                 final Class<?> annotationClass = Class.forName(annotationClassName);
                 if (controllerClass.isAnnotationPresent((Class<? extends Annotation>) annotationClass) ||
-                    (null != method && method.isAnnotationPresent((Class<? extends Annotation>) annotationClass))) {
+                        (null != method && method.isAnnotationPresent((Class<? extends Annotation>) annotationClass))) {
                     return false;
                 }
             } catch (ClassNotFoundException e) {

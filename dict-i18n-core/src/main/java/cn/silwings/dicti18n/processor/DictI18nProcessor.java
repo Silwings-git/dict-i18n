@@ -181,12 +181,12 @@ public class DictI18nProcessor {
 
     private boolean isJavaBasicType(final Class<?> clazz) {
         return clazz == String.class
-               || clazz == Date.class
-               || clazz.isPrimitive()
-               || clazz.isEnum()
-               || Number.class.isAssignableFrom(clazz)
-               || Boolean.class.isAssignableFrom(clazz)
-               || Character.class.isAssignableFrom(clazz);
+                || clazz == Date.class
+                || clazz.isPrimitive()
+                || clazz.isEnum()
+                || Number.class.isAssignableFrom(clazz)
+                || Boolean.class.isAssignableFrom(clazz)
+                || Character.class.isAssignableFrom(clazz);
     }
 
     private String getBaseFieldName(final DictDesc annotation, final Field descField) {

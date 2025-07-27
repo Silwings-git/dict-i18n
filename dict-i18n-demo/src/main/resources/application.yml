@@ -10,16 +10,16 @@ dict-i18n:
     declared:
       enabled: false
     file:
-      enabled: false
-      location-patterns:
-    redis:
       enabled: true
-      key-prefix: 'dict_i18n_demo:'
+    redis:
+      enabled: false
+      key-prefix: 'dict_i18n_demo'
       preload:
         enabled: false
         fail-fast: true
         preload-mode: full
     sql:
+      enabled: false
       schema:
         enabled: true
       preload:

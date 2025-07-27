@@ -1,23 +1,24 @@
-account_type:
-  GUEST: ''
-  OPERATION: ''
+Account_type:
+  GUEST: 'Guest'
+  OPERATION: 'Operation'
 logic_delete:
-  '0': ''
-  '1': ''
-order.order_country:
-  CN: 'China'
-  MY: ''
-  US: ''
+  '0': 'Normal'
+  '1': 'Deleted'
+order:
+  order_country:
+    CN: 'China'
+    MY: 'Malaysia'
+    US: 'America'
 orderSource:
-  _: ''
+  _: 'Unknown Order Source'
 orderType:
-  _: ''
+  _: 'Unknown Order Type'
 order_status:
-  canceled: ''
-  completed: ''
+  canceled: 'Canceled'
+  completed: 'Completed'
   created: 'Created'
-  paid: ''
-  shipped: ''
+  paid: 'Paid'
+  shipped: 'Shipped'
 payment_type:
-  alipay: ''
-  weixin: ''
+  alipay: 'AliPay'
+  weixin: 'WeChat Pay'

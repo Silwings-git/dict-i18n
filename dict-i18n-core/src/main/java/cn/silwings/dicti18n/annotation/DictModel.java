@@ -1,6 +1,10 @@
 package cn.silwings.dicti18n.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Indicates that this class contains dictionary internationalization fields, used to optimize the framework's response enhancement performance.

@@ -118,7 +118,7 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
                 if (!Objects.equals(firstDictName, currentName)) {
                     throw new ApplicationContextException(
                             "All enum constants of " + clazz.getName() + " must have the same dictName. Found: '"
-                            + firstDictName + "' and '" + currentName + "'");
+                                    + firstDictName + "' and '" + currentName + "'");
                 }
             }
             return firstDictName;
