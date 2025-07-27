@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(classes = TestApp.class)
 public class DictI18nRedisDataInitializerTest {
 
-    private String EXPECT_SCRIPT = "local mode = ARGV[1]\n" +
+    private static final String EXPECT_SCRIPT = "local mode = ARGV[1]\n" +
             "for i = 2, #ARGV, 2 do\n" +
             "    local key = ARGV[i]\n" +
             "    local value = ARGV[i + 1]\n" +
@@ -30,7 +30,7 @@ public class DictI18nRedisDataInitializerTest {
             "end\n" +
             "return \"OK\"";
 
-    private List<List<String>> EXPECT_ARGS = Arrays.asList(Arrays.asList(
+    private static final List<List<String>> EXPECT_ARGS = Arrays.asList(Arrays.asList(
                     "INCREMENTAL",
                     "dict_i18n:en-us:pay.pay_type.wechat",
                     "WeChat Pay",

@@ -41,7 +41,7 @@ public class MockStringRedisTemplate extends org.springframework.data.redis.core
                     .forEach(kv -> {
                         final String key = kv.get(0);
                         final String value = kv.get(1);
-                        this.cache.put(this.redisDictI18nLoaderProperties.processKey((String) key), value);
+                        this.cache.put(this.redisDictI18nLoaderProperties.processKey(key), value);
                     });
         } else if (PreLoadMode.INCREMENTAL.equals(preLoadMode)) {
             IntStream.range(0, kvList.size() / 2)
@@ -50,7 +50,7 @@ public class MockStringRedisTemplate extends org.springframework.data.redis.core
                     .forEach(kv -> {
                         final String key = kv.get(0);
                         final String value = kv.get(1);
-                        this.cache.put(this.redisDictI18nLoaderProperties.processKey((String) key), value);
+                        this.cache.put(this.redisDictI18nLoaderProperties.processKey(key), value);
                     });
         } else {
             throw new IllegalArgumentException("Invalid PreLoadMode: " + preLoadMode);
