@@ -172,6 +172,6 @@ dict-i18n:
       exclude-annotations:
     check:
       unique-dict-name:
-        # Whether to enable dict name unique check
+        # Check if the dictionary name is unique at startup.
         enabled: true
 ```

@@ -46,7 +46,7 @@ public class DictI18nStarterProperties {
         public static class UniqueDictName {
 
             /**
-             * Whether to enable dict name unique check
+             * Check if the dictionary name is unique at startup.
              */
             private boolean enabled = true;
 
