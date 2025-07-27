@@ -2,6 +2,7 @@ package cn.silwings.dicti18n.loader.redis.config;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.config.AbstractDictI18nLoaderProperties;
+import cn.silwings.dicti18n.loader.enums.ErrorHandlingStrategy;
 import cn.silwings.dicti18n.loader.enums.PreLoadMode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +22,22 @@ public class RedisDictI18nLoaderProperties extends AbstractDictI18nLoaderPropert
     private List<String> locationPatterns = ClassPathDictI18nLoader.LOCATION_PATTERNS;
 
     /**
+     * the prefix of the key in the dict cache
+     */
+    private String keyPrefix = "dict_i18n";
+
+    /**
      * Redis Preload Properties
      */
     private RedisDictI18nLoaderPreloadProperties preload = new RedisDictI18nLoaderPreloadProperties();
+
+    /**
+     * Error handling strategy when unexpected exceptions occur
+     * - FAIL: Fail immediately when any exception occurs
+     * - IGNORE: Ignore the exception and continue to the next loader
+     * Default is FAIL
+     */
+    private ErrorHandlingStrategy errorHandlingStrategy = ErrorHandlingStrategy.FAIL;
 
     @Getter
     @Setter

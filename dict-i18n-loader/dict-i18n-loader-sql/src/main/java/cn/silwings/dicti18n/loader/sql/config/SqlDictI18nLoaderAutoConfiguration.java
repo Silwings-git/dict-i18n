@@ -75,7 +75,7 @@ public class SqlDictI18nLoaderAutoConfiguration {
     }
 
     @Bean
-    public SqlDictI18nLoader sqlDictI18nLoader(final SQLTemplate sqlTemplate, final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider) {
-        return new SqlDictI18nLoader(sqlTemplate, dictI18nLoaderCacheProvider);
+    public SqlDictI18nLoader sqlDictI18nLoader(final SQLTemplate sqlTemplate, final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider, final SqlDictI18nLoaderProperties sqlDictI18nLoaderProperties) {
+        return new SqlDictI18nLoader(sqlTemplate, dictI18nLoaderCacheProvider, sqlDictI18nLoaderProperties);
     }
 }

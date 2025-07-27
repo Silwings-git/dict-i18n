@@ -81,31 +81,97 @@ order_status:
 
 ```yaml
 dict-i18n:
-  # Specify the priority of the Loader name, for example: ["redis", "mysql", "yaml"]
+  #  Specify the priority of the Loader name, for example: ["declared", "file", "redis", "sql"]
   loader-order:
-    - yml
-  # The maximum recursion depth when looking up a field
-  max-recursion-depth: 10
+    - redis
+    - sql
+    - file
+    - declared
+  # The maximum nesting depth when looking up a field
+  max-nesting-depth: 10
+  # Whether to return dictKey when description is empty
+  return-key-if-empty: true
   # The default language to use when a translation is not found
-  default-lang: zh-cn
-  check:
-    # Specifies whether to enable the uniqueness check of dictName.
-    enable-dict-name-unique-check: true
-    # A list of package paths to scan to find the cn.silwings.dicti18n.dict.Dict implementation class.
-    scan-packages:
-      - cn.silwings.dicti18n.demo
-  response-enhancer:
-    # Whether to enable global response enhancements
-    enabled: true
-    # The package to which the included return class belongs (return type)
-    include-packages:
-      - cn.silwings.dicti18n.demo
-    # Specifies which annotation classes or methods do not need to be enhanced
-    exclude-annotations:
-      - org.springframework.web.bind.annotation.GetMapping
-      - org.springframework.web.bind.annotation.PostMapping
+  default-lang: zh
   loader:
-    yml:
-      # Specify the resource path, and support Spring Resource path formats such as classpath: file:.
-      location-pattern: classpath:dict/dict_*.yml
+    declared:
+      # Whether to enable the declared dict loader
+      enabled: true
+      # Whether to ignore the dict case
+      ignore-case: true
+    file:
+      # Whether to enable the file dict loader
+      enabled: true
+      # Whether to ignore the dict case
+      ignore-case: true
+    redis:
+      # Whether to enable the redis dict loader
+      enabled: true
+      # Whether to ignore the dict case
+      ignore-case: true
+      # the prefix of the key in the dict cache
+      key-prefix: 'dict_i18n'
+      # Error handling strategy when unexpected exceptions occur
+      error-handling-strategy: FAIL
+      preload:
+        # Whether to load dict data from the resource file into Redis on startup.
+        enabled: false
+        # Whether to fail fast when loading dict data into Redis.
+        fail-fast: true
+        # Load mode when preloading to Redis.
+        preload-mode: INCREMENTAL
+    sql:
+      # Whether to enable the sql dict loader
+      enabled: true
+      # Whether to ignore the dict case
+      ignore-case: true
+      # Error handling strategy when unexpected exceptions occur
+      error-handling-strategy: FAIL
+      schema:
+        # Whether to enable schema initialization (create tables + create indexes)
+        enabled: false
+      preload:
+        # Whether to load dict data from the resource file into database on startup.
+        enabled: false
+        # Whether to fail fast when loading dict data into database.
+        fail-fast: true
+        # Load mode when preloading to database.
+        preload-mode: INCREMENTAL
+
+      cache:
+        # Whether to enable the sql dict loader cache
+        enabled: false
+        # Maximum number of cache items
+        maximum-size: 1000
+        # Cache expiration time (unit: seconds）
+        expire-after-write-seconds: 300
+  starter:
+    # A list of package paths to scan to find the {@link cn.silwings.dicti18n.dict.Dict} implementation class.
+    scan-packages:
+    endpoint:
+      # Whether to enable endpoint
+      enabled: true
+      dict-items:
+        # Whether to enable dict items endpoint
+        enabled: true
+        # The path for the dict items endpoint.
+        path: /dict-i18n/dict-items
+      dict-names:
+        # Whether to enable dict items endpoint
+        enabled: true
+        # he path for the dict names endpoint.
+        path: /dict-i18n/dict-names
+    enhancer:
+      # Whether to enable global response enhancement.
+      enabled: true
+      # List of package names. Only responses with return types in these packages will be enhanced.If not specified, defaults to the Spring component scanning base packages.
+      include-packages:
+        - cn.silwings.dicti18n.demo
+        - org.springframework.http
+      # Fully qualified names of annotations.If a class or method is annotated with any of these, it will be excluded from enhancement.
+      exclude-annotations:
+    check:
+      unique-dict-name:
+        # Whether to enable dict name unique check
+        enabled: true
 ```

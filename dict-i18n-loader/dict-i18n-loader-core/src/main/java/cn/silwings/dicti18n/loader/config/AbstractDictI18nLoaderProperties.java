@@ -19,11 +19,6 @@ public class AbstractDictI18nLoaderProperties {
     private boolean ignoreCase = true;
 
     /**
-     * the prefix of the key in the dict cache
-     */
-    private String keyPrefix = "dict_i18n";
-
-    /**
      * Decide whether to ignore string case based on the configuration
      *
      * @param key Enter a string

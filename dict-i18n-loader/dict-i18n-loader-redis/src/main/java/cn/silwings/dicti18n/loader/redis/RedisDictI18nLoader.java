@@ -2,6 +2,7 @@ package cn.silwings.dicti18n.loader.redis;
 
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
+import cn.silwings.dicti18n.loader.enums.ErrorHandlingStrategy;
 import cn.silwings.dicti18n.loader.redis.config.RedisDictI18nLoaderProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,14 @@ public class RedisDictI18nLoader implements ClassPathDictI18nLoader {
     @Override
     public Optional<String> get(final String lang, final String dictKey) {
         final String redisKey = this.processKey(lang, dictKey);
-        return Optional.ofNullable(this.redisTemplate.opsForValue().get(redisKey));
+        try {
+            return Optional.ofNullable(this.redisTemplate.opsForValue().get(redisKey));
+        } catch (Exception e) {
+            if (ErrorHandlingStrategy.IGNORE.equals(redisDictI18nLoaderProperties.getErrorHandlingStrategy())) {
+                log.debug("[DictI18n] Redis query failure: {}", e.getMessage(), e);
+                return Optional.empty();
+            }
+            throw e;
+        }
     }
 }

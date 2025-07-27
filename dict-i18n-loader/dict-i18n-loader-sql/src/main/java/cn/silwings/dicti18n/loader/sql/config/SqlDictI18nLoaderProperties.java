@@ -2,6 +2,7 @@ package cn.silwings.dicti18n.loader.sql.config;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.config.AbstractDictI18nLoaderProperties;
+import cn.silwings.dicti18n.loader.enums.ErrorHandlingStrategy;
 import cn.silwings.dicti18n.loader.enums.PreLoadMode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,14 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
      * Default path: classpath:dict_i18n/dict_*.yml
      */
     private List<String> locationPatterns = ClassPathDictI18nLoader.LOCATION_PATTERNS;
+
+    /**
+     * Error handling strategy when unexpected exceptions occur
+     * - FAIL: Fail immediately when any exception occurs
+     * - IGNORE: Ignore the exception and continue to the next loader
+     * Default is FAIL
+     */
+    private ErrorHandlingStrategy errorHandlingStrategy = ErrorHandlingStrategy.FAIL;
 
     /**
      * Preload properties.
@@ -69,7 +78,7 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
     @ToString
     public static class SqlDictI18nLoaderCacheProperties {
         /**
-         * Enable cache
+         * Whether to enable the dict loader cache
          */
         private boolean enabled = false;
 

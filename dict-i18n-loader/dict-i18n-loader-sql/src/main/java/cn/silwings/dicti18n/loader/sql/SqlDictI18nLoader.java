@@ -3,6 +3,8 @@ package cn.silwings.dicti18n.loader.sql;
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.cache.DictDescGetter;
 import cn.silwings.dicti18n.loader.cache.DictI18nLoaderCacheProvider;
+import cn.silwings.dicti18n.loader.enums.ErrorHandlingStrategy;
+import cn.silwings.dicti18n.loader.sql.config.SqlDictI18nLoaderProperties;
 import cn.silwings.dicti18n.loader.sql.db.SQLTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +22,12 @@ public class SqlDictI18nLoader implements ClassPathDictI18nLoader {
     private static final Logger log = LoggerFactory.getLogger(SqlDictI18nLoader.class);
     private final SQLTemplate sqlTemplate;
     private final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider;
+    private final SqlDictI18nLoaderProperties sqlDictI18nLoaderProperties;
 
-    public SqlDictI18nLoader(final SQLTemplate sqlTemplate, final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider) {
+    public SqlDictI18nLoader(final SQLTemplate sqlTemplate, final DictI18nLoaderCacheProvider dictI18nLoaderCacheProvider, final SqlDictI18nLoaderProperties sqlDictI18nLoaderProperties) {
         this.sqlTemplate = sqlTemplate;
         this.dictI18nLoaderCacheProvider = dictI18nLoaderCacheProvider;
+        this.sqlDictI18nLoaderProperties = sqlDictI18nLoaderProperties;
     }
 
     @Override
@@ -61,6 +65,13 @@ public class SqlDictI18nLoader implements ClassPathDictI18nLoader {
                 return Optional.ofNullable(description);
             } catch (EmptyResultDataAccessException e) {
                 return Optional.empty();
+            } catch (Exception e) {
+                if (ErrorHandlingStrategy.IGNORE.equals(this.sqlDictI18nLoaderProperties.getErrorHandlingStrategy())) {
+                    log.debug("[DictI18n] SQL query error: {}", e.getMessage(), e);
+                    return Optional.empty();
+                } else {
+                    throw e;
+                }
             }
         };
     }

@@ -15,7 +15,7 @@ import java.util.List;
 public class DictI18nProperties {
 
     /**
-     * Specify the priority of the Loader name, for example: ["redis", "mysql", "yaml"]
+     * Specify the priority of the Loader name, for example: ["declared", "file", "redis", "sql"]
      */
     private List<String> loaderOrder = new ArrayList<>();
 
