@@ -137,7 +137,6 @@ dict-i18n:
         fail-fast: true
         # Load mode when preloading to database.
         preload-mode: INCREMENTAL
-
       cache:
         # Whether to enable the sql dict loader cache
         enabled: false
