@@ -1,0 +1,11 @@
+order_status:
+  pending: 'Pending'
+  processing: 'Processing'
+  shipped: 'Shipped'
+  delivered: 'Delivered'
+  cancelled: 'Cancelled'
+
+pay:
+  pay_type:
+    alipay: 'Alipay'
+    wechat: 'WeChat Pay'

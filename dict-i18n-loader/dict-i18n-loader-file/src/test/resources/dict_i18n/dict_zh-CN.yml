@@ -1,0 +1,11 @@
+order_status:
+  pending: '待处理'
+  processing: '处理中'
+  shipped: '已发货'
+  delivered: '已送达'
+  cancelled: '已取消'
+
+pay:
+  pay_type:
+    alipay: '支付宝'
+    wechat: '微信支付'

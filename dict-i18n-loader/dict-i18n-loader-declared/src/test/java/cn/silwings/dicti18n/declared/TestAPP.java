@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
-public class TestConfig {
+public class TestAPP {
 
     @Bean
     public DictScanner dictScanner() {

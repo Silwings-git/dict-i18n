@@ -1,10 +1,8 @@
 package cn.silwings.dicti18n.declared;
 
-import cn.silwings.dicti18n.loader.DictI18nLoader;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.Optional;
 
@@ -13,14 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(classes = TestConfig.class)
-@TestPropertySource(properties = {
-        "dicti18n.declared.scan-packages=cn.silwings.dicti18n.declared"
-})
+@SpringBootTest(classes = TestAPP.class)
 class DeclaredDictI18nLoaderSpringTest {
 
     @Autowired
-    private DictI18nLoader dictI18nLoader;
+    private DeclaredDictI18nLoader dictI18nLoader;
 
     @Test
     void testLoaderInitializationWithSpringContext() {
