@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-demo</artifactId>
 
+    <name>Dict I18n Demo Application</name>
+    <description>Example project demonstrating usage of Dict I18n framework</description>
+
     <dependencies>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>

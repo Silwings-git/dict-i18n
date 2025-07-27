@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-loader-core</artifactId>
 
+    <name>Dict I18n Loader Core</name>
+    <description>Core implementations for dictionary resource loading</description>
+
     <dependencies>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>

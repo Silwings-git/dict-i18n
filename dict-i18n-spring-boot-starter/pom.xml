@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
 
+    <name>Dict I18n Spring Boot Starter</name>
+    <description>Spring Boot auto-configuration for seamless integration of Dict I18n</description>
+
     <dependencies>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>

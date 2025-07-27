@@ -9,6 +9,10 @@
         <version>${revision}</version>
     </parent>
     <packaging>pom</packaging>
+
+    <name>Dict I18n Loader API</name>
+    <description>Abstractions and interfaces for loading dictionary resources</description>
+
     <modules>
         <module>dict-i18n-loader-core</module>
         <module>dict-i18n-loader-sql</module>

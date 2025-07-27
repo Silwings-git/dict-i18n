@@ -17,8 +17,8 @@
         </developer>
     </developers>
 
-    <name>Dict I18n Spring Boot Starter</name>
-    <description>Spring Boot Starter for Dictionary and Internationalization</description>
+    <name>Dict I18n Parent Project</name>
+    <description>Parent POM for managing dependencies and versions across Dict I18n modules</description>
     <url>https://github.com/Silwings-git/dict-i18n</url>
 
     <licenses>

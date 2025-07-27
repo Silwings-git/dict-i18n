@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-core</artifactId>
 
+    <name>Dict I18n Core Library</name>
+    <description>Core functionality and APIs for dictionary and internationalization management</description>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>

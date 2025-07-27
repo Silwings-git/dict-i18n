@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-loader-redis</artifactId>
 
+    <name>Dict I18n Redis Loader</name>
+    <description>Dictionary loader implementation for Redis cache</description>
+
     <dependencies>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>

@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-loader-declared</artifactId>
 
+    <name>Dict I18n Declared Loader</name>
+    <description>Loader for statically declared dictionary entries</description>
+
     <dependencies>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>

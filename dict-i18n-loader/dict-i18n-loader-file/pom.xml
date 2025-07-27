@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-loader-file</artifactId>
 
+    <name>Dict I18n File Loader</name>
+    <description>Loader for reading dictionary resources from files</description>
+
     <dependencies>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>

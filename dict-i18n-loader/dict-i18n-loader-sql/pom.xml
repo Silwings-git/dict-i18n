@@ -11,6 +11,9 @@
 
     <artifactId>dict-i18n-loader-sql</artifactId>
 
+    <name>Dict I18n SQL Loader</name>
+    <description>Dictionary loader implementation for SQL databases</description>
+
     <dependencies>
         <dependency>
             <groupId>cn.silwings.dicti18n</groupId>
