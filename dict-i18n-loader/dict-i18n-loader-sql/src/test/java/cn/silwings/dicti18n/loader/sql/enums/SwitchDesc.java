@@ -1,4 +1,4 @@
-package cn.silwings.dicti18n.loader.sql;
+package cn.silwings.dicti18n.loader.sql.enums;
 
 import cn.silwings.dicti18n.dict.Dict;
 

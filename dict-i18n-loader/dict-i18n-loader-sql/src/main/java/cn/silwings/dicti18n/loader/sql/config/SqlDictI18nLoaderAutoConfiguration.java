@@ -1,8 +1,8 @@
 package cn.silwings.dicti18n.loader.sql.config;
 
+import cn.silwings.dicti18n.loader.cache.DictI18nLoaderCacheProvider;
 import cn.silwings.dicti18n.loader.parser.DictFileParser;
 import cn.silwings.dicti18n.loader.sql.SqlDictI18nLoader;
-import cn.silwings.dicti18n.loader.sql.cache.DictI18nLoaderCacheProvider;
 import cn.silwings.dicti18n.loader.sql.cache.GuavaDictI18nLoaderCacheProvider;
 import cn.silwings.dicti18n.loader.sql.cache.NoCacheDictCacheProvider;
 import cn.silwings.dicti18n.loader.sql.db.JdbcSQLTemplate;

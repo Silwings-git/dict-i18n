@@ -1,6 +1,7 @@
 package cn.silwings.dicti18n.loader.sql.cache;
 
-import cn.silwings.dicti18n.loader.sql.DictI18nDatabaseQuery;
+import cn.silwings.dicti18n.loader.cache.DictDescGetter;
+import cn.silwings.dicti18n.loader.cache.DictI18nLoaderCacheProvider;
 import cn.silwings.dicti18n.loader.sql.config.SqlDictI18nLoaderProperties;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -24,12 +25,12 @@ public class GuavaDictI18nLoaderCacheProvider implements DictI18nLoaderCacheProv
     }
 
     @Override
-    public Optional<String> getDesc(final String lang, final String key, final DictI18nDatabaseQuery dbQuery) {
+    public Optional<String> getDesc(final String lang, final String key, final DictDescGetter dbQuery) {
         final String cacheKey = this.generateCacheKey(lang, key);
         try {
             return this.cache.get(cacheKey, () -> {
                 try {
-                    return dbQuery.select(lang, key);
+                    return dbQuery.get(lang, key);
                 } catch (Exception e) {
                     log.error("[DictI18n] Failed to query internationalized dictionary data from the database: {}", e.getMessage(), e);
                     return Optional.empty();

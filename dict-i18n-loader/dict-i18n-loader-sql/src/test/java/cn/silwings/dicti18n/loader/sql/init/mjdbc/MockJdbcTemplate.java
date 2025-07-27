@@ -27,7 +27,7 @@ public class MockJdbcTemplate implements SQLTemplate {
     @Override
     public String queryForObject(final String sql, final Class<String> requiredType, final List<?> args) {
         if (sql.equals("SELECT description FROM dict_i18n WHERE dict_key = ? AND lang = ? AND enabled = 1 LIMIT 1")) {
-            this.cache.get(args.get(0) + "." + args.get(1));
+            return this.cache.get(args.get(1) + "." + args.get(0));
         }
         return null;
     }

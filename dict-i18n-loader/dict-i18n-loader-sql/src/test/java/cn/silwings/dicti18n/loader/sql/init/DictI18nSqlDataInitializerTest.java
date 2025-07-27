@@ -2,10 +2,10 @@ package cn.silwings.dicti18n.loader.sql.init;
 
 import cn.silwings.dicti18n.loader.enums.PreLoadMode;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
-import cn.silwings.dicti18n.loader.sql.OrderStatus;
-import cn.silwings.dicti18n.loader.sql.PayType;
-import cn.silwings.dicti18n.loader.sql.SwitchDesc;
 import cn.silwings.dicti18n.loader.sql.TestApp;
+import cn.silwings.dicti18n.loader.sql.enums.OrderStatus;
+import cn.silwings.dicti18n.loader.sql.enums.PayType;
+import cn.silwings.dicti18n.loader.sql.enums.SwitchDesc;
 import cn.silwings.dicti18n.loader.sql.init.data.DictI18nSqlDataInitializer;
 import cn.silwings.dicti18n.loader.sql.init.mjdbc.MockJdbcTemplate;
 import org.junit.jupiter.api.Assertions;

@@ -1,7 +1,8 @@
 package cn.silwings.dicti18n.loader.sql;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
-import cn.silwings.dicti18n.loader.sql.cache.DictI18nLoaderCacheProvider;
+import cn.silwings.dicti18n.loader.cache.DictDescGetter;
+import cn.silwings.dicti18n.loader.cache.DictI18nLoaderCacheProvider;
 import cn.silwings.dicti18n.loader.sql.db.SQLTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,14 +51,14 @@ public class SqlDictI18nLoader implements ClassPathDictI18nLoader {
      *
      * @return database query function
      */
-    public DictI18nDatabaseQuery getDatabaseQuery() {
+    public DictDescGetter getDatabaseQuery() {
         return (lang, dictKey) -> {
             try {
                 final String sql = "SELECT description FROM dict_i18n WHERE dict_key = ? AND lang = ? AND enabled = 1 LIMIT 1";
 
                 final String description = this.sqlTemplate.queryForObject(sql, String.class, Arrays.asList(dictKey, lang));
 
-                return Optional.of(description);
+                return Optional.ofNullable(description);
             } catch (EmptyResultDataAccessException e) {
                 return Optional.empty();
             }
