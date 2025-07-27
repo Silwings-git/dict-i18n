@@ -1,10 +1,10 @@
 dict-i18n:
   #  Specify the priority of the Loader name, for example: ["declared", "file", "redis", "sql"]
   loader-order:
-    - redis
-    - sql
     - file
     - declared
+    - redis
+    - sql
   # The maximum nesting depth when looking up a field
   max-nesting-depth: 10
   # Whether to return dictKey when description is empty
