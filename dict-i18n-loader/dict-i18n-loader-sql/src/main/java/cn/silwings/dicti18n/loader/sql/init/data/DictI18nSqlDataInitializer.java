@@ -1,6 +1,6 @@
 package cn.silwings.dicti18n.loader.sql.init.data;
 
-import cn.silwings.dicti18n.loader.enums.LoadMode;
+import cn.silwings.dicti18n.loader.enums.PreLoadMode;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,7 +33,7 @@ public class DictI18nSqlDataInitializer {
      * @param preloadMode Preload mode
      */
     @Transactional(rollbackFor = Exception.class)
-    public void initialize(final Map<String, List<DictInfo>> langDictMap, final LoadMode preloadMode) {
+    public void initialize(final Map<String, List<DictInfo>> langDictMap, final PreLoadMode preloadMode) {
         langDictMap.forEach((language, dictList) -> this.initializeByLanguage(language, dictList, preloadMode));
     }
 
@@ -44,7 +44,7 @@ public class DictI18nSqlDataInitializer {
      * @param dictList    Dictionary information list
      * @param preloadMode Preload mode
      */
-    private void initializeByLanguage(final String language, final List<DictInfo> dictList, final LoadMode preloadMode) {
+    private void initializeByLanguage(final String language, final List<DictInfo> dictList, final PreLoadMode preloadMode) {
         if (null == language || null == dictList || dictList.isEmpty()) {
             return;
         }

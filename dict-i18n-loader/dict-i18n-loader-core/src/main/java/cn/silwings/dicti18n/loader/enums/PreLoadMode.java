@@ -1,6 +1,6 @@
 package cn.silwings.dicti18n.loader.enums;
 
-public enum LoadMode {
+public enum PreLoadMode {
     FULL,
     INCREMENTAL
 }

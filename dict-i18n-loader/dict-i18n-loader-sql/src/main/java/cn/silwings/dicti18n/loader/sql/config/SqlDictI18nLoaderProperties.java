@@ -2,7 +2,7 @@ package cn.silwings.dicti18n.loader.sql.config;
 
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
 import cn.silwings.dicti18n.loader.config.AbstractDictI18nLoaderProperties;
-import cn.silwings.dicti18n.loader.enums.LoadMode;
+import cn.silwings.dicti18n.loader.enums.PreLoadMode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -60,7 +60,7 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
          * - INCREMENTAL: Only write keys that do not exist in database.
          * Default is INCREMENTAL.
          */
-        private LoadMode preloadMode = LoadMode.INCREMENTAL;
+        private PreLoadMode preloadMode = PreLoadMode.INCREMENTAL;
 
     }
 
