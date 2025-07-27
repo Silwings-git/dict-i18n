@@ -17,6 +17,8 @@
         </developer>
     </developers>
 
+    <name>Dict I18n Spring Boot Starter</name>
+    <description>Spring Boot Starter for Dictionary and Internationalization</description>
     <url>https://github.com/Silwings-git/dict-i18n</url>
 
     <licenses>
@@ -293,6 +295,20 @@
                     <failOnError>false</failOnError>
                     <doclint>none</doclint>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
