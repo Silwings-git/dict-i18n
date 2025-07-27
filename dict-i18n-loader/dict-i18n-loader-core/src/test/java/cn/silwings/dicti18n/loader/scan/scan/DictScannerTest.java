@@ -23,7 +23,7 @@ public class DictScannerTest {
         final Collection<String> packages = Collections.singleton("cn.silwings.dicti18n.loader.scan");
 
 
-        final Set<Class<Dict>> result = scanner.scan(packages);
+        final Set<Class<? extends Dict>> result = scanner.scan(packages);
 
 
         assertNotNull(result);
@@ -39,7 +39,7 @@ public class DictScannerTest {
         final Collection<String> packages = Arrays.asList("", "cn.silwings.dicti18n.loader.scan", "  ", null);
 
 
-        final Set<Class<Dict>> result = scanner.scan(packages);
+        final Set<Class<? extends Dict>> result = scanner.scan(packages);
 
 
         assertNotNull(result);
@@ -55,7 +55,7 @@ public class DictScannerTest {
         final Collection<String> packages = Collections.emptyList();
 
 
-        final Set<Class<Dict>> result = scanner.scan(packages);
+        final Set<Class<? extends Dict>> result = scanner.scan(packages);
 
 
         assertNotNull(result);
@@ -69,7 +69,7 @@ public class DictScannerTest {
         final Collection<String> packages = Collections.singleton("nonexistent.package");
 
 
-        final Set<Class<Dict>> result = scanner.scan(packages);
+        final Set<Class<? extends Dict>> result = scanner.scan(packages);
 
 
         assertNotNull(result);

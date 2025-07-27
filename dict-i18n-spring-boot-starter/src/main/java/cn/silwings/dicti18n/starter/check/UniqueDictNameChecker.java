@@ -68,11 +68,11 @@ public class UniqueDictNameChecker implements ApplicationContextAware {
         final List<String> basePackages = this.dictI18NStarterProperties.getScanPackages().isEmpty()
                 ? AutoConfigurationPackages.get(this.applicationContext)
                 : this.dictI18NStarterProperties.getScanPackages();
-        final Set<Class<Dict>> dictClasses = this.dictScanner.scan(basePackages);
+        final Set<Class<? extends Dict>> dictClasses = this.dictScanner.scan(basePackages);
 
         final Map<String, Class<?>> dictNameMap = new HashMap<>();
 
-        for (Class<Dict> dictClass : dictClasses) {
+        for (Class<? extends Dict> dictClass : dictClasses) {
             try {
                 final String dictName = this.resolveDictName(dictClass);
                 this.checkDictNameNotBlank(dictName, dictClass);

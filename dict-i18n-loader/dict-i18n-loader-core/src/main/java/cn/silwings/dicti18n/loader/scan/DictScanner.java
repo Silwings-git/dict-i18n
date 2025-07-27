@@ -25,7 +25,7 @@ public class DictScanner {
      * @param packages the set of base packages to scan; packages should not be blank
      * @return a set of classes implementing the {@link Dict} interface found within the specified packages
      */
-    public Set<Class<Dict>> scan(final Collection<String> packages) {
+    public Set<Class<? extends Dict>> scan(final Collection<String> packages) {
 
         final DictClassPathScanningCandidateComponentProvider provider =
                 new DictClassPathScanningCandidateComponentProvider(false);
