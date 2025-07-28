@@ -1,5 +1,7 @@
 # dict-i18n-spring-boot-starter
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Silwings-git/dict-i18n)
+
 A Spring Boot starter for dictionary-based internationalization (i18n) of domain data codes such as order statuses,
 product types, etc. This starter simplifies managing multi-language descriptions for fixed or rarely changing code data
 by automatically injecting localized text into Java objects, REST responses, and import/export scenarios.
