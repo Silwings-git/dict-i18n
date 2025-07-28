@@ -5,7 +5,6 @@
         <mojo>
             <goal>yml</goal>
             <implementation>cn.silwings.dicti18n.plugin.generate.GenerateYmlMojo</implementation>
-            <phase>generate-resources</phase>
             <configuration>
                 <basePackages implementation="java.util.List"/>
                 <languages implementation="java.util.List"/>
@@ -16,7 +15,6 @@
         <mojo>
             <goal>properties</goal>
             <implementation>cn.silwings.dicti18n.plugin.generate.GeneratePropertiesMojo</implementation>
-            <phase>generate-resources</phase>
             <configuration>
                 <basePackages implementation="java.util.List"/>
                 <languages implementation="java.util.List"/>
