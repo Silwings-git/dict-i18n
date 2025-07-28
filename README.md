@@ -29,6 +29,14 @@ Add the starter dependency to your Spring Boot project and define your dictionar
 Configure loader priorities and language preferences via application properties. The system automatically populates
 description fields annotated with `@DictDesc` during JSON response serialization.
 
+```xml
+<dependency>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 ```java
 public enum OrderStatus implements Dict {
     PENDING("pending"),
