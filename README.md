@@ -33,7 +33,7 @@ description fields annotated with `@DictDesc` during JSON response serialization
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 <!-- Select at least one loader you are interested in-->
@@ -41,28 +41,28 @@ description fields annotated with `@DictDesc` during JSON response serialization
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-declared</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 <!-- Loader to retrieve data from Redis-->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-redis</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 <!-- Loader to retrieve data from Database-->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-sql</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 <!-- Loader to retrieve data from file-->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-file</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 ```
