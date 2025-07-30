@@ -1,4 +1,4 @@
-package cn.silwings.dicti18n.declared.config;
+package cn.silwings.dicti18n.loader.declared.config;
 
 
 import cn.silwings.dicti18n.loader.config.AbstractDictI18nLoaderProperties;

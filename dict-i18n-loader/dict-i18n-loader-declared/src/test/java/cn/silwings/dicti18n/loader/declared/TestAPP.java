@@ -1,4 +1,4 @@
-package cn.silwings.dicti18n.declared;
+package cn.silwings.dicti18n.loader.declared;
 
 import cn.silwings.dicti18n.loader.scan.DictScanner;
 import org.springframework.boot.SpringBootConfiguration;

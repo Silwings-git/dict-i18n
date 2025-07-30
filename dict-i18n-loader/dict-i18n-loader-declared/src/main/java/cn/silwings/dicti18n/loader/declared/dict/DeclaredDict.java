@@ -1,4 +1,4 @@
-package cn.silwings.dicti18n.declared.dict;
+package cn.silwings.dicti18n.loader.declared.dict;
 
 import cn.silwings.dicti18n.dict.Dict;
 

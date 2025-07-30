@@ -1,6 +1,6 @@
-package cn.silwings.dicti18n.declared;
+package cn.silwings.dicti18n.loader.declared;
 
-import cn.silwings.dicti18n.declared.dict.DeclaredDict;
+import cn.silwings.dicti18n.loader.declared.dict.DeclaredDict;
 
 enum TestSpringDict implements DeclaredDict {
     ENUM1("TEST_SPRING", "ENUM1", "Spring Enum Description 1"),

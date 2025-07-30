@@ -1,10 +1,10 @@
-package cn.silwings.dicti18n.declared;
+package cn.silwings.dicti18n.loader.declared;
 
 
-import cn.silwings.dicti18n.declared.config.DeclaredDictI18nLoaderProperties;
-import cn.silwings.dicti18n.declared.dict.DeclaredDict;
 import cn.silwings.dicti18n.dict.Dict;
 import cn.silwings.dicti18n.loader.DictI18nLoader;
+import cn.silwings.dicti18n.loader.declared.config.DeclaredDictI18nLoaderProperties;
+import cn.silwings.dicti18n.loader.declared.dict.DeclaredDict;
 import cn.silwings.dicti18n.loader.scan.DictScanner;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;

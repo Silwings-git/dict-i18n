@@ -80,7 +80,7 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
         /**
          * Whether to enable the dict loader cache
          */
-        private boolean enabled = false;
+        private boolean enabled = true;
 
         /**
          * Maximum number of cache items

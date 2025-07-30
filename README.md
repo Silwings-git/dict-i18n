@@ -30,39 +30,40 @@ Configure loader priorities and language preferences via application properties.
 description fields annotated with `@DictDesc` during JSON response serialization.
 
 ```xml
+
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
     <version>1.0.1</version>
 </dependency>
 
-<!-- Select at least one loader you are interested in-->
-<!-- Loader declared using static code-->
+        <!-- Select at least one loader you are interested in-->
+        <!-- Loader declared using static code-->
 <dependency>
-    <groupId>cn.silwings.dicti18n</groupId>
-    <artifactId>dict-i18n-loader-declared</artifactId>
-    <version>1.0.1</version>
+<groupId>cn.silwings.dicti18n</groupId>
+<artifactId>dict-i18n-loader-declared</artifactId>
+<version>1.0.1</version>
 </dependency>
 
-<!-- Loader to retrieve data from Redis-->
+        <!-- Loader to retrieve data from Redis-->
 <dependency>
-    <groupId>cn.silwings.dicti18n</groupId>
-    <artifactId>dict-i18n-loader-redis</artifactId>
-    <version>1.0.1</version>
+<groupId>cn.silwings.dicti18n</groupId>
+<artifactId>dict-i18n-loader-redis</artifactId>
+<version>1.0.1</version>
 </dependency>
 
-<!-- Loader to retrieve data from Database-->
+        <!-- Loader to retrieve data from Database-->
 <dependency>
-    <groupId>cn.silwings.dicti18n</groupId>
-    <artifactId>dict-i18n-loader-sql</artifactId>
-    <version>1.0.1</version>
+<groupId>cn.silwings.dicti18n</groupId>
+<artifactId>dict-i18n-loader-sql</artifactId>
+<version>1.0.1</version>
 </dependency>
 
-<!-- Loader to retrieve data from file-->
+        <!-- Loader to retrieve data from file-->
 <dependency>
-    <groupId>cn.silwings.dicti18n</groupId>
-    <artifactId>dict-i18n-loader-file</artifactId>
-    <version>1.0.1</version>
+<groupId>cn.silwings.dicti18n</groupId>
+<artifactId>dict-i18n-loader-file</artifactId>
+<version>1.0.1</version>
 </dependency>
 
 ```
@@ -179,7 +180,7 @@ dict-i18n:
         preload-mode: INCREMENTAL
       cache:
         # Whether to enable the sql dict loader cache
-        enabled: false
+        enabled: true
         # Maximum number of cache items
         maximum-size: 1000
         # Cache expiration time (unit: seconds）
@@ -198,7 +199,7 @@ dict-i18n:
       dict-names:
         # Whether to enable dict items endpoint
         enabled: true
-        # he path for the dict names endpoint.
+        # The path for the dict names endpoint.
         path: /dict-i18n/dict-names
     enhancer:
       # Whether to enable global response enhancement.

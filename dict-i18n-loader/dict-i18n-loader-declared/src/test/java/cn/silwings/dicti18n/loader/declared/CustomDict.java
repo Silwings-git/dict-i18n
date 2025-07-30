@@ -1,6 +1,6 @@
-package cn.silwings.dicti18n.declared;
+package cn.silwings.dicti18n.loader.declared;
 
-import cn.silwings.dicti18n.declared.dict.DeclaredDict;
+import cn.silwings.dicti18n.loader.declared.dict.DeclaredDict;
 
 // 测试用自定义字典实现
 class CustomDict implements DeclaredDict {
