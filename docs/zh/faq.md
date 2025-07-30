@@ -1,0 +1,36 @@
+# ❓ 常见问题解答
+
+### Q1: 没有获取到翻译描述？
+
+* 确认请求头中的语言（`Accept-Language`）是否与资源文件匹配，如 `en-US` vs `en-GB`
+* 检查字典资源文件是否存在、格式正确、内容已填充
+* 检查是否正确使用了 `@DictDesc` 注解
+* 检查响应增强功能是否启用：`dict-i18n.starter.enhancer`
+
+---
+
+### Q2: 如何忽略地区，仅根据语言识别？
+
+* 使用如 `dict_zh.yml` 的文件名，框架会自动降级匹配（如 zh-CN → zh）
+
+---
+
+### Q3: 没有生成国际化文件？
+
+* 执行 `mvn compile` 命令
+* 检查 Maven 插件 `languages` 配置
+* 确认已定义至少一个实现了 `Dict` 的枚举类
+
+---
+
+### Q4: 想集成自定义数据源？
+
+* 实现 `DictI18nLoader` 接口，并注册为 Spring Bean 即可
+
+---
+
+### Q5: 如何自定义语言来源，不使用默认 `Accept-Language`？
+
+* 实现 `LanguageProvider` 接口，替换默认语言解析逻辑
+
+---

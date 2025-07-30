@@ -131,17 +131,37 @@
                     <execution>
                         <goals>
                             <goal>yml</goal>
-                            <!--                            <goal>properties</goal>-->
+                            <!--<goal>properties</goal>-->
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
                     <languages>
-                        <language>zh</language>
-                        <language>en</language>
+                        <language>zh-CN</language>
+                        <language>en-US</language>
                     </languages>
                     <verbose>true</verbose>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven.plugin.deploy.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>skip-deploy-for-demo</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

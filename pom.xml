@@ -54,13 +54,17 @@
         <slf4j-api.version>1.7.36</slf4j-api.version>
         <reflections.version>0.10.2</reflections.version>
         <spring.boot.version>2.7.12</spring.boot.version>
-        <maven.plugin.annotations.version>3.6.0</maven.plugin.annotations.version>
-        <maven.plugin.api.version>3.9.9</maven.plugin.api.version>
-        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-        <maven.plugin.plugin.version>3.5.2</maven.plugin.plugin.version>
-        <flatten.maven.plugin.version>1.5.0</flatten.maven.plugin.version>
         <guava.version>33.4.8-jre</guava.version>
         <mockito-all.version>1.10.19</mockito-all.version>
+        <maven.plugin.annotations.version>3.6.0</maven.plugin.annotations.version>
+        <maven.plugin.api.version>3.9.9</maven.plugin.api.version>
+        <maven.plugin.compiler.version>3.11.0</maven.plugin.compiler.version>
+        <maven.plugin.deploy.version>3.1.1</maven.plugin.deploy.version>
+        <maven.plugin.plugin.version>3.5.2</maven.plugin.plugin.version>
+        <maven.plugin.central-publishing.version>0.8.0</maven.plugin.central-publishing.version>
+        <maven.plugin.source.version>3.1.0</maven.plugin.source.version>
+        <maven.plugin.javadoc.version>3.1.0</maven.plugin.javadoc.version>
+        <maven.plugin.flatten.version>1.5.0</maven.plugin.flatten.version>
     </properties>
 
     <dependencyManagement>
@@ -187,7 +191,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.compiler.plugin.version}</version>
+                    <version>${maven.plugin.compiler.version}</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
@@ -212,7 +216,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>${flatten.maven.plugin.version}</version>
+                <version>${maven.plugin.flatten.version}</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <flattenMode>resolveCiFriendliesOnly</flattenMode>
@@ -237,7 +241,7 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.8.0</version>
+                <version>${maven.plugin.central-publishing.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
@@ -246,7 +250,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${maven.plugin.source.version}</version>
                 <inherited>true</inherited>
                 <executions>
                     <execution>
@@ -265,7 +269,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${maven.plugin.javadoc.version}</version>
                 <inherited>true</inherited>
                 <executions>
                     <execution>
