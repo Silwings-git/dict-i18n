@@ -114,33 +114,33 @@ public enum OrderState implements Dict {
     <version>1.0.1</version>
 </dependency>
 
-        <!-- 按需添加加载器（至少选一个） -->
-        <!-- 静态声明加载器 -->
+<!-- 按需添加加载器（至少选一个） -->
+<!-- 静态声明加载器 -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-declared</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-declared</artifactId>
+    <version>1.0.1</version>
 </dependency>
 
-        <!-- Redis 加载器 -->
+<!-- Redis 加载器 -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-redis</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-redis</artifactId>
+    <version>1.0.1</version>
 </dependency>
 
-        <!-- 数据库加载器 -->
+<!-- 数据库加载器 -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-sql</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-sql</artifactId>
+    <version>1.0.1</version>
 </dependency>
 
-        <!-- 文件加载器（YAML/Properties） -->
+<!-- 文件加载器（YAML/Properties） -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-file</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-file</artifactId>
+    <version>1.0.1</version>
 </dependency>  
 ```  
 

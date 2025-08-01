@@ -48,14 +48,14 @@ dict-i18n:
     <version>1.0.1</version>
 </dependency>
 
-        <!-- Loader dependency: example using file loader -->
+<!-- Loader dependency: example using file loader -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-file</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-file</artifactId>
+    <version>1.0.1</version>
 </dependency>
 
-        <!-- Maven plugin: generates internationalization resource files -->
+<!-- Maven plugin: generates internationalization resource files -->
 <plugin>
 <groupId>cn.silwings.dicti18n</groupId>
 <artifactId>dict-i18n-generator-maven-plugin</artifactId>

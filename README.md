@@ -127,33 +127,33 @@ Add `dict-i18n-spring-boot-starter` to `pom.xml` (automatically integrates core,
     <version>1.0.1</version>
 </dependency>
 
-        <!-- Add loaders as needed (at least one) -->
-        <!-- Static declaration loader -->
+<!-- Add loaders as needed (at least one) -->
+<!-- Static declaration loader -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-declared</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-declared</artifactId>
+    <version>1.0.1</version>
 </dependency>
 
-        <!-- Redis loader -->
+<!-- Redis loader -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-redis</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-redis</artifactId>
+    <version>1.0.1</version>
 </dependency>
 
-        <!-- Database loader -->
+<!-- Database loader -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-sql</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-sql</artifactId>
+    <version>1.0.1</version>
 </dependency>
 
-        <!-- File loader (YAML/Properties) -->
+<!-- File loader (YAML/Properties) -->
 <dependency>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-loader-file</artifactId>
-<version>1.0.1</version>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-loader-file</artifactId>
+    <version>1.0.1</version>
 </dependency>  
 ```  
 
