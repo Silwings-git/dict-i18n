@@ -126,7 +126,7 @@ Supported loaders: `declared` (code-declared), `file` (file-based), `sql` (datab
 
 | Configuration                | Type    | Default               | Description                                        |  
 |------------------------------|---------|-----------------------|----------------------------------------------------|  
-| `enabled`                    | boolean | `true` (since v1.0.2) | Whether to enable local caching for the SQL loader |  
+| `enabled`                    | boolean | `true` (since v1.0.4) | Whether to enable local caching for the SQL loader |  
 | `maximum-size`               | int     | `1000`                | Maximum number of cache entries                    |  
 | `expire-after-write-seconds` | int     | `300`                 | Cache expiration time (seconds) after writing      |  
 

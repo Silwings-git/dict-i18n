@@ -30,7 +30,7 @@ public class SqlDictI18nLoaderAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DictI18nLoaderCacheProvider.class)
-    @ConditionalOnProperty(name = "dict-i18n.loader.sql.cache.enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "dict-i18n.loader.sql.cache.enabled", havingValue = "true", matchIfMissing = true)
     public GuavaDictI18nLoaderCacheProvider guavaDictI18nLoaderCacheProvider(final SqlDictI18nLoaderProperties sqlDictI18nLoaderProperties) {
         log.info("[DictI18n] Using GuavaDictI18nLoaderCacheProvider.");
         return new GuavaDictI18nLoaderCacheProvider(sqlDictI18nLoaderProperties.getCache());
@@ -38,7 +38,7 @@ public class SqlDictI18nLoaderAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DictI18nLoaderCacheProvider.class)
-    @ConditionalOnProperty(name = "dict-i18n.loader.sql.cache.enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(name = "dict-i18n.loader.sql.cache.enabled", havingValue = "false")
     public NoCacheDictCacheProvider noCacheDictCacheProvider() {
         log.info("[DictI18n] Using NoCacheDictCacheProvider");
         return new NoCacheDictCacheProvider();
