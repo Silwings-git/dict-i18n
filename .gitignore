@@ -33,3 +33,4 @@ build/
 
 # Maven flatten plugin
 **/.flattened-pom.xml
+/dict_i18n.db

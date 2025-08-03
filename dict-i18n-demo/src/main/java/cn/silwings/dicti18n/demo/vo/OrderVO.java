@@ -17,7 +17,7 @@ public class OrderVO {
     @DictDesc(OrderStatus.class)
     private String orderStatusDesc;
 
-    @DictDesc(value = OrderStatus.class,field = "orderStatus")
+    @DictDesc(value = OrderStatus.class, field = "orderStatus")
     private String status;
 
     private ShippingStatus shippingStatus;

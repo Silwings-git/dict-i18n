@@ -45,35 +45,35 @@ dict-i18n:
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 
 <!-- Loader dependency: example using file loader -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-file</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 
 <!-- Maven plugin: generates internationalization resource files -->
 <plugin>
-<groupId>cn.silwings.dicti18n</groupId>
-<artifactId>dict-i18n-generator-maven-plugin</artifactId>
-<executions>
-    <execution>
-        <goals>
-            <goal>yml</goal> <!-- or use <goal>properties</goal> -->
-        </goals>
-    </execution>
-</executions>
-<configuration>
-    <languages>
-        <!-- Configure required languages (can use region-free formats like zh, en) -->
-        <language>zh-CN</language>
-        <language>en-US</language>
-    </languages>
-    <verbose>true</verbose> <!-- <!-- Output detailed logs -->
-</configuration>
+    <groupId>cn.silwings.dicti18n</groupId>
+    <artifactId>dict-i18n-generator-maven-plugin</artifactId>
+    <executions>
+        <execution>
+            <goals>
+                <goal>yml</goal> <!-- or use <goal>properties</goal> -->
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <languages>
+            <!-- Configure required languages (can use region-free formats like zh, en) -->
+            <language>zh-CN</language>
+            <language>en-US</language>
+        </languages>
+        <verbose>true</verbose> <!-- <!-- Output detailed logs -->
+    </configuration>
 </plugin>  
 ```  
 
