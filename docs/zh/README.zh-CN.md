@@ -79,9 +79,9 @@ public class OrderDTO {
 
 // 响应示例
 {
-        "status":"pending",
-        "statusDesc":"Pending" // 或根据语言配置返回对应语言描述
-        }
+    "status":"pending",
+    "statusDesc":"Pending" // 或根据语言配置返回对应语言描述
+}
 ```
 
 ### 4. 严格启动校验

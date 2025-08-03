@@ -91,9 +91,9 @@ public class OrderDTO {
 
 // Response example  
 {
-        "status":"pending",
-        "statusDesc":"Pending" // Or return the corresponding language description based on language configuration  
-        }  
+    "status":"pending",
+    "statusDesc":"Pending" // Or return the corresponding language description based on language configuration  
+}  
 ```  
 
 ### 4. Strict Startup Validation
