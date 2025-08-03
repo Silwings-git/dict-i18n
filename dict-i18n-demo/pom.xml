@@ -157,18 +157,6 @@
                 <configuration>
                     <skip>true</skip>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>skip-deploy-for-demo</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
