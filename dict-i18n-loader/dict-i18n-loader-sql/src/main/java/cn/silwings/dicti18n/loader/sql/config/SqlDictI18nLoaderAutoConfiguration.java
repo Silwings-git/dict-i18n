@@ -45,7 +45,7 @@ public class SqlDictI18nLoaderAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "dict-i18n.loader.sql.schema.enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "dict-i18n.loader.sql.schema.enabled", havingValue = "true", matchIfMissing = true)
     public DictI18nSchemaInitializer dictI18nSchemaInitializer(final SQLTemplate sqlTemplate) {
         return new DictI18nSchemaInitializer(sqlTemplate);
     }
@@ -57,7 +57,7 @@ public class SqlDictI18nLoaderAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "dict-i18n.loader.sql.preload.enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "dict-i18n.loader.sql.preload.enabled", havingValue = "true", matchIfMissing = true)
     public DictI18nSqlDataInitializer dictI18nSqlDataInitializer(final SQLTemplate sqlTemplate) {
         return new DictI18nSqlDataInitializer(sqlTemplate);
     }
