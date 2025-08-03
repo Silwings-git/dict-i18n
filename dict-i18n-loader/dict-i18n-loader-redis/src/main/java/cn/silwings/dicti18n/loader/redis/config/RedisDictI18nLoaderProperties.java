@@ -46,9 +46,8 @@ public class RedisDictI18nLoaderProperties extends AbstractDictI18nLoaderPropert
 
         /**
          * Whether to load dict data from the resource file into Redis on startup.
-         * Default is false.
          */
-        private boolean enabled = false;
+        private boolean enabled = true;
 
         /**
          * Whether to fail fast when loading dict data into Redis.

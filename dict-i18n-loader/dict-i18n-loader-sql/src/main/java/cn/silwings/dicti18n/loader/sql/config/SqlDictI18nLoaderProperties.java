@@ -53,7 +53,7 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
          * Whether to load dict data from the resource file into database on startup.
          * Default is false.
          */
-        private boolean enabled = false;
+        private boolean enabled = true;
 
         /**
          * Whether to fail fast when loading dict data into database.
@@ -99,7 +99,7 @@ public class SqlDictI18nLoaderProperties extends AbstractDictI18nLoaderPropertie
         /**
          * Whether to enable schema initialization (create tables + create indexes)
          */
-        private boolean enabled = false;
+        private boolean enabled = true;
     }
 
 }

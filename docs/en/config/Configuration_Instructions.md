@@ -86,7 +86,7 @@ Supported loaders: `declared` (code-declared), `file` (file-based), `sql` (datab
 
 | Configuration  | Type    | Default       | Description                                                |  
 |----------------|---------|---------------|------------------------------------------------------------|  
-| `enabled`      | boolean | `false`       | Whether to preload data from files to Redis on startup     |  
+| `enabled`      | boolean | `true`        | Whether to preload data from files to Redis on startup     |  
 | `fail-fast`    | boolean | `true`        | Whether to fail quickly on preload failures                |  
 | `preload-mode` | enum    | `INCREMENTAL` | Preload mode: `INCREMENTAL` (partial) or `FULL` (complete) |  
 
@@ -108,7 +108,7 @@ Supported loaders: `declared` (code-declared), `file` (file-based), `sql` (datab
 
 | Configuration  | Type    | Default       | Description                                                   |  
 |----------------|---------|---------------|---------------------------------------------------------------|  
-| `enabled`      | boolean | `false`       | Whether to preload data from files to the database on startup |  
+| `enabled`      | boolean | `true`        | Whether to preload data from files to the database on startup |  
 | `fail-fast`    | boolean | `true`        | Whether to fail quickly on preload failures                   |  
 | `preload-mode` | enum    | `INCREMENTAL` | Preload mode: `INCREMENTAL` (partial) or `FULL` (complete)    |  
 
@@ -118,7 +118,7 @@ Supported loaders: `declared` (code-declared), `file` (file-based), `sql` (datab
 
 | Configuration | Type    | Default | Description                           |  
 |---------------|---------|---------|---------------------------------------|  
-| `enabled`     | boolean | `false` | Whether to auto-create tables/indexes |  
+| `enabled`     | boolean | `true`  | Whether to auto-create tables/indexes |  
 
 #### 🧠 Cache Configuration (`cache`)
 
