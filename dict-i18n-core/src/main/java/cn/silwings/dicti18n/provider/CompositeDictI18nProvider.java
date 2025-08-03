@@ -59,7 +59,15 @@ public class CompositeDictI18nProvider implements DictI18nProvider {
      * @return The dictionary description in the corresponding language, or returns Optional.empty() if not found.
      */
     @Override
-    public Optional<String> getText(final String language, String defaultLanguage, final String dictName, final String code) {
+    public Optional<String> getText(String language, String defaultLanguage, final String dictName, final String code) {
+
+        if (null == defaultLanguage) {
+            defaultLanguage = "";
+        }
+
+        if (StringUtils.isBlank(language)) {
+            language = defaultLanguage;
+        }
 
         final List<String> langChain = this.getFallbackLangChain(language);
         final boolean includeDefaultLang = !langChain.contains(defaultLanguage);

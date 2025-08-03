@@ -146,7 +146,7 @@ public class DictI18nProcessor {
                     descField.set(target, text);
                 }
             } catch (Exception e) {
-                log.debug("[DictI18n] SetDictDescToField failed: {}", e.getMessage(), e);
+                log.error("[DictI18n] SetDictDescToField failed: {}", e.getMessage(), e);
             }
         }
     }

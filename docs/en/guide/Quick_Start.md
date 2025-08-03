@@ -45,14 +45,14 @@ dict-i18n:
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 
 <!-- Loader dependency: example using file loader -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-file</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 
 <!-- Maven plugin: generates internationalization resource files -->
@@ -72,7 +72,7 @@ dict-i18n:
             <language>zh-CN</language>
             <language>en-US</language>
         </languages>
-        <verbose>true</verbose> <!-- <!-- Output detailed logs -->
+        <verbose>true</verbose> <!-- Output detailed logs -->
     </configuration>
 </plugin>  
 ```  
