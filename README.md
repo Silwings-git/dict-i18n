@@ -124,7 +124,7 @@ Add `dict-i18n-spring-boot-starter` to `pom.xml` (automatically integrates core,
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.5</version>
 </dependency>
 
 <!-- Add loaders as needed (at least one) -->
@@ -132,28 +132,28 @@ Add `dict-i18n-spring-boot-starter` to `pom.xml` (automatically integrates core,
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-declared</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.5</version>
 </dependency>
 
 <!-- Redis loader -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-redis</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.5</version>
 </dependency>
 
 <!-- Database loader -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-sql</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.5</version>
 </dependency>
 
 <!-- File loader (YAML/Properties) -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-file</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.5</version>
 </dependency>  
 ```  
 
