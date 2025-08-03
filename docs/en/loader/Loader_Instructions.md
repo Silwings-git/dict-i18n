@@ -463,16 +463,16 @@ public class RestApiDictI18nLoader implements DictI18nLoader {
         }
 
         // Get dictionary data for this language, load if necessary  
-        final Map<String, String> langDict = this.cache.computeIfAbsent(lang, this::loadDictionaryForLanguage);
+        final Map<String, String> langDict = this.cache.computeIfAbsent(dictKey + "." + lang, key -> this.loadDictionaryForLanguage(dictKey, lang));
 
         // Return translation if available  
         return Optional.ofNullable(langDict.get(dictKey));
     }
 
-    private Map<String, String> loadDictionaryForLanguage(final String lang) {
+    private Map<String, String> loadDictionaryForLanguage(final String dictKey, final String lang) {
         try {
             // Call REST API to get dictionary data for this language  
-            final String url = this.apiUrl + "?lang=" + lang;
+            final String url = this.apiUrl + "?lang=" + lang + "&dictKey=" + dictKey;
             final DictionaryResponse response = this.restTemplate.getForObject(url, DictionaryResponse.class);
 
             if (null != response && response.isSuccess()) {
