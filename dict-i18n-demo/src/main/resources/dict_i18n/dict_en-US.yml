@@ -1,0 +1,14 @@
+order_status:
+  CANCELED: Canceled
+  COMPLETED: Completed
+  PAID: Paid
+  PENDING: Pending
+  SHIPPED: Shipped
+shipping_status:
+  delivered: Delivered
+  delivery_failed: Delivery-Failed
+  in_transit: In-Transit
+  pending: Pending
+  returned: Returned
+  returning: Returning
+  shipped: Shipped

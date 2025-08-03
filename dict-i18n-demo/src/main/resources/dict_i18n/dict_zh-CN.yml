@@ -1,0 +1,14 @@
+order_status:
+  CANCELED: 已取消
+  COMPLETED: 已完成
+  PAID: 已支付
+  PENDING: 待处理
+  SHIPPED: 已发货
+shipping_status:
+  delivered: 已签收
+  delivery_failed: 签收失败
+  in_transit: 运输中
+  pending: 待发货
+  returned: 已退货
+  returning: 退货中
+  shipped: 已发货

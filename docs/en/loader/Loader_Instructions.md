@@ -322,7 +322,8 @@ instead of the default in-memory cache.
     - If it implements `DeclaredDict`, its `getDesc()` method is called directly.
     - If it does not implement `DeclaredDict`, the loader uses reflection to find a `getDesc()` method; if found, it is
       invoked.
-    - If no `getDesc()` method is found, a default result is returned based on configuration.
+    - If it is an enum type, return the name of the enum value;
+    - return empty;
 
    ```mermaid  
    sequenceDiagram
@@ -359,7 +360,10 @@ instead of the default in-memory cache.
             Loader ->> DictImpl: Reflectively call getDesc()
             DictImpl -->> Loader: Return description
         else getDesc() not found
-            Loader ->> Loader: Return default result based on config
+            alt is an enum type
+            Loader->>Loader: Return the name of the enum value
+        else Is not an enum type
+            Loader->>Loader: Return empty
         end
     end
     Loader -->> App: Return translation result  
