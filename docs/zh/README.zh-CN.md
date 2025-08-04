@@ -2,6 +2,8 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Silwings-git/dict-i18n)
 
+📹 [介绍视频](https://www.bilibili.com/video/BV1pStVzeEm4/) —— 快速了解框架核心功能与集成流程
+
 `dict-i18n` 是一套基于字典实现领域数据编码（如订单状态、商品类型等）国际化（i18n）的解决方案，深度集成 Spring Boot
 生态，支持多数据源加载字典、自动注入本地化文本到 Java 对象及 REST 响应，简化多语言描述管理，适配固定或低频变更的编码数据场景。
 

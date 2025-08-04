@@ -4,6 +4,8 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Silwings-git/dict-i18n)
 
+📹 [Introduction video](https://www.bilibili.com/video/BV1pStVzeEm4/) —— Quickly understand the framework's core features and integration process
+
 `dict-i18n` is a solution for internationalizing (i18n) domain data codes (such as order statuses, product types, etc.)
 based on dictionaries. It deeply integrates with the Spring Boot ecosystem, supports loading dictionaries from multiple
 data sources, automatically injects localized text into Java objects and REST responses, simplifies the management of
