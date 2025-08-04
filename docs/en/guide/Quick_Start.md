@@ -1,9 +1,6 @@
 # 📘 Dict-I18n Quick Start Guide
 
-Welcome to **`dict-i18n`** — a lightweight, extensible dictionary internationalization framework designed for *
-*multilingual descriptions** of dictionary fields in Java applications, such as enumeration values, status codes, and
-type identifiers. It automatically scans dictionary definitions, generates resource files during build, and enhances
-HTTP responses at runtime.
+Get up and running with dict-i18n in minutes! This guide will walk you through the essential steps to use dict-i18n in a Spring Boot application.
 
 ## ✨ Core Features
 
@@ -45,14 +42,14 @@ dict-i18n:
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 </dependency>
 
 <!-- Loader dependency: example using file loader -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-file</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 </dependency>
 
 <!-- Maven plugin: generates internationalization resource files -->
