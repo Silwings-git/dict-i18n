@@ -196,7 +196,7 @@ dict-i18n:
   loader-order:
     - file  # 文件加载器优先  
 
-# 字典内容示例（dict-i18n/order_status.yml）  
+# 字典内容示例（dict-i18n/dict_zh.yml）  
 order_status:
   pending: 待处理
   completed: 已完成  

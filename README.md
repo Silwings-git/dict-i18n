@@ -209,7 +209,7 @@ dict-i18n:
   loader-order:
     - file  # File loader takes precedence  
 
-# Dictionary content example (dict-i18n/order_status.yml)  
+# Dictionary content example (dict-i18n/dict_en.yml)  
 order_status:
   pending: Pending
   completed: Completed  
