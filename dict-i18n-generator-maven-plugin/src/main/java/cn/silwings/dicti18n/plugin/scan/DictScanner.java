@@ -72,15 +72,19 @@ public class DictScanner {
     }
 
     private static void logMore(final ScanContext context, final Class<?> implClass) {
-        context.getLog().debug("    classloader: " + implClass.getClassLoader());
-        context.getLog().debug("    modifiers: " + Modifier.toString(implClass.getModifiers()));
-        context.getLog().debug("    extends: " + (implClass.getSuperclass() != null ? implClass.getSuperclass().getName() : "none"));
-        context.getLog().debug("    interfaces: " + Arrays.stream(implClass.getInterfaces())
-                .map(Class::getName).collect(Collectors.joining(", ")));
-        context.getLog().debug("    annotations: " +
-                Arrays.stream(implClass.getAnnotations())
-                        .map(a -> "@" + a.annotationType().getSimpleName())
-                        .collect(Collectors.joining(", ")));
+        try {
+            context.getLog().debug("    classloader: " + implClass.getClassLoader());
+            context.getLog().debug("    modifiers: " + Modifier.toString(implClass.getModifiers()));
+            context.getLog().debug("    extends: " + (implClass.getSuperclass() != null ? implClass.getSuperclass().getName() : "none"));
+            context.getLog().debug("    interfaces: " + Arrays.stream(implClass.getInterfaces())
+                    .map(Class::getName).collect(Collectors.joining(", ")));
+            context.getLog().debug("    annotations: " +
+                    Arrays.stream(implClass.getAnnotations())
+                            .map(a -> "@" + a.annotationType().getSimpleName())
+                            .collect(Collectors.joining(", ")));
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     /**

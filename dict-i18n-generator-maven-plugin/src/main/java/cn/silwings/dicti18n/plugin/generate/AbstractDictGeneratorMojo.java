@@ -20,12 +20,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class AbstractDictGeneratorMojo extends AbstractMojo {
-    // Match class names similar to "com.example.EnableStatusEnum$1"
-    private static final Pattern ENUM_ANONYMOUS_CLASS_PATTERN = Pattern.compile(".*\\$\\d+$");
 
     @Parameter(defaultValue = "${session}", required = true, readonly = true)
     protected MavenSession session;
