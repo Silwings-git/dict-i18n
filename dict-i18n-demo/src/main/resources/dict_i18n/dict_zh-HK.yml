@@ -4,6 +4,9 @@ order_status:
   PAID: 已支付
   PENDING: 待處理
   SHIPPED: 已發貨
+payment_type:
+  ALIPAY: ''
+  WECHAT: ''
 shipping_status:
   delivered: 已簽收
   delivery_failed: 簽收失敗

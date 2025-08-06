@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Mojo(name = "yml", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "yml", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
 
     @Override
@@ -33,7 +34,9 @@ public class GenerateYmlMojo extends AbstractDictGeneratorMojo {
             final Map<String, Object> newDictMap = this.parseDictListToMap(dictsList);
             final Map<String, Object> oldDictMap = this.loadDictFromFile(outFile);
             final Map<String, Object> targetDictMap = this.merge(oldDictMap, newDictMap);
-            this.write(targetDictMap, outFile);
+            if (!targetDictMap.isEmpty()) {
+                this.write(targetDictMap, outFile);
+            }
         }
     }
 

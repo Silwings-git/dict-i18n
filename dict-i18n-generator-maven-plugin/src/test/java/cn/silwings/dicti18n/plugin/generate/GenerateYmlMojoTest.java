@@ -53,8 +53,8 @@ class GenerateYmlMojoTest {
         // 模拟扫描到的字典枚举类
         final Set<Class<? extends Dict>> classes = buildDictClasses();
         // 执行生成逻辑（调用两次以验证幂等性，确保重复生成不会出问题）
-        mojo.generate(classes, mojo.languages, mojo.outputDir);
-        mojo.generate(classes, mojo.languages, mojo.outputDir);
+        mojo.generate(classes, mojo.languages, mojo.outputDir, this.getClass().getClassLoader());
+        mojo.generate(classes, mojo.languages, mojo.outputDir, this.getClass().getClassLoader());
 
         // 验证每种语言的YML文件是否正确生成
         for (String lang : mojo.languages) {

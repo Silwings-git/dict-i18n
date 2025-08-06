@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
-@Mojo(name = "properties", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "properties", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class GeneratePropertiesMojo extends AbstractDictGeneratorMojo {
 
     @Override
@@ -28,7 +29,9 @@ public class GeneratePropertiesMojo extends AbstractDictGeneratorMojo {
             final OrderedProperties newDicProps = this.parseDictListToProperties(dictsList);
             final OrderedProperties oldDictProps = this.loadDictFromFile(outFile);
             final OrderedProperties targetDictProps = this.merge(oldDictProps, newDicProps);
-            this.write(targetDictProps, outFile);
+            if (!targetDictProps.isEmpty()) {
+                this.write(targetDictProps, outFile);
+            }
         }
     }
 

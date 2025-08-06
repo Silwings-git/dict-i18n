@@ -113,7 +113,7 @@ public enum OrderState implements Dict {
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-spring-boot-starter</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 </dependency>
 
 <!-- 按需添加加载器（至少选一个） -->
@@ -121,28 +121,28 @@ public enum OrderState implements Dict {
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-declared</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 </dependency>
 
 <!-- Redis 加载器 -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-redis</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 </dependency>
 
 <!-- 数据库加载器 -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-sql</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 </dependency>
 
 <!-- 文件加载器（YAML/Properties） -->
 <dependency>
     <groupId>cn.silwings.dicti18n</groupId>
     <artifactId>dict-i18n-loader-file</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 </dependency>  
 ```  
 

@@ -2,15 +2,13 @@ package cn.silwings.dicti18n.plugin.scan;
 
 import cn.silwings.dicti18n.dict.Dict;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ConfigurationBuilder;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -32,110 +30,92 @@ public class DictScanner {
      * @return a set of classes implementing the Dict interface
      * @throws MojoExecutionException if scanning fails
      */
+    @SuppressWarnings("unchecked")
     public Set<Class<? extends Dict>> scan(final ScanContext context) throws MojoExecutionException {
 
-        context.getLog().info("Start looking for the implementation class of the Dict interface...");
+        final Log log = context.getLog();
+        log.info("Start looking for the implementation class of the Dict interface...");
 
         try {
-            // Get the compiled classpath
-            final List<String> classpathElements = context.getProject().getCompileClasspathElements();
-            final List<URL> urls = new ArrayList<>();
+            final MavenProject currentProject = context.getProject();
+            final ClassLoader classLoader = context.getClassLoader();
+            final File file = new File(currentProject.getBuild().getOutputDirectory());
 
-            for (String element : classpathElements) {
-                try {
-                    urls.add(new File(element).toURI().toURL());
-                } catch (MalformedURLException e) {
-                    context.getLog().error("Conversion of classpath element failed: " + element, e);
+            final Set<Class<? extends Dict>> result = scanClassNames(file)
+                    .stream()
+                    .map(className -> {
+                        try {
+                            return Class.forName(className, true, classLoader);
+                        } catch (ClassNotFoundException e) {
+                            log.error(e);
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .filter(cls -> !cls.isInterface() && !Modifier.isAbstract(cls.getModifiers()))
+                    .filter(Dict.class::isAssignableFrom)
+                    .map(cls -> (Class<? extends Dict>) cls)
+                    .collect(Collectors.toSet());
+
+            log.info("[DictScanner] Found " + result.size() + " concrete Dict classes.");
+            for (Class<?> implClass : result) {
+                log.info("[DictScanner] -> " + implClass.getName());
+                if (context.isVerbose()) {
+                    logMore(context, implClass);
                 }
             }
 
-            // Create a classloader
-            try (final URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[0]), getClass().getClassLoader())) {
-                // Obtain the Reflections configuration
-                ConfigurationBuilder config = new ConfigurationBuilder()
-                        .setClassLoaders(new ClassLoader[]{classLoader})
-                        .setScanners(Scanners.SubTypes, Scanners.TypesAnnotated);
-
-                // Add a scan path
-                if (context.getBasePackages() != null && !context.getBasePackages().isEmpty()) {
-                    config.setUrls(urls.stream()
-                            .flatMap(url -> context.getBasePackages()
-                                    .stream()
-                                    .map(pkg -> url.toString() + "/" + pkg.replace('.', '/')))
-                            .map(path -> {
-                                try {
-                                    return new URL(path);
-                                } catch (MalformedURLException e) {
-                                    context.getLog().warn("Invalid base package path: " + path, e);
-                                    return null;
-                                }
-                            })
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList()));
-                } else {
-                    config.setUrls(urls);
-                }
-
-                // Scanning classes
-                final Reflections reflections = new Reflections(config);
-
-                // Find all implementation classes
-                final Set<Class<? extends Dict>> allImplementations = reflections.getSubTypesOf(Dict.class);
-
-                // Filter out abstract classes and interfaces
-                final Set<Class<? extends Dict>> concreteImplementations = allImplementations.stream()
-                        .filter(cls -> !cls.isInterface() && !isAbstract(cls))
-                        .collect(Collectors.toSet());
-
-                // Output the result
-                context.getLog().info("Find the implementation classes for the " + concreteImplementations.size() + " Dict interfaces ");
-                for (Class<? extends Dict> implClass : concreteImplementations) {
-                    context.getLog().info("  - " + implClass.getName());
-                    if (context.isVerbose()) {
-                        context.getLog().debug("    location: " + findClassLocation(implClass, urls));
-                    }
-                }
-
-                return concreteImplementations;
-            }
+            return result;
         } catch (Exception e) {
             throw new MojoExecutionException("[DictI18n] Dict implementation of class-like scan failed", e);
         }
     }
 
-    /**
-     * Checks whether a class is abstract.
-     *
-     * @param cls the class to check
-     * @return true if abstract, false otherwise
-     */
-    public boolean isAbstract(final Class<?> cls) {
-        return (cls.getModifiers() & java.lang.reflect.Modifier.ABSTRACT) != 0;
+    private static void logMore(final ScanContext context, final Class<?> implClass) {
+        context.getLog().debug("    classloader: " + implClass.getClassLoader());
+        context.getLog().debug("    modifiers: " + Modifier.toString(implClass.getModifiers()));
+        context.getLog().debug("    extends: " + (implClass.getSuperclass() != null ? implClass.getSuperclass().getName() : "none"));
+        context.getLog().debug("    interfaces: " + Arrays.stream(implClass.getInterfaces())
+                .map(Class::getName).collect(Collectors.joining(", ")));
+        context.getLog().debug("    annotations: " +
+                Arrays.stream(implClass.getAnnotations())
+                        .map(a -> "@" + a.annotationType().getSimpleName())
+                        .collect(Collectors.joining(", ")));
     }
 
     /**
-     * Attempts to determine the URL location of a class file.
+     * Scan the directory and extract all class names
      *
-     * @param cls           the class whose location is to be found
-     * @param classpathUrls list of classpath root URLs to search in
-     * @return the URL as a string, or "Unknown location" if not found
+     * @param directory The directory to scan
+     * @return Full list of class names (including package names)
      */
-    public String findClassLocation(final Class<?> cls, final List<URL> classpathUrls) {
-        final String className = cls.getName().replace('.', '/') + ".class";
-        for (URL url : classpathUrls) {
-            try {
-                final URL resourceUrl = new URL(url, className);
-                try {
-                    resourceUrl.openStream().close();
-                    return url.toString();
-                } catch (Exception ignored) {
-                    // Not this URL
-                }
-            } catch (MalformedURLException ignored) {
-                // Invalid URL
+    public static List<String> scanClassNames(final File directory) {
+        final List<String> classNames = new ArrayList<>();
+        scanForClassNames(directory, "", classNames);
+        return classNames;
+    }
+
+    private static void scanForClassNames(final File dir, final String packageName, final List<String> classNames) {
+        final File[] files = dir.listFiles();
+        if (null == files) {
+            return;
+        }
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                final String newPackage = packageName.isEmpty()
+                        ? file.getName()
+                        : packageName + "." + file.getName();
+                scanForClassNames(file, newPackage, classNames);
+            } else if (file.getName().endsWith(".class")) {
+                // Extract class name (remove the .class suffix)
+                final String className = file.getName().substring(0, file.getName().length() - 6);
+                // Combination full class name (package name + class name)
+                final String fullClassName = packageName.isEmpty()
+                        ? className
+                        : packageName + "." + className;
+                classNames.add(fullClassName);
             }
         }
-        return "Unknown location";
     }
-
 }

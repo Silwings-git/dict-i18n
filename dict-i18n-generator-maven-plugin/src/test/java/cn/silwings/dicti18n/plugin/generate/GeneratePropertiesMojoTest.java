@@ -45,8 +45,8 @@ class GeneratePropertiesMojoTest {
 
         // 模拟扫描到的枚举类
         final Set<Class<? extends Dict>> classes = buildDictClasses();
-        mojo.generate(classes, mojo.languages, mojo.outputDir);
-        mojo.generate(classes, mojo.languages, mojo.outputDir);
+        mojo.generate(classes, mojo.languages, mojo.outputDir, this.getClass().getClassLoader());
+        mojo.generate(classes, mojo.languages, mojo.outputDir, this.getClass().getClassLoader());
 
         for (String lang : mojo.languages) {
             final File file = new File(mojo.outputDir, "dict_" + lang + ".properties");
