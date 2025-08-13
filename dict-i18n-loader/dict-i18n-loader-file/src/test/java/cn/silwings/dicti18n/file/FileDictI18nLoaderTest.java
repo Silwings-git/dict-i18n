@@ -1,5 +1,6 @@
 package cn.silwings.dicti18n.file;
 
+import cn.silwings.dicti18n.loader.file.FileDictI18nLoader;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

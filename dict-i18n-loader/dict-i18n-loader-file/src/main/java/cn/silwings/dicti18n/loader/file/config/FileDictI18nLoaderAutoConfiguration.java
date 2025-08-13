@@ -1,6 +1,6 @@
-package cn.silwings.dicti18n.file.config;
+package cn.silwings.dicti18n.loader.file.config;
 
-import cn.silwings.dicti18n.file.FileDictI18nLoader;
+import cn.silwings.dicti18n.loader.file.FileDictI18nLoader;
 import cn.silwings.dicti18n.loader.parser.DictFileParser;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

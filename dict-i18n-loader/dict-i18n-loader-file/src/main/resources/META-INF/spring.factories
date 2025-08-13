@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.silwings.dicti18n.file.config.FileDictI18nLoaderAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.silwings.dicti18n.loader.file.config.FileDictI18nLoaderAutoConfiguration

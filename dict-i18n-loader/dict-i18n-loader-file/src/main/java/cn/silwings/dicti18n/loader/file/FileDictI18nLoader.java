@@ -1,7 +1,7 @@
-package cn.silwings.dicti18n.file;
+package cn.silwings.dicti18n.loader.file;
 
-import cn.silwings.dicti18n.file.config.FileDictI18nLoaderProperties;
 import cn.silwings.dicti18n.loader.ClassPathDictI18nLoader;
+import cn.silwings.dicti18n.loader.file.config.FileDictI18nLoaderProperties;
 import cn.silwings.dicti18n.loader.parser.DictFileParser;
 import cn.silwings.dicti18n.loader.parser.DictInfo;
 import org.slf4j.Logger;
